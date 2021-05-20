@@ -43,25 +43,33 @@ class WanikaniParser:
             levelsList += self.__GetLinks(filter)
         return levelsList
 
-    def GetAllKanjiFromLevel(self, level) -> kanjiData.Kanji:
+    def GetAllKanjiFromLevel(self, level, kanjiFilter) -> kanjiData.Kanji:
         self.__GetToLevel(level)
         filter = lambda d: d.find_elements(By.XPATH, "//*[contains(@class, 'kanji-') and contains(@class, 'character-item')]")
         kanjiList = self.__GetLinks(filter)
         for kanji in kanjiList:
+            if kanji in kanjiFilter: 
+                continue
             self.__driver.get(kanji)
-            yield self.__GetKanjiData()
+            yield self.__GetKanjiData(), kanji
 
-    def GetAllWordsFromLevel(self, level) -> kanjiData.Word:
+    def GetAllWordsFromLevel(self, level, wordFilter) -> kanjiData.Word:
         self.__GetToLevel(level)
         filter = lambda d: d.find_elements(By.XPATH, "//*[contains(@class, 'vocabulary-') and contains(@class, 'character-item')]")
         wordsList = self.__GetLinks(filter)
         for word in wordsList:
+            if word in wordFilter: 
+                continue
             self.__driver.get(word)
-            yield self.__GetWordData()
+            yield self.__GetWordData(), word
 
     def __GetKanjiData(self) -> kanjiData.Kanji:
         kanji = kanjiData.Kanji()
-        kanji.name = self.__wait.until(lambda d: d.find_element(By.CLASS_NAME, 'kanji-icon')).text
+        try:
+            kanji.name = self.__wait.until(lambda d: d.find_element(By.CLASS_NAME, 'kanji-icon')).text
+        except TimeoutException:
+            return None
+        kanji.level = int(self.__driver.find_element(By.CLASS_NAME, 'level-icon').text)
 
         meanings = self.__driver.find_element(By.ID, 'meaning').find_elements(By.CLASS_NAME, 'alternative-meaning')
         kanji.primary = meanings[0].find_element(By.TAG_NAME, 'p').text
@@ -70,8 +78,8 @@ class WanikaniParser:
 
         readings = self.__driver.find_element(By.ID, 'reading').find_elements(By.CLASS_NAME, 'span4')
         kanji.onyomi = readings[0].find_element(By.TAG_NAME, 'p').text.strip().split(', ')
-        kanji.kunyomi = readings[0].find_element(By.TAG_NAME, 'p').text.strip().split(', ')
-        
+        kanji.kunyomi = readings[1].find_element(By.TAG_NAME, 'p').text.strip().split(', ')
+
         try:
             kanji.progress = self.__driver.find_element(By.CLASS_NAME, 'srs').find_element(By.CSS_SELECTOR, "div[style*='display: inline-block;']").text.strip() 
         except NoSuchElementException:
@@ -80,11 +88,16 @@ class WanikaniParser:
 
     def __GetWordData(self) -> kanjiData.Word:
         word = kanjiData.Word()
-        word.name = self.__wait.until(lambda d: d.find_element(By.CLASS_NAME, 'vocabulary-icon')).text
+        try:
+            word.name = self.__wait.until(lambda d: d.find_element(By.CLASS_NAME, 'vocabulary-icon')).text
+        except TimeoutException:
+            return None
+        word.level = int(self.__driver.find_element(By.CLASS_NAME, 'level-icon').text)
 
         meanings = self.__driver.find_element(By.ID, 'meaning').find_elements(By.CLASS_NAME, 'alternative-meaning')
         word.primary = meanings[0].find_element(By.TAG_NAME, 'p').text
-        if (len(meanings) > 2):
+        alt = meanings[1].find_element(By.TAG_NAME, 'h2').text.lower()
+        if "alter" in alt:
             word.alternatives = meanings[1].find_element(By.TAG_NAME, 'p').text.strip().split(', ')
 
         readings = self.__driver.find_element(By.ID, 'reading').find_elements(By.CLASS_NAME, 'pronunciation-variant')
@@ -117,18 +130,4 @@ class WanikaniParser:
         return items
 
     def __GetToLevel(self, level):
-        self.__driver.get(level)
-
-
-
-#level-\d-kanji
-#//*[matches(@id, 'level-\d-kanji')]
-#//*[matches(@class, 'kanji-\d+ character-item')]
-
-    
-    
-
-
-
-
-        
+        self.__driver.get(level)  
