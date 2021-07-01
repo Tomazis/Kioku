@@ -17,7 +17,7 @@ class Word(Base):
     progress = Column(String)
     level = Column(Integer)
 
-    composition: relationship("Kanji", secondary=words_kanji, backref='words')
+    composition = relationship("Kanji", secondary=words_kanji, backref='words')
 
     def __init__(self, name, primary, progress, level):
         self.name = name

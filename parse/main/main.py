@@ -61,7 +61,7 @@ def GetData(levels, pType, index):
                     LOCK.release()
                 else:
                     isAllParsed = False  
-                sleep(1)            
+                sleep(1)       
             if isAllParsed:
                 LOCK.acquire()
                 parserLogger.ParserLogger.changeStatus(level, pType, True)

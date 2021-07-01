@@ -6,19 +6,19 @@ from .models import Kanji, KanjiAlternative, Kunyomi, Onyomi
 
 class KanjiChoiceField(forms.ModelChoiceField):
         def label_from_instance(self, obj):
-            return f"{obj.name}"
+            return f"{obj}"
 
 
 @admin.register(Kanji)
 class KanjiAdmin(admin.ModelAdmin):
-    list_display = ('name', 'primary', 'level')
-    list_display_links = ('name', 'primary')
-    search_fields = ('name', 'primary', 'level')
+    list_display = ('kanji', 'primary', 'level')
+    list_display_links = ('kanji', 'primary')
+    search_fields = ('kanji', 'primary', 'level')
 
 @admin.register(KanjiAlternative)
 class KanjiAlternativeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'kanji')
-    search_fields = ('name', 'kanji')
+    list_display = ('alternative', 'kanji')
+    search_fields = ('alternative', 'kanji')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'kanji':
@@ -27,8 +27,8 @@ class KanjiAlternativeAdmin(admin.ModelAdmin):
 
 @admin.register(Kunyomi)
 class KunyomiAdmin(admin.ModelAdmin):
-    list_display = ('name', 'kanji')
-    search_fields = ('name', 'kanji')
+    list_display = ('kunyomi', 'kanji')
+    search_fields = ('kunyomi', 'kanji')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'kanji':
@@ -37,8 +37,8 @@ class KunyomiAdmin(admin.ModelAdmin):
 
 @admin.register(Onyomi)
 class OnyomiAdmin(admin.ModelAdmin):
-    list_display = ('name', 'kanji')
-    search_fields = ('name', 'kanji')
+    list_display = ('onyomi', 'kanji')
+    search_fields = ('onyomi', 'kanji')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'kanji':

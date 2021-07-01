@@ -99,13 +99,14 @@ class WanikaniParser:
         alt = meanings[1].find_element(By.TAG_NAME, 'h2').text.lower()
         if "alter" in alt:
             word.alternatives = meanings[1].find_element(By.TAG_NAME, 'p').text.strip().split(', ')
+        word.wordType = meanings[-1].find_element(By.TAG_NAME, 'p').text.strip().split(', ')
 
         readings = self.__driver.find_element(By.ID, 'reading').find_elements(By.CLASS_NAME, 'pronunciation-variant')
         word.reading = [reading.text for reading in readings]
 
         context = self.__driver.find_element(By.ID, 'context')
-        wordTypes = context.find_elements(By.CLASS_NAME, 'word-type')
-        word.wordType = [wordType.text for wordType in wordTypes]
+        # wordTypes = context.find_elements(By.CLASS_NAME, 'word-type')
+        # word.wordType = [wordType.text for wordType in wordTypes]
 
         sentencesGroup = context.find_elements(By.CLASS_NAME, 'context-sentence-group')
         sentencesText = [sentences.find_elements(By.TAG_NAME, 'p') for sentences in sentencesGroup]

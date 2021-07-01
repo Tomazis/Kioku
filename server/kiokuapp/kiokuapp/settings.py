@@ -20,7 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 
+from .secret_key import HIDDEN_SECRET_KEY
+SECRET_KEY = HIDDEN_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'kanji.apps.KanjiConfig',
-    'words.apps.WordsConfig',
-    'users.apps.UsersConfig',
+    'corsheaders',
+    'admin_reorder',
+    'api.apps.ApiConfig'
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 ROOT_URLCONF = 'kiokuapp.urls'
@@ -122,3 +125,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#CORS
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
+
+#Admin Reorder
+ADMIN_REORDER = (
+    {'app': 'auth', 'label': 'AUTHENTICATION AND AUTHORIZATION'},
+    { 'app': 'api', 'label': 'Kanji',
+    'models':( 'api.Kanji', 'api.KanjiAlternative', 'api.Onyomi', 'api.Kunyomi')},
+    { 'app': 'api', 'label': 'Words',
+    'models':( 'api.Word', 'api.WordAlternative', 'api.WordReading', 'api.WordType', 'api.Sentence')},
+    { 'app': 'api', 'label': 'Users',
+    'models':( 'api.User', 'api.UserKanjiProgress', 'api.UserWordProgress')},
+)

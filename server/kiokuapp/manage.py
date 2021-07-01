@@ -6,7 +6,7 @@ from pathlib import Path
 
 path = Path(__file__).parents[0]
 sys.path.append(path)
-
+print(path)
 
 def main():
     """Run administrative tasks."""

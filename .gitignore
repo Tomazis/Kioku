@@ -138,3 +138,7 @@ config.ini
 kanji.db
 parserChecker*.json
 .vscode/settings.json
+
+export_db
+parse/main/config.ini
+server/kiokuapp/kiokuapp/secret_key.py
