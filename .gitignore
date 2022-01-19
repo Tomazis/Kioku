@@ -142,3 +142,4 @@ parserChecker*.json
 export_db
 parse/main/config.ini
 server/kiokuapp/kiokuapp/secret_key.py
+server/old
