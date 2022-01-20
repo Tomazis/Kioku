@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "server\\srv-frontend-api"
+		},
+		{
+			"path": "server\\srv-session"
+		},
+		{
+			"path": "server\\srv-session-api"
+		},
+		{
+			"path": "server\\srv-dba"
+		},
+		{
+			"path": "server\\srv-authorization"
+		}
+	],
+	"settings": {}
+}

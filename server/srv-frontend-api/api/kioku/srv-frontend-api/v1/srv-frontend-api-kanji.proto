@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package kioku.server.srv_frontend_api.v1;
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/tomazis/kioku/server/srv-frontend-api/pkg/srv-frontend-api;srv_frontend_api";
+
+// SrvFrontendApiService - Service for managing the API server
+service SrvFrontendApiService {
+    rpc GetKanjiV1(GetKanjiV1Request) returns (GetKanjiV1Response) {
+        option (google.api.http) = {
+            get: "/v1/kanji/{kanji_id}"
+        };
+    }
+
+    rpc ListKanjiV1(ListKanjiV1Request) returns (ListKanjiV1Response) {
+        option (google.api.http) = {
+            get: "/v1/kanjis/{level}"
+        };
+    }
+}
+
+message Kanji {
+             uint64 id           = 1;
+             string kanji        = 2;
+             string primary      = 3;
+             uint32 level        = 4;
+    repeated string alternatives = 5;
+    repeated string onyomi       = 6;
+    repeated string kunyomi      = 7;
+}
+
+message GetKanjiV1Request {
+    uint64 kanji_id = 1 [(validate.rules).uint64.gt = 0]; 
+}
+
+message GetKanjiV1Response {
+    Kanji kanji = 1;
+}
+
+message ListKanjiV1Request {
+    uint32 level = 1;
+}
+
+message ListKanjiV1Response {
+    repeated Kanji kanji = 1;
+}
+
+
