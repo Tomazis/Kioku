@@ -11,8 +11,8 @@ import (
 )
 
 type RepoKanji interface {
-	Get(ctx context.Context, kanjiID uint64) (*models.Kanji, error)
-	List(ctx context.Context, level uint32) ([]models.Kanji, error)
+	GetKanji(ctx context.Context, kanjiID uint64) (*models.Kanji, error)
+	ListKanji(ctx context.Context, level uint32) ([]*models.Kanji, error)
 }
 
 func (api *frontendAPI) GetKanjiV1(ctx context.Context, req *pb.GetKanjiV1Request,
@@ -25,7 +25,9 @@ func (api *frontendAPI) GetKanjiV1(ctx context.Context, req *pb.GetKanjiV1Reques
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	kanji, err := api.repo.Get(ctx, req.GetKanjiId())
+	logger.InfoKV(ctx, "Get request", "kanjiID", req.GetKanjiId())
+
+	kanji, err := api.repo.GetKanji(ctx, req.GetKanjiId())
 	if err != nil {
 		logger.ErrorKV(ctx, "GetKanjiV1 -- failed to get from db", "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -57,7 +59,7 @@ func (api *frontendAPI) ListKanjiV1(ctx context.Context, req *pb.ListKanjiV1Requ
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	kanji, err := api.repo.List(ctx, req.GetLevel())
+	kanji, err := api.repo.ListKanji(ctx, req.GetLevel())
 	if err != nil {
 		logger.ErrorKV(ctx, "ListKanjiV1 -- failed to List from db", "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
