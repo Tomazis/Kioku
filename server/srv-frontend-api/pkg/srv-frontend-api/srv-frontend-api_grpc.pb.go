@@ -18,8 +18,13 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SrvFrontendApiServiceClient interface {
+	//Kanji part
 	GetKanjiV1(ctx context.Context, in *GetKanjiV1Request, opts ...grpc.CallOption) (*GetKanjiV1Response, error)
 	ListKanjiV1(ctx context.Context, in *ListKanjiV1Request, opts ...grpc.CallOption) (*ListKanjiV1Response, error)
+	//Words part
+	GetWordV1(ctx context.Context, in *GetWordV1Request, opts ...grpc.CallOption) (*GetWordV1Response, error)
+	ListWordsByLevelV1(ctx context.Context, in *ListWordsByLevelV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error)
+	ListWordsByKanjiV1(ctx context.Context, in *ListWordsByKanjiV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error)
 }
 
 type srvFrontendApiServiceClient struct {
@@ -48,12 +53,44 @@ func (c *srvFrontendApiServiceClient) ListKanjiV1(ctx context.Context, in *ListK
 	return out, nil
 }
 
+func (c *srvFrontendApiServiceClient) GetWordV1(ctx context.Context, in *GetWordV1Request, opts ...grpc.CallOption) (*GetWordV1Response, error) {
+	out := new(GetWordV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_frontend_api.v1.SrvFrontendApiService/GetWordV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvFrontendApiServiceClient) ListWordsByLevelV1(ctx context.Context, in *ListWordsByLevelV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error) {
+	out := new(ListWordsV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_frontend_api.v1.SrvFrontendApiService/ListWordsByLevelV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvFrontendApiServiceClient) ListWordsByKanjiV1(ctx context.Context, in *ListWordsByKanjiV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error) {
+	out := new(ListWordsV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_frontend_api.v1.SrvFrontendApiService/ListWordsByKanjiV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SrvFrontendApiServiceServer is the server API for SrvFrontendApiService service.
 // All implementations must embed UnimplementedSrvFrontendApiServiceServer
 // for forward compatibility
 type SrvFrontendApiServiceServer interface {
+	//Kanji part
 	GetKanjiV1(context.Context, *GetKanjiV1Request) (*GetKanjiV1Response, error)
 	ListKanjiV1(context.Context, *ListKanjiV1Request) (*ListKanjiV1Response, error)
+	//Words part
+	GetWordV1(context.Context, *GetWordV1Request) (*GetWordV1Response, error)
+	ListWordsByLevelV1(context.Context, *ListWordsByLevelV1Request) (*ListWordsV1Response, error)
+	ListWordsByKanjiV1(context.Context, *ListWordsByKanjiV1Request) (*ListWordsV1Response, error)
 	mustEmbedUnimplementedSrvFrontendApiServiceServer()
 }
 
@@ -66,6 +103,15 @@ func (UnimplementedSrvFrontendApiServiceServer) GetKanjiV1(context.Context, *Get
 }
 func (UnimplementedSrvFrontendApiServiceServer) ListKanjiV1(context.Context, *ListKanjiV1Request) (*ListKanjiV1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListKanjiV1 not implemented")
+}
+func (UnimplementedSrvFrontendApiServiceServer) GetWordV1(context.Context, *GetWordV1Request) (*GetWordV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWordV1 not implemented")
+}
+func (UnimplementedSrvFrontendApiServiceServer) ListWordsByLevelV1(context.Context, *ListWordsByLevelV1Request) (*ListWordsV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListWordsByLevelV1 not implemented")
+}
+func (UnimplementedSrvFrontendApiServiceServer) ListWordsByKanjiV1(context.Context, *ListWordsByKanjiV1Request) (*ListWordsV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListWordsByKanjiV1 not implemented")
 }
 func (UnimplementedSrvFrontendApiServiceServer) mustEmbedUnimplementedSrvFrontendApiServiceServer() {}
 
@@ -116,6 +162,60 @@ func _SrvFrontendApiService_ListKanjiV1_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SrvFrontendApiService_GetWordV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWordV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvFrontendApiServiceServer).GetWordV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_frontend_api.v1.SrvFrontendApiService/GetWordV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvFrontendApiServiceServer).GetWordV1(ctx, req.(*GetWordV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvFrontendApiService_ListWordsByLevelV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWordsByLevelV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvFrontendApiServiceServer).ListWordsByLevelV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_frontend_api.v1.SrvFrontendApiService/ListWordsByLevelV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvFrontendApiServiceServer).ListWordsByLevelV1(ctx, req.(*ListWordsByLevelV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvFrontendApiService_ListWordsByKanjiV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWordsByKanjiV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvFrontendApiServiceServer).ListWordsByKanjiV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_frontend_api.v1.SrvFrontendApiService/ListWordsByKanjiV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvFrontendApiServiceServer).ListWordsByKanjiV1(ctx, req.(*ListWordsByKanjiV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SrvFrontendApiService_ServiceDesc is the grpc.ServiceDesc for SrvFrontendApiService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -131,7 +231,19 @@ var SrvFrontendApiService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "ListKanjiV1",
 			Handler:    _SrvFrontendApiService_ListKanjiV1_Handler,
 		},
+		{
+			MethodName: "GetWordV1",
+			Handler:    _SrvFrontendApiService_GetWordV1_Handler,
+		},
+		{
+			MethodName: "ListWordsByLevelV1",
+			Handler:    _SrvFrontendApiService_ListWordsByLevelV1_Handler,
+		},
+		{
+			MethodName: "ListWordsByKanjiV1",
+			Handler:    _SrvFrontendApiService_ListWordsByKanjiV1_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "kioku/srv-frontend-api/v1/srv-frontend-api-kanji.proto",
+	Metadata: "kioku/srv-frontend-api/v1/srv-frontend-api.proto",
 }

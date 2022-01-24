@@ -3,15 +3,15 @@ package models
 import models "github.com/tomazis/kioku/server/srv-frontend-api/internal/models/kanji"
 
 type Word struct {
-	ID           uint64            `db:"id"`
-	Word         string            `db:"word"`
-	Primary      string            `db:"primary"`
-	Level        uint32            `db:"level"`
-	Composition  []models.Kanji    `db:"-"`
-	Alternatives []WordAlternative `db:"-"`
-	Readings     []WordReading     `db:"-"`
-	Types        []WordType        `db:"-"`
-	Sentences    []Sentence        `db:"-"`
+	ID           uint64         `db:"id"`
+	Word         string         `db:"word"`
+	Primary      string         `db:"primary"`
+	Level        uint32         `db:"level"`
+	Composition  []models.Kanji `db:"-"`
+	Alternatives []string       `db:"-"`
+	Readings     []string       `db:"-"`
+	Types        []string       `db:"-"`
+	Sentences    []Sentence     `db:"-"`
 }
 
 type WordAlternative struct {

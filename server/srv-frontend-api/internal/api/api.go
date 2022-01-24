@@ -6,6 +6,7 @@ import (
 
 type Repo interface {
 	RepoKanji
+	RepoWord
 }
 
 type frontendAPI struct {

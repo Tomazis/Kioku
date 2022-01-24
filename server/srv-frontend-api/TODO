@@ -1,16 +1,16 @@
 1. Create protbuf for:
     Kanji Progress
-    Words
+    +Words
     Words Progress
 
 2. Unit tests for gRPC API
     +Kanji (Get, List)
     Kanji Progress (Get, GetToLearn, ListByLevel)
-    Words (Get, List)
+    Words (Get, ListByLevel, ListByKanji)
     Words Progress (Get, GetToLearn, ListByLevel)
 
 3. Repo methods:
     Kanji (Get, List)
     Kanji Progress (Get, GetToLearn, ListByLevel)
-    Words (Get, List)
+    Words (Get, ListByLevel, ListByKanji)
     Words Progress (Get, GetToLearn, ListByLevel)

@@ -4,15 +4,15 @@ import (
 	"context"
 
 	"github.com/tomazis/kioku/server/srv-frontend-api/internal/logger"
-	models "github.com/tomazis/kioku/server/srv-frontend-api/internal/models/kanji"
+	m_kanji "github.com/tomazis/kioku/server/srv-frontend-api/internal/models/kanji"
 	pb "github.com/tomazis/kioku/server/srv-frontend-api/pkg/srv-frontend-api"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 type RepoKanji interface {
-	GetKanji(ctx context.Context, kanjiID uint64) (*models.Kanji, error)
-	ListKanji(ctx context.Context, level uint32) ([]*models.Kanji, error)
+	GetKanji(ctx context.Context, kanjiID uint64) (*m_kanji.Kanji, error)
+	ListKanji(ctx context.Context, level uint32) ([]*m_kanji.Kanji, error)
 }
 
 func (api *frontendAPI) GetKanjiV1(ctx context.Context, req *pb.GetKanjiV1Request,

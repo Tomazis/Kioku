@@ -21,7 +21,7 @@ const bufSize = 1024 * 1024
 var lis *bufconn.Listener
 
 var ctrl *gomock.Controller
-var r *mock_api.MockRepoKanji
+var r *mock_api.MockRepo
 
 func TestAPI(t *testing.T) {
 	RegisterFailHandler(Fail)
@@ -37,7 +37,8 @@ var _ = BeforeEach(func() {
 	// var err error
 	// Expect(err).ShouldNot(HaveOccurred())
 	ctrl = gomock.NewController(GinkgoT())
-	r = mock_api.NewMockRepoKanji(ctrl)
+	r = mock_api.NewMockRepo(ctrl)
+
 	lis = bufconn.Listen(bufSize)
 	s := grpc.NewServer()
 	// r := repo.NewRepo()

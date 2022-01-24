@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "kioku/srv-frontend-api/v1/srv-frontend-api-kanji.proto",
+    "title": "kioku/srv-frontend-api/v1/srv-frontend-api-word.proto",
     "version": "version not set"
   },
   "consumes": [

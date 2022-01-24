@@ -404,7 +404,16 @@ func (m *ListKanjiV1Request) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Level
+	if m.GetLevel() <= 0 {
+		err := ListKanjiV1RequestValidationError{
+			field:  "Level",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return ListKanjiV1RequestMultiError(errors)

@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package kioku.server.srv_frontend_api.v1;
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "kioku/srv-frontend-api/v1/srv-frontend-api-kanji.proto";
+import "kioku/srv-frontend-api/v1/srv-frontend-api-word.proto";
+
+option go_package = "github.com/tomazis/kioku/server/srv-frontend-api/pkg/srv-frontend-api;srv_frontend_api";
+
+// SrvFrontendApiService - Service for managing the API server
+service SrvFrontendApiService {
+    //Kanji part
+    rpc GetKanjiV1(GetKanjiV1Request) returns (GetKanjiV1Response) {
+        option (google.api.http) = {
+            get: "/v1/kanji/{kanji_id}"
+        };
+    }
+
+    rpc ListKanjiV1(ListKanjiV1Request) returns (ListKanjiV1Response) {
+        option (google.api.http) = {
+            get: "/v1/kanjis/{level}"
+        };
+    }
+
+
+    //Words part
+    rpc GetWordV1(GetWordV1Request) returns (GetWordV1Response) {
+        option (google.api.http) = {
+            get: "/v1/word/{word_id}"
+        };
+    }
+
+    rpc ListWordsByLevelV1(ListWordsByLevelV1Request) returns (ListWordsV1Response) {
+        option (google.api.http) = {
+            get: "/v1/words/{level}"
+        };
+    }
+
+    rpc ListWordsByKanjiV1(ListWordsByKanjiV1Request) returns (ListWordsV1Response) {
+        option (google.api.http) = {
+            get: "/v1/words/kanji/{kanji_id}"
+        };
+    }
+}

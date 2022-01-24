@@ -19,15 +19,17 @@ var kanjiList = []rune("万丈三上下丸久亡凡刃千口土士夕大女子�
 var _ = Describe("test Kanji API get method", func() {
 	rand.Seed(time.Now().UnixNano())
 
+	kanjiAmount := 20
+
 	var kanjiContainer []*models.Kanji
 	ctx := context.Background()
 
-	for i := 1; i < 20; i++ {
+	for i := 1; i < kanjiAmount; i++ {
 		kanjiContainer = append(kanjiContainer, &models.Kanji{
 			ID:           uint64(i),
 			Kanji:        string(kanjiList[rand.Intn(len(kanjiList))]),
 			Primary:      "a",
-			Level:        uint32(rand.Intn(20)),
+			Level:        uint32(rand.Intn(kanjiAmount)),
 			Alternatives: nil,
 			Onyomi:       nil,
 			Kunyomi:      nil,
@@ -92,15 +94,32 @@ var _ = Describe("test Kanji API get method", func() {
 			Expect(resp).Should(BeNil())
 		})
 	})
+	When("problem with validation", func() {
+		It("should return nil and error", func() {
+			kanji_id := uint64(0)
+
+			conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
+			Expect(err).ShouldNot(HaveOccurred())
+			defer conn.Close()
+			client := pb.NewSrvFrontendApiServiceClient(conn)
+
+			resp, err := client.GetKanjiV1(ctx, &pb.GetKanjiV1Request{KanjiId: kanji_id})
+			Expect(err).Should(HaveOccurred())
+			Expect(resp).Should(BeNil())
+
+		})
+	})
 })
 
 var _ = Describe("test Kanji API list method", func() {
 	rand.Seed(time.Now().UnixNano())
 
+	kanjiAmount := 20
+
 	var kanjiContainer []*models.Kanji
 	ctx := context.Background()
 
-	for i := 1; i < 40; i += 2 {
+	for i := 1; i < kanjiAmount*2; i += 2 {
 		kanjiContainer = append(kanjiContainer, &models.Kanji{
 			ID:           uint64(i),
 			Kanji:        string(kanjiList[rand.Intn(len(kanjiList))]),
@@ -137,7 +156,7 @@ var _ = Describe("test Kanji API list method", func() {
 	When("DB table has kanji models", func() {
 		Context("db table has that kanji with level", func() {
 			It("should return kanji list by level", func() {
-				kanji_level := uint32(rand.Intn(len(kanjiContainer))) / 2
+				kanji_level := uint32(rand.Intn(kanjiAmount)) + 1
 				r.EXPECT().ListKanji(gomock.Any(), gomock.Any()).Return(retrieve_list(kanji_level)).AnyTimes()
 
 				conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
@@ -184,6 +203,22 @@ var _ = Describe("test Kanji API list method", func() {
 
 			Expect(err).Should(HaveOccurred())
 			Expect(resp).Should(BeNil())
+		})
+	})
+
+	When("problem with validation", func() {
+		It("should return nil and error", func() {
+			kanji_level := uint32(0)
+
+			conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
+			Expect(err).ShouldNot(HaveOccurred())
+			defer conn.Close()
+			client := pb.NewSrvFrontendApiServiceClient(conn)
+			resp, err := client.ListKanjiV1(ctx, &pb.ListKanjiV1Request{Level: kanji_level})
+
+			Expect(err).Should(HaveOccurred())
+			Expect(resp).Should(BeNil())
+
 		})
 	})
 })
