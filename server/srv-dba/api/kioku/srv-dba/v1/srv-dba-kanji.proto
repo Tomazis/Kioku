@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package kioku.server.srv_dba.v1;
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba;srv_dba";
+
+message Kanji {
+             uint64 id           = 1;
+             string kanji        = 2;
+             string primary      = 3;
+             uint32 level        = 4;
+    repeated string alternatives = 5;
+    repeated string onyomi       = 6;
+    repeated string kunyomi      = 7;
+}
+
+message GetKanjiV1Request {
+    uint64 kanji_id = 1 [(validate.rules).uint64.gt = 0]; 
+}
+
+message GetKanjiV1Response {
+    Kanji kanji = 1;
+}
+
+message ListKanjiV1Request {
+    uint32 level = 1 [(validate.rules).uint32.gt = 0];
+}
+
+message ListKanjiV1Response {
+    repeated Kanji kanji = 1;
+}

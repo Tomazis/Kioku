@@ -1,0 +1,171 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "kioku/srv-dba/v1/srv-dba.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "SrvDbaService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/kanji/{kanjiId}": {
+      "get": {
+        "summary": "Kanji part",
+        "operationId": "SrvDbaService_GetKanjiV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetKanjiV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "kanjiId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/kanjis/{level}": {
+      "get": {
+        "operationId": "SrvDbaService_ListKanjiV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListKanjiV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "level",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1GetKanjiV1Response": {
+      "type": "object",
+      "properties": {
+        "kanji": {
+          "$ref": "#/definitions/v1Kanji"
+        }
+      }
+    },
+    "v1Kanji": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "kanji": {
+          "type": "string"
+        },
+        "primary": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "onyomi": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kunyomi": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1ListKanjiV1Response": {
+      "type": "object",
+      "properties": {
+        "kanji": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Kanji"
+          }
+        }
+      }
+    }
+  }
+}

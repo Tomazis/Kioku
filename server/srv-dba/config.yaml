@@ -1,0 +1,36 @@
+project:
+  name: kioku
+  serviceName: srv-dba
+  debug: true
+  environment: development
+
+grpc:
+  host: 0.0.0.0
+  port: 8083
+  maxConnectionIdle: 5 # Minutes
+  maxConnectionAge: 5 # Minutes
+  timeout: 15 # Seconds
+
+rest:
+  host: 0.0.0.0
+  port: 8080
+
+metrics:
+  host: 0.0.0.0
+  port: 9100
+  path: /metrics
+
+jaeger:
+  service: "srv-dba"
+  host: "localhost"
+  port: ":6831"
+
+status:
+  host: 0.0.0.0
+  port: 8000
+  livenessPath: /live
+  readinessPath: /ready
+  versionPath: /version
+
+telemetry:
+  graylogPath: 127.0.0.1:12201
