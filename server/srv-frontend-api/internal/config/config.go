@@ -43,6 +43,12 @@ type Grpc struct {
 	Timeout           int64  `yaml:"timeout"`
 }
 
+type GrpcDBA struct {
+	Port    int    `yaml:"port"`
+	Host    string `yaml:"host"`
+	Timeout int64  `yaml:"timeout"`
+}
+
 // Rest - contains parameter rest json connection.
 type Rest struct {
 	Host string `yaml:"host"`
@@ -86,6 +92,7 @@ type Config struct {
 	Jaeger    Jaeger    `yaml:"jaeger"`
 	Status    Status    `yaml:"status"`
 	Telemetry Telemetry `yaml:"telemetry"`
+	GrpcDBA   GrpcDBA   `yaml:"grpc_dba"`
 }
 
 // ReadConfigYML - read configurations from file and init instance Config.

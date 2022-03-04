@@ -11,7 +11,7 @@ import (
 )
 
 type RepoKanji interface {
-	GetKanji(ctx context.Context, kanjiID uint64) (*m_kanji.Kanji, error)
+	GetKanji(ctx context.Context, kanjiID uint64) (*pb.GetKanjiV1Response, error)
 	ListKanji(ctx context.Context, level uint32) ([]*m_kanji.Kanji, error)
 }
 
@@ -38,15 +38,7 @@ func (api *frontendAPI) GetKanjiV1(ctx context.Context, req *pb.GetKanjiV1Reques
 	}
 	logger.DebugKV(ctx, "GetKanjiV1 -- success")
 
-	return &pb.GetKanjiV1Response{Kanji: &pb.Kanji{
-		Id:           kanji.ID,
-		Kanji:        kanji.Kanji,
-		Primary:      kanji.Primary,
-		Level:        kanji.Level,
-		Alternatives: kanji.Alternatives,
-		Onyomi:       kanji.Onyomi,
-		Kunyomi:      kanji.Kunyomi,
-	}}, nil
+	return kanji, nil
 }
 
 func (api *frontendAPI) ListKanjiV1(ctx context.Context, req *pb.ListKanjiV1Request,

@@ -55,7 +55,7 @@ func (s *gRPCServer) Start(ctx context.Context, cfg *config.Config) error {
 		)),
 	)
 
-	r := repo.NewRepo()
+	r := repo.NewRepo(time.Duration(cfg.GrpcDBA.Timeout)*time.Second, fmt.Sprintf("%s:%d", cfg.GrpcDBA.Host, cfg.GrpcDBA.Port))
 
 	pb.RegisterSrvFrontendApiServiceServer(grpcServer, api.NewFrontendAPI(r))
 

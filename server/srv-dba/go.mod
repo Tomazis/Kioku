@@ -15,6 +15,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.6.6 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.3 // indirect
+	github.com/jmoiron/sqlx v1.3.4
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/net v0.0.0-20220114011407-0dd24b26b47d // indirect

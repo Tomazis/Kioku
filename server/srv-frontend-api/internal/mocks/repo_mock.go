@@ -11,6 +11,7 @@ import (
 	gomock "github.com/golang/mock/gomock"
 	models "github.com/tomazis/kioku/server/srv-frontend-api/internal/models/kanji"
 	models0 "github.com/tomazis/kioku/server/srv-frontend-api/internal/models/word"
+	srv_frontend_api "github.com/tomazis/kioku/server/srv-frontend-api/pkg/srv-frontend-api"
 )
 
 // MockRepo is a mock of Repo interface.
@@ -37,10 +38,10 @@ func (m *MockRepo) EXPECT() *MockRepoMockRecorder {
 }
 
 // GetKanji mocks base method.
-func (m *MockRepo) GetKanji(ctx context.Context, kanjiID uint64) (*models.Kanji, error) {
+func (m *MockRepo) GetKanji(ctx context.Context, kanjiID uint64) (*srv_frontend_api.GetKanjiV1Response, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetKanji", ctx, kanjiID)
-	ret0, _ := ret[0].(*models.Kanji)
+	ret0, _ := ret[0].(*srv_frontend_api.GetKanjiV1Response)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
