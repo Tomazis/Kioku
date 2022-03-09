@@ -77,6 +77,18 @@ type Telemetry struct {
 	GraylogPath string `yaml:"graylogPath"`
 }
 
+// Database - contains all parameters database connection.
+type Database struct {
+	Host       string `yaml:"host"`
+	Port       string `yaml:"port"`
+	User       string `yaml:"user"`
+	Password   string `yaml:"password"`
+	Migrations string `yaml:"migrations"`
+	Name       string `yaml:"name"`
+	SslMode    string `yaml:"sslmode"`
+	Driver     string `yaml:"driver"`
+}
+
 // Config - contains all configuration parameters in config package.
 type Config struct {
 	Project   Project   `yaml:"project"`
@@ -86,6 +98,7 @@ type Config struct {
 	Jaeger    Jaeger    `yaml:"jaeger"`
 	Status    Status    `yaml:"status"`
 	Telemetry Telemetry `yaml:"telemetry"`
+	Database  Database  `yaml:"database"`
 }
 
 // ReadConfigYML - read configurations from file and init instance Config.

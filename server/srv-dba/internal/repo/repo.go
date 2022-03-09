@@ -1,7 +1,11 @@
 package repo
 
-type repo struct{}
+import "github.com/jmoiron/sqlx"
 
-func NewRepo() *repo {
-	return &repo{}
+type repo struct {
+	db *sqlx.DB
+}
+
+func NewRepo(db_ *sqlx.DB) *repo {
+	return &repo{db: db_}
 }

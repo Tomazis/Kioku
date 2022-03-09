@@ -2,11 +2,17 @@ package main
 
 import (
 	"context"
+	"flag"
+	"fmt"
 	"os"
 
+	"github.com/pressly/goose/v3"
 	gelf "github.com/snovichkov/zap-gelf"
+	"github.com/tomazis/kioku/server/srv-dba/internal/api"
 	"github.com/tomazis/kioku/server/srv-dba/internal/config"
+	"github.com/tomazis/kioku/server/srv-dba/internal/database"
 	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
+	"github.com/tomazis/kioku/server/srv-dba/internal/repo"
 	"github.com/tomazis/kioku/server/srv-dba/internal/server"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -31,7 +37,37 @@ func main() {
 		"environment", cfg.Project.Environment,
 	)
 
-	if err := server.NewGRPCServer().Start(ctx, &cfg); err != nil {
+	migration := flag.Bool("migration", true, "Defines the migration start option")
+	flag.Parse()
+
+	dsn := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=%v",
+		cfg.Database.Host,
+		cfg.Database.Port,
+		cfg.Database.User,
+		cfg.Database.Password,
+		cfg.Database.Name,
+		cfg.Database.SslMode,
+	)
+
+	db, err := database.NewPostgres(dsn, cfg.Database.Driver)
+	if err != nil {
+		logger.ErrorKV(ctx, "Failed init postgres", "error", err)
+		return
+	}
+	defer db.Close()
+
+	if *migration {
+		if err = goose.Up(db.DB, cfg.Database.Migrations); err != nil {
+			logger.ErrorKV(ctx, "Migration failed", "error", err)
+			return
+		}
+	}
+
+	r := repo.NewRepo(db)
+
+	dbaAPI := api.NewDbaAPI(r)
+
+	if err := server.NewGRPCServer().Start(ctx, &cfg, &dbaAPI); err != nil {
 		logger.ErrorKV(ctx, "Failed to start gRPC server", "error", err)
 		return
 	}

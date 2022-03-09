@@ -9,10 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tomazis/kioku/server/srv-dba/internal/api"
 	"github.com/tomazis/kioku/server/srv-dba/internal/config"
 	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
-	"github.com/tomazis/kioku/server/srv-dba/internal/repo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
@@ -30,7 +28,7 @@ func NewGRPCServer() *gRPCServer {
 	return &gRPCServer{}
 }
 
-func (s *gRPCServer) Start(ctx context.Context, cfg *config.Config) error {
+func (s *gRPCServer) Start(ctx context.Context, cfg *config.Config, dbaAPI *pb.SrvDbaServiceServer) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -55,9 +53,7 @@ func (s *gRPCServer) Start(ctx context.Context, cfg *config.Config) error {
 		)),
 	)
 
-	r := repo.NewRepo()
-
-	pb.RegisterSrvDbaServiceServer(grpcServer, api.NewDbaAPI(r))
+	pb.RegisterSrvDbaServiceServer(grpcServer, *dbaAPI)
 
 	go func() {
 		logger.InfoKV(ctx, "gRPC Server is listening", "address", grpcAddr)

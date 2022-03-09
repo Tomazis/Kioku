@@ -9,10 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tomazis/kioku/server/srv-frontend-api/internal/api"
 	"github.com/tomazis/kioku/server/srv-frontend-api/internal/config"
 	"github.com/tomazis/kioku/server/srv-frontend-api/internal/logger"
-	"github.com/tomazis/kioku/server/srv-frontend-api/internal/repo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
@@ -24,13 +22,21 @@ import (
 	pb "github.com/tomazis/kioku/server/srv-frontend-api/pkg/srv-frontend-api"
 )
 
+type Api interface {
+	GetWordV1(ctx context.Context, req *pb.GetWordV1Request) (*pb.GetWordV1Response, error)
+	ListWordsByLevelV1(ctx context.Context, req *pb.ListWordsByLevelV1Request) (*pb.ListWordsV1Response, error)
+	ListWordsByKanjiV1(ctx context.Context, req *pb.ListWordsByKanjiV1Request) (*pb.ListWordsV1Response, error)
+	GetKanjiV1(ctx context.Context, req *pb.GetKanjiV1Request) (*pb.GetKanjiV1Response, error)
+	ListKanjiV1(ctx context.Context, req *pb.ListKanjiV1Request) (*pb.ListKanjiV1Response, error)
+}
+
 type gRPCServer struct{}
 
 func NewGRPCServer() *gRPCServer {
 	return &gRPCServer{}
 }
 
-func (s *gRPCServer) Start(ctx context.Context, cfg *config.Config) error {
+func (s *gRPCServer) Start(ctx context.Context, cfg *config.Config, frontendAPI *pb.SrvFrontendApiServiceServer) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -55,9 +61,7 @@ func (s *gRPCServer) Start(ctx context.Context, cfg *config.Config) error {
 		)),
 	)
 
-	r := repo.NewRepo(time.Duration(cfg.GrpcDBA.Timeout)*time.Second, fmt.Sprintf("%s:%d", cfg.GrpcDBA.Host, cfg.GrpcDBA.Port))
-
-	pb.RegisterSrvFrontendApiServiceServer(grpcServer, api.NewFrontendAPI(r))
+	pb.RegisterSrvFrontendApiServiceServer(grpcServer, *frontendAPI)
 
 	go func() {
 		logger.InfoKV(ctx, "gRPC Server is listening", "address", grpcAddr)

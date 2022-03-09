@@ -2,11 +2,15 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
+	"time"
 
 	gelf "github.com/snovichkov/zap-gelf"
+	"github.com/tomazis/kioku/server/srv-frontend-api/internal/api"
 	"github.com/tomazis/kioku/server/srv-frontend-api/internal/config"
 	"github.com/tomazis/kioku/server/srv-frontend-api/internal/logger"
+	"github.com/tomazis/kioku/server/srv-frontend-api/internal/repo"
 	"github.com/tomazis/kioku/server/srv-frontend-api/internal/server"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -31,7 +35,11 @@ func main() {
 		"environment", cfg.Project.Environment,
 	)
 
-	if err := server.NewGRPCServer().Start(ctx, &cfg); err != nil {
+	r := repo.NewRepo(time.Duration(cfg.GrpcDBA.Timeout)*time.Second, fmt.Sprintf("%s:%d", cfg.GrpcDBA.Host, cfg.GrpcDBA.Port))
+
+	frontendAPI := api.NewFrontendAPI(r)
+
+	if err := server.NewGRPCServer().Start(ctx, &cfg, &frontendAPI); err != nil {
 		logger.ErrorKV(ctx, "Failed to start gRPC server", "error", err)
 		return
 	}
