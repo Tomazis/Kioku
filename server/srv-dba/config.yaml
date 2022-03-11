@@ -34,3 +34,13 @@ status:
 
 telemetry:
   graylogPath: 127.0.0.1:12201
+
+database:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: postgres
+  name: srv_dba
+  sslmode: disable
+  migrations: migrations
+  driver: postgres

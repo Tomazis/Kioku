@@ -7,6 +7,8 @@ import (
 	m_kanji "github.com/tomazis/kioku/server/srv-frontend-api/internal/models/kanji"
 	"google.golang.org/grpc"
 
+	"google.golang.org/grpc/credentials/insecure"
+
 	pb "github.com/tomazis/kioku/server/srv-frontend-api/pkg/srv-frontend-api"
 )
 
@@ -15,7 +17,7 @@ var ErrNotFound = errors.New("not found")
 func (r *repo) GetKanji(ctx context.Context, kanjiID uint64) (*pb.GetKanjiV1Response, error) {
 	ctx, cancelFunc := context.WithTimeout(ctx, r.defaultTimeout)
 	defer cancelFunc()
-	conn, err := grpc.DialContext(ctx, r.address, grpc.WithInsecure())
+	conn, err := grpc.DialContext(ctx, r.address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}

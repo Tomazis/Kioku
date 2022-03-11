@@ -63,6 +63,22 @@ func main() {
 		}
 	}
 
+	sqlitedb, err := database.NewSqlite("kanji.db", "sqlite3")
+	if err != nil {
+		logger.ErrorKV(ctx, "Failed init Sqlite", "error", err)
+		return
+	}
+	defer sqlitedb.Close()
+
+	logger.InfoKV(ctx, "Start transfer")
+
+	err = Transfer(ctx, sqlitedb, db)
+
+	if err != nil {
+		logger.ErrorKV(ctx, "Error in transfer", "error", err)
+		return
+	}
+
 	r := repo.NewRepo(db)
 
 	dbaAPI := api.NewDbaAPI(r)

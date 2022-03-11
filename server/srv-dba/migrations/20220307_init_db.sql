@@ -24,9 +24,9 @@ CREATE TABLE onyomi (
            ON UPDATE NO ACTION
 );
 
-CREATE TABLE kunyoumi (
+CREATE TABLE kunyomi (
   id BIGSERIAL PRIMARY KEY,
-  kanji_kunyoumi TEXT,
+  kanji_kunyomi TEXT,
   kanji_id BIGINT NOT NULL
            REFERENCES kanji(id) 
            ON DELETE CASCADE 
@@ -44,7 +44,7 @@ CREATE TABLE word_alternatives (
   id BIGSERIAL PRIMARY KEY,
   word_alternative TEXT,
   word_id BIGINT NOT NULL
-          REFERENCES word(id) 
+          REFERENCES words(id) 
           ON DELETE CASCADE 
           ON UPDATE NO ACTION
 );
@@ -53,7 +53,7 @@ CREATE TABLE word_readings (
   id BIGSERIAL PRIMARY KEY,
   word_reading TEXT,
   word_id BIGINT NOT NULL
-          REFERENCES word(id) 
+          REFERENCES words(id) 
           ON DELETE CASCADE 
           ON UPDATE NO ACTION
 );
@@ -62,7 +62,7 @@ CREATE TABLE word_types (
   id BIGSERIAL PRIMARY KEY,
   word_type TEXT,
   word_id BIGINT NOT NULL
-          REFERENCES word(id) 
+          REFERENCES words(id) 
           ON DELETE CASCADE 
           ON UPDATE NO ACTION
 );
@@ -71,7 +71,7 @@ CREATE TABLE sentences (
   id BIGSERIAL PRIMARY KEY,
   japanese_sentence TEXT,
   word_id BIGINT NOT NULL
-          REFERENCES word(id) 
+          REFERENCES words(id) 
           ON DELETE CASCADE 
           ON UPDATE NO ACTION
 );
@@ -79,7 +79,7 @@ CREATE TABLE sentences (
 CREATE TABLE sentence_translations (
   id BIGSERIAL PRIMARY KEY,
   sentence_id BIGINT NOT NULL 
-              REFERENCES sentence(id) 
+              REFERENCES sentences(id) 
               ON DELETE CASCADE 
               ON UPDATE NO ACTION,
   sentence_language INTEGER,
@@ -96,7 +96,7 @@ CREATE TABLE compositions (
            ON UPDATE NO ACTION,
 
   word_id BIGINT NOT NULL 
-          REFERENCES word(id) 
+          REFERENCES words(id) 
           ON DELETE CASCADE 
           ON UPDATE NO ACTION
   
@@ -146,7 +146,7 @@ CREATE TABLE word_progress (
           ON UPDATE NO ACTION,
 
   kanji_id BIGINT NOT NULL 
-           REFERENCES kanji(id) 
+           REFERENCES words(id) 
            ON DELETE CASCADE 
            ON UPDATE NO ACTION,
   srs_level INTEGER,
