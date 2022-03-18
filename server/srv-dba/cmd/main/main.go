@@ -14,6 +14,7 @@ import (
 	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
 	"github.com/tomazis/kioku/server/srv-dba/internal/repo"
 	"github.com/tomazis/kioku/server/srv-dba/internal/server"
+	"github.com/tomazis/kioku/server/srv-dba/internal/transfer"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -72,7 +73,7 @@ func main() {
 
 	logger.InfoKV(ctx, "Start transfer")
 
-	err = Transfer(ctx, sqlitedb, db)
+	err = transfer.Transfer(ctx, sqlitedb, db)
 
 	if err != nil {
 		logger.ErrorKV(ctx, "Error in transfer", "error", err)
