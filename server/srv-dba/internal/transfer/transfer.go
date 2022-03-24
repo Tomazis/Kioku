@@ -37,7 +37,15 @@ type compostion struct {
 }
 
 func Transfer(ctx context.Context, sqliteDB *sqlx.DB, pgDB *sqlx.DB) error {
-	_, err := GetSqliteKanji(ctx, sqliteDB)
+	_, err := CreateTestUser(ctx, pgDB)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+	_, err = GetSqliteKanji(ctx, sqliteDB)
 
 	if err != nil {
 		return err

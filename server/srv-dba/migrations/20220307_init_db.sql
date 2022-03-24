@@ -106,9 +106,9 @@ CREATE TABLE users (
   id BIGSERIAL PRIMARY KEY,
   username TEXT,
   user_password TEXT,
-  user_email TEXT,
-  first_name TEXT,
-  second_name TEXT
+  user_email TEXT DEFAULT NULL,
+  first_name TEXT DEFAULT NULL,
+  second_name TEXT DEFAULT NULL 
 );
 
 CREATE TABLE user_progress (
@@ -117,7 +117,7 @@ CREATE TABLE user_progress (
           REFERENCES users(id) 
           ON DELETE CASCADE 
           ON UPDATE NO ACTION,
-  user_level INTEGER
+  user_level INTEGER DEFAULT 1
 );
 
 CREATE TABLE kanji_progress (
@@ -134,8 +134,8 @@ CREATE TABLE kanji_progress (
 
   srs_level INTEGER,
   unlock_date date,
-  next_date date,
-  burn_date date
+  next_date date DEFAULT NULL ,
+  burn_date date DEFAULT NULL 
 );
 
 CREATE TABLE word_progress (
@@ -151,8 +151,8 @@ CREATE TABLE word_progress (
            ON UPDATE NO ACTION,
   srs_level INTEGER,
   unlock_date date,
-  next_date date,
-  burn_date date
+  next_date date DEFAULT NULL ,
+  burn_date date DEFAULT NULL 
 );
 
 -- +goose Down
