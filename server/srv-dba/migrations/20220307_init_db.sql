@@ -145,7 +145,7 @@ CREATE TABLE word_progress (
           ON DELETE CASCADE 
           ON UPDATE NO ACTION,
 
-  kanji_id BIGINT NOT NULL 
+  word_id BIGINT NOT NULL 
            REFERENCES words(id) 
            ON DELETE CASCADE 
            ON UPDATE NO ACTION,

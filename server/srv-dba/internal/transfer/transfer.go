@@ -3,8 +3,10 @@ package transfer
 import (
 	"context"
 	"database/sql"
+	"sync"
 
 	"github.com/jmoiron/sqlx"
+	"golang.org/x/sync/errgroup"
 )
 
 type kanjiModel struct {
@@ -23,10 +25,11 @@ type wordModel struct {
 	Word            string         `db:"word"`
 	WordMeaning     string         `db:"word_meaning"`
 	WordLevel       uint32         `db:"word_level"`
-	WordReading     string         `db:"word_reading"`
-	WordType        string         `db:"word_type"`
-	SentenceJap     string         `db:"jap"`
-	SentenceEng     string         `db:"eng"`
+	WordReading     sql.NullString `db:"word_reading"`
+	WordType        sql.NullString `db:"word_type"`
+	SentenceJap     sql.NullString `db:"jap"`
+	SentenceEng     sql.NullString `db:"eng"`
+	SentenceID      sql.NullString `db:"sentence_id"`
 	WordAlternative sql.NullString `db:"word_alternative"`
 	Progress        sql.NullString `db:"progress"`
 }
@@ -36,28 +39,87 @@ type compostion struct {
 	KanjiID uint64 `db:"kanji_id"`
 }
 
+func parseSRS(srs string) int {
+	switch srs {
+	case "Apprentice":
+		return 1
+	case "Guru":
+		return 5
+	case "Master":
+		return 7
+	case "Enlightened":
+		return 8
+	case "Burned":
+		return 9
+	}
+	return 0
+}
+
+type transfer struct {
+	sqliteDB *sqlx.DB
+	pgDB     *sqlx.DB
+	mutex    sync.Mutex
+	chunk    int
+}
+
 func Transfer(ctx context.Context, sqliteDB *sqlx.DB, pgDB *sqlx.DB) error {
-	_, err := CreateTestUser(ctx, pgDB)
+	trans := transfer{
+		sqliteDB: sqliteDB,
+		pgDB:     pgDB,
+		chunk:    50}
+
+	user_id, err := trans.CreateTestUser(ctx)
+
+	if err != nil {
+		return err
+	}
+	kanji, err := trans.GetSqliteKanji(ctx)
+
+	if err != nil {
+		return err
+	}
+	g := new(errgroup.Group)
+	for i := 0; i < len(kanji); i += trans.chunk {
+		from := i
+		until := i + trans.chunk
+		if until > len(kanji) {
+			until = len(kanji)
+		}
+		g.Go(func() error {
+			err = trans.ImportKanji(ctx, kanji[from:until], user_id)
+			return err
+		})
+	}
+
+	if err := g.Wait(); err != nil {
+		return err
+	}
+
+	words, err := trans.GetSqliteWords(ctx)
 
 	if err != nil {
 		return err
 	}
 
-	return nil
+	g = new(errgroup.Group)
 
-	_, err = GetSqliteKanji(ctx, sqliteDB)
+	for i := 0; i < len(words); i += trans.chunk {
+		from := i
+		until := i + trans.chunk
+		if until > len(words) {
+			until = len(words)
+		}
+		g.Go(func() error {
+			err = trans.ImportWords(ctx, words[from:until], user_id)
+			return err
+		})
+	}
 
-	if err != nil {
+	if err := g.Wait(); err != nil {
 		return err
 	}
 
-	_, err = GetSqliteWords(ctx, sqliteDB)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = GetSqliteCompositions(ctx, sqliteDB)
+	_, err = trans.GetSqliteCompositions(ctx)
 
 	if err != nil {
 		return err
