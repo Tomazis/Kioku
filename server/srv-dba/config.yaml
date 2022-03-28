@@ -3,6 +3,7 @@ project:
   serviceName: srv-dba
   debug: true
   environment: development
+  importDB: false
 
 grpc:
   host: 0.0.0.0

@@ -69,10 +69,31 @@ func Transfer(ctx context.Context, sqliteDB *sqlx.DB, pgDB *sqlx.DB) error {
 		chunk:    50}
 
 	user_id, err := trans.CreateTestUser(ctx)
-
 	if err != nil {
 		return err
 	}
+	g := new(errgroup.Group)
+	g.Go(func() error {
+		err = startImportKanji(ctx, &trans, user_id)
+		return err
+	})
+	g.Go(func() error {
+		err = startImportWords(ctx, &trans, user_id)
+		return err
+	})
+
+	if err := g.Wait(); err != nil {
+		return err
+	}
+
+	err = startImportComp(ctx, &trans)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func startImportKanji(ctx context.Context, trans *transfer, user_id int64) error {
 	kanji, err := trans.GetSqliteKanji(ctx)
 
 	if err != nil {
@@ -95,13 +116,17 @@ func Transfer(ctx context.Context, sqliteDB *sqlx.DB, pgDB *sqlx.DB) error {
 		return err
 	}
 
+	return nil
+}
+
+func startImportWords(ctx context.Context, trans *transfer, user_id int64) error {
 	words, err := trans.GetSqliteWords(ctx)
 
 	if err != nil {
 		return err
 	}
 
-	g = new(errgroup.Group)
+	g := new(errgroup.Group)
 
 	for i := 0; i < len(words); i += trans.chunk {
 		from := i
@@ -118,10 +143,31 @@ func Transfer(ctx context.Context, sqliteDB *sqlx.DB, pgDB *sqlx.DB) error {
 	if err := g.Wait(); err != nil {
 		return err
 	}
+	return nil
+}
 
-	_, err = trans.GetSqliteCompositions(ctx)
+func startImportComp(ctx context.Context, trans *transfer) error {
+	comps, err := trans.GetSqliteCompositions(ctx)
 
 	if err != nil {
+		return err
+	}
+
+	g := new(errgroup.Group)
+
+	for i := 0; i < len(comps); i += trans.chunk {
+		from := i
+		until := i + trans.chunk
+		if until > len(comps) {
+			until = len(comps)
+		}
+		g.Go(func() error {
+			err = trans.importComp(ctx, comps[from:until])
+			return err
+		})
+	}
+
+	if err := g.Wait(); err != nil {
 		return err
 	}
 

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/pressly/goose/v3"
 	gelf "github.com/snovichkov/zap-gelf"
 	"github.com/tomazis/kioku/server/srv-dba/internal/api"
@@ -64,20 +65,10 @@ func main() {
 		}
 	}
 
-	sqlitedb, err := database.NewSqlite("kanji.db", "sqlite3")
-	if err != nil {
-		logger.ErrorKV(ctx, "Failed init Sqlite", "error", err)
-		return
-	}
-	defer sqlitedb.Close()
-
-	logger.InfoKV(ctx, "Start transfer")
-
-	err = transfer.Transfer(ctx, sqlitedb, db)
-
-	if err != nil {
-		logger.ErrorKV(ctx, "Error in transfer", "error", err)
-		return
+	if cfg.Project.ImportDB {
+		if err = startTransfer(ctx, db); err != nil {
+			return
+		}
 	}
 
 	r := repo.NewRepo(db)
@@ -124,4 +115,23 @@ func initLogger(ctx context.Context, cfg config.Config) (syncFn func()) {
 		}
 	}
 
+}
+
+func startTransfer(ctx context.Context, db *sqlx.DB) (err error) {
+	sqlitedb, err := database.NewSqlite("kanji.db", "sqlite3")
+	if err != nil {
+		logger.ErrorKV(ctx, "Failed init Sqlite", "error", err)
+		return
+	}
+	defer sqlitedb.Close()
+
+	logger.InfoKV(ctx, "Start transfer")
+
+	err = transfer.Transfer(ctx, sqlitedb, db)
+
+	if err != nil {
+		logger.ErrorKV(ctx, "Error in transfer", "error", err)
+		return err
+	}
+	return nil
 }

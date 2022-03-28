@@ -64,17 +64,17 @@ func (t *transfer) ImportKanji(ctx context.Context, kModel []kanjiModel, user_id
 	for _, k := range kModel {
 		q_kan = q_kan.Values(k.ID, k.Kanji, k.Primary, k.Level)
 		if k.Alternative.Valid {
-			for _, alt := range strings.Split(k.Alternative.String, ";") {
+			for _, alt := range strings.Split(k.Alternative.String, "|") {
 				q_alt = q_alt.Values(alt, k.ID)
 			}
 		}
 		if k.Onyomi.Valid {
-			for _, on := range strings.Split(k.Onyomi.String, ";") {
+			for _, on := range strings.Split(k.Onyomi.String, "|") {
 				q_on = q_on.Values(on, k.ID)
 			}
 		}
 		if k.Kunyomi.Valid {
-			for _, kun := range strings.Split(k.Kunyomi.String, ";") {
+			for _, kun := range strings.Split(k.Kunyomi.String, "|") {
 				q_kun = q_kun.Values(kun, k.ID)
 			}
 		}
@@ -155,30 +155,36 @@ func (t *transfer) ImportWords(ctx context.Context, wModel []wordModel, user_id 
 	for _, w := range wModel {
 		q_words = q_words.Values(w.ID, w.Word, w.WordMeaning, w.WordLevel)
 		if w.WordAlternative.Valid {
-			for _, alt := range strings.Split(w.WordAlternative.String, ";") {
+			for _, alt := range strings.Split(w.WordAlternative.String, "|") {
 				q_alt = q_alt.Values(alt, w.ID)
 			}
 		}
 		if w.WordReading.Valid {
-			for _, read := range strings.Split(w.WordReading.String, ";") {
+			for _, read := range strings.Split(w.WordReading.String, "|") {
 				q_read = q_read.Values(read, w.ID)
 			}
 		}
 		if w.WordType.Valid {
-			for _, w_type := range strings.Split(w.WordType.String, ";") {
+			for _, w_type := range strings.Split(w.WordType.String, "|") {
 				q_types = q_types.Values(w_type, w.ID)
 			}
 		}
-		senIDs := strings.Split(w.SentenceID.String, ";")
+		senIDs := strings.Split(w.SentenceID.String, "|")
 		if w.SentenceJap.Valid {
-			for i, sen := range strings.Split(w.SentenceJap.String, ";") {
-				id, _ := strconv.ParseInt(senIDs[i], 10, 64)
+			for i, sen := range strings.Split(w.SentenceJap.String, "|") {
+				id, err := strconv.ParseInt(senIDs[i], 10, 64)
+				if err != nil {
+					return err
+				}
 				q_sen = q_sen.Values(id, sen, w.ID)
 			}
 		}
 		if w.SentenceEng.Valid {
-			for i, trans := range strings.Split(w.SentenceEng.String, ";") {
-				id, _ := strconv.ParseInt(senIDs[i], 10, 64)
+			for i, trans := range strings.Split(w.SentenceEng.String, "|") {
+				id, err := strconv.ParseInt(senIDs[i], 10, 64)
+				if err != nil {
+					return err
+				}
 				q_trans = q_trans.Values(1, trans, id)
 			}
 		}
@@ -239,6 +245,27 @@ func (t *transfer) ImportWords(ctx context.Context, wModel []wordModel, user_id 
 		tx.Rollback()
 		return err
 	}
+
+	return nil
+}
+
+func (t *transfer) importComp(ctx context.Context, comp []compostion) error {
+	q_comp := psql.Insert("compositions").
+		Columns("kanji_id", "word_id")
+
+	for _, c := range comp {
+		q_comp = q_comp.Values(c.KanjiID, c.WordID)
+	}
+
+	query_comp, args_comp, err := q_comp.ToSql()
+
+	if err != nil {
+		return err
+	}
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+
+	t.pgDB.MustExecContext(ctx, query_comp, args_comp...)
 
 	return nil
 }

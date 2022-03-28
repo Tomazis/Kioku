@@ -28,6 +28,19 @@ services:
       # - pgdata:/var/lib/postgresql/data
       - ./scripts/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
 
+volumes:
+  pgdata:
+    driver: local
+  esdata:
+    driver: local
+  mongodata:
+    driver: local
+
+networks:
+  srvnw:
+    driver: bridge
+
+
   # elasticsearch:
   #   image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
   #   environment:
@@ -88,14 +101,3 @@ services:
   #     - 12201:12201/udp
   #   restart: always
 
-volumes:
-  pgdata:
-    driver: local
-  esdata:
-    driver: local
-  mongodata:
-    driver: local
-
-networks:
-  srvnw:
-    driver: bridge

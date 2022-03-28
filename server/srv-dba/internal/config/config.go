@@ -32,6 +32,7 @@ type Project struct {
 	Environment string `yaml:"environment"`
 	Version     string
 	CommitHash  string
+	ImportDB    bool `yaml:"importDB"`
 }
 
 // Grpc - contains parameter address grpc.

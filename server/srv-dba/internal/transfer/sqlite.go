@@ -5,12 +5,10 @@ import (
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
-
-	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
 )
 
 func (t *transfer) GetSqliteKanji(ctx context.Context) ([]kanjiModel, error) {
-	subQueryAlt, _, err := sq.Select("kanji_id as alt_kanji_id, group_concat(kanji_alternative, ';') AS kanji_alternative").Distinct().
+	subQueryAlt, _, err := sq.Select("kanji_id as alt_kanji_id, group_concat(kanji_alternative, '|') AS kanji_alternative").Distinct().
 		From("kanji").
 		LeftJoin("kanji_alternatives ON (kanji.id == kanji_alternatives.kanji_id)").
 		GroupBy("kanji.id").
@@ -19,7 +17,7 @@ func (t *transfer) GetSqliteKanji(ctx context.Context) ([]kanjiModel, error) {
 	if err != nil {
 		return nil, err
 	}
-	subQueryKun, _, err := sq.Select("kanji_id as kun_kanji_id, group_concat(kanji_kunyomi, ';') AS kanji_kunyomi").Distinct().
+	subQueryKun, _, err := sq.Select("kanji_id as kun_kanji_id, group_concat(kanji_kunyomi, '|') AS kanji_kunyomi").Distinct().
 		From("kanji").
 		LeftJoin("kanji_kunyomi ON (kanji.id == kanji_kunyomi.kanji_id)").
 		GroupBy("kanji.id").
@@ -28,7 +26,7 @@ func (t *transfer) GetSqliteKanji(ctx context.Context) ([]kanjiModel, error) {
 	if err != nil {
 		return nil, err
 	}
-	subQueryOn, _, err := sq.Select("kanji_id as on_kanji_id, group_concat(kanji_onyomi, ';') AS kanji_onyomi").Distinct().
+	subQueryOn, _, err := sq.Select("kanji_id as on_kanji_id, group_concat(kanji_onyomi, '|') AS kanji_onyomi").Distinct().
 		From("kanji").
 		LeftJoin("kanji_onyomi ON (kanji.id == kanji_onyomi.kanji_id)").
 		GroupBy("kanji.id").
@@ -50,8 +48,6 @@ func (t *transfer) GetSqliteKanji(ctx context.Context) ([]kanjiModel, error) {
 		return nil, err
 	}
 
-	logger.InfoKV(ctx, "Kanji query", "query", query)
-
 	var kanji []kanjiModel
 
 	err = t.sqliteDB.SelectContext(ctx, &kanji, query)
@@ -59,16 +55,12 @@ func (t *transfer) GetSqliteKanji(ctx context.Context) ([]kanjiModel, error) {
 	if err != nil {
 		return nil, err
 	}
-	logger.InfoKV(ctx, "Kanji count", "count", len(kanji))
-	if len(kanji) > 0 {
-		logger.InfoKV(ctx, "Kanji struct", "struct", fmt.Sprintf("%+v\n", kanji[0]))
-	}
 
 	return kanji, err
 }
 
 func (t *transfer) GetSqliteWords(ctx context.Context) ([]wordModel, error) {
-	subQueryAlt, _, err := sq.Select("word_id as alt_word_id, group_concat(word_alternative, ';') AS word_alternative").Distinct().
+	subQueryAlt, _, err := sq.Select("word_id as alt_word_id, group_concat(word_alternative, '|') AS word_alternative").Distinct().
 		From("words").
 		LeftJoin("word_alternatives ON (words.id == word_alternatives.word_id)").
 		GroupBy("words.id").
@@ -78,7 +70,7 @@ func (t *transfer) GetSqliteWords(ctx context.Context) ([]wordModel, error) {
 		return nil, err
 	}
 
-	subQueryRead, _, err := sq.Select("word_readings.word_id as read_word_id, group_concat(word_reading, ';') AS word_reading").Distinct().
+	subQueryRead, _, err := sq.Select("word_readings.word_id as read_word_id, group_concat(word_reading, '|') AS word_reading").Distinct().
 		From("words").
 		LeftJoin("word_readings ON (words.id == word_readings.word_id)").
 		GroupBy("words.id").
@@ -88,7 +80,7 @@ func (t *transfer) GetSqliteWords(ctx context.Context) ([]wordModel, error) {
 		return nil, err
 	}
 
-	subQueryType, _, err := sq.Select("word_types.word_id as type_word_id, group_concat(word_type, ';') AS word_type").Distinct().
+	subQueryType, _, err := sq.Select("word_types.word_id as type_word_id, group_concat(word_type, '|') AS word_type").Distinct().
 		From("words").
 		LeftJoin("word_types ON (words.id == word_types.word_id)").
 		GroupBy("words.id").
@@ -98,7 +90,7 @@ func (t *transfer) GetSqliteWords(ctx context.Context) ([]wordModel, error) {
 		return nil, err
 	}
 
-	subQuerySen, _, err := sq.Select("sentences.word_id as sen_word_id, group_concat(sentences.id, ';') as sentence_id, group_concat(eng, ';') AS eng, group_concat(jap, ';') AS jap").Distinct().
+	subQuerySen, _, err := sq.Select("sentences.word_id as sen_word_id, group_concat(sentences.id, '|') as sentence_id, group_concat(eng, '|') AS eng, group_concat(jap, '|') AS jap").Distinct().
 		From("words").
 		LeftJoin("sentences ON (words.id == sentences.word_id)").
 		GroupBy("words.id").
@@ -122,19 +114,12 @@ func (t *transfer) GetSqliteWords(ctx context.Context) ([]wordModel, error) {
 		return nil, err
 	}
 
-	logger.InfoKV(ctx, "Words query", "query", query)
-
 	var words []wordModel
 
 	err = t.sqliteDB.SelectContext(ctx, &words, query)
 
 	if err != nil {
 		return nil, err
-	}
-
-	logger.InfoKV(ctx, "Words count", "count", len(words))
-	if len(words) > 0 {
-		logger.InfoKV(ctx, "Words struct", "struct", fmt.Sprintf("%+v\n", words[0]))
 	}
 
 	return words, err
@@ -148,8 +133,6 @@ func (t *transfer) GetSqliteCompositions(ctx context.Context) ([]compostion, err
 		return nil, err
 	}
 
-	logger.InfoKV(ctx, "Compostions query", "query", query)
-
 	var compostions []compostion
 
 	err = t.sqliteDB.SelectContext(ctx, &compostions, query)
@@ -157,8 +140,6 @@ func (t *transfer) GetSqliteCompositions(ctx context.Context) ([]compostion, err
 	if err != nil {
 		return nil, err
 	}
-
-	logger.InfoKV(ctx, "Words count", "count", len(compostions))
 
 	return compostions, err
 }
