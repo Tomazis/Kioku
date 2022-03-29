@@ -140,22 +140,22 @@ var _ interface {
 	ErrorName() string
 } = KanjiValidationError{}
 
-// Validate checks the field values on GetKanjiV1Request with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *GetKanjiV1Request) Validate() error {
+// Validate checks the field values on GetKanjiByIdV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetKanjiByIdV1Request) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetKanjiV1Request with the rules
+// ValidateAll checks the field values on GetKanjiByIdV1Request with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetKanjiV1RequestMultiError, or nil if none found.
-func (m *GetKanjiV1Request) ValidateAll() error {
+// GetKanjiByIdV1RequestMultiError, or nil if none found.
+func (m *GetKanjiByIdV1Request) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetKanjiV1Request) validate(all bool) error {
+func (m *GetKanjiByIdV1Request) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -163,7 +163,7 @@ func (m *GetKanjiV1Request) validate(all bool) error {
 	var errors []error
 
 	if m.GetKanjiId() <= 0 {
-		err := GetKanjiV1RequestValidationError{
+		err := GetKanjiByIdV1RequestValidationError{
 			field:  "KanjiId",
 			reason: "value must be greater than 0",
 		}
@@ -174,18 +174,18 @@ func (m *GetKanjiV1Request) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetKanjiV1RequestMultiError(errors)
+		return GetKanjiByIdV1RequestMultiError(errors)
 	}
 	return nil
 }
 
-// GetKanjiV1RequestMultiError is an error wrapping multiple validation errors
-// returned by GetKanjiV1Request.ValidateAll() if the designated constraints
-// aren't met.
-type GetKanjiV1RequestMultiError []error
+// GetKanjiByIdV1RequestMultiError is an error wrapping multiple validation
+// errors returned by GetKanjiByIdV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type GetKanjiByIdV1RequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetKanjiV1RequestMultiError) Error() string {
+func (m GetKanjiByIdV1RequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -194,11 +194,11 @@ func (m GetKanjiV1RequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetKanjiV1RequestMultiError) AllErrors() []error { return m }
+func (m GetKanjiByIdV1RequestMultiError) AllErrors() []error { return m }
 
-// GetKanjiV1RequestValidationError is the validation error returned by
-// GetKanjiV1Request.Validate if the designated constraints aren't met.
-type GetKanjiV1RequestValidationError struct {
+// GetKanjiByIdV1RequestValidationError is the validation error returned by
+// GetKanjiByIdV1Request.Validate if the designated constraints aren't met.
+type GetKanjiByIdV1RequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -206,24 +206,24 @@ type GetKanjiV1RequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetKanjiV1RequestValidationError) Field() string { return e.field }
+func (e GetKanjiByIdV1RequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetKanjiV1RequestValidationError) Reason() string { return e.reason }
+func (e GetKanjiByIdV1RequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetKanjiV1RequestValidationError) Cause() error { return e.cause }
+func (e GetKanjiByIdV1RequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetKanjiV1RequestValidationError) Key() bool { return e.key }
+func (e GetKanjiByIdV1RequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetKanjiV1RequestValidationError) ErrorName() string {
-	return "GetKanjiV1RequestValidationError"
+func (e GetKanjiByIdV1RequestValidationError) ErrorName() string {
+	return "GetKanjiByIdV1RequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetKanjiV1RequestValidationError) Error() string {
+func (e GetKanjiByIdV1RequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -235,14 +235,14 @@ func (e GetKanjiV1RequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetKanjiV1Request.%s: %s%s",
+		"invalid %sGetKanjiByIdV1Request.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetKanjiV1RequestValidationError{}
+var _ error = GetKanjiByIdV1RequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -250,24 +250,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetKanjiV1RequestValidationError{}
+} = GetKanjiByIdV1RequestValidationError{}
 
-// Validate checks the field values on GetKanjiV1Response with the rules
+// Validate checks the field values on GetKanjiByIdV1Response with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetKanjiV1Response) Validate() error {
+func (m *GetKanjiByIdV1Response) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetKanjiV1Response with the rules
+// ValidateAll checks the field values on GetKanjiByIdV1Response with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetKanjiV1ResponseMultiError, or nil if none found.
-func (m *GetKanjiV1Response) ValidateAll() error {
+// GetKanjiByIdV1ResponseMultiError, or nil if none found.
+func (m *GetKanjiByIdV1Response) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetKanjiV1Response) validate(all bool) error {
+func (m *GetKanjiByIdV1Response) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -278,7 +278,7 @@ func (m *GetKanjiV1Response) validate(all bool) error {
 		switch v := interface{}(m.GetKanji()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetKanjiV1ResponseValidationError{
+				errors = append(errors, GetKanjiByIdV1ResponseValidationError{
 					field:  "Kanji",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -286,7 +286,7 @@ func (m *GetKanjiV1Response) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, GetKanjiV1ResponseValidationError{
+				errors = append(errors, GetKanjiByIdV1ResponseValidationError{
 					field:  "Kanji",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -295,7 +295,7 @@ func (m *GetKanjiV1Response) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetKanji()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return GetKanjiV1ResponseValidationError{
+			return GetKanjiByIdV1ResponseValidationError{
 				field:  "Kanji",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -304,18 +304,18 @@ func (m *GetKanjiV1Response) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return GetKanjiV1ResponseMultiError(errors)
+		return GetKanjiByIdV1ResponseMultiError(errors)
 	}
 	return nil
 }
 
-// GetKanjiV1ResponseMultiError is an error wrapping multiple validation errors
-// returned by GetKanjiV1Response.ValidateAll() if the designated constraints
-// aren't met.
-type GetKanjiV1ResponseMultiError []error
+// GetKanjiByIdV1ResponseMultiError is an error wrapping multiple validation
+// errors returned by GetKanjiByIdV1Response.ValidateAll() if the designated
+// constraints aren't met.
+type GetKanjiByIdV1ResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetKanjiV1ResponseMultiError) Error() string {
+func (m GetKanjiByIdV1ResponseMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -324,11 +324,11 @@ func (m GetKanjiV1ResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetKanjiV1ResponseMultiError) AllErrors() []error { return m }
+func (m GetKanjiByIdV1ResponseMultiError) AllErrors() []error { return m }
 
-// GetKanjiV1ResponseValidationError is the validation error returned by
-// GetKanjiV1Response.Validate if the designated constraints aren't met.
-type GetKanjiV1ResponseValidationError struct {
+// GetKanjiByIdV1ResponseValidationError is the validation error returned by
+// GetKanjiByIdV1Response.Validate if the designated constraints aren't met.
+type GetKanjiByIdV1ResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -336,24 +336,24 @@ type GetKanjiV1ResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetKanjiV1ResponseValidationError) Field() string { return e.field }
+func (e GetKanjiByIdV1ResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetKanjiV1ResponseValidationError) Reason() string { return e.reason }
+func (e GetKanjiByIdV1ResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetKanjiV1ResponseValidationError) Cause() error { return e.cause }
+func (e GetKanjiByIdV1ResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetKanjiV1ResponseValidationError) Key() bool { return e.key }
+func (e GetKanjiByIdV1ResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetKanjiV1ResponseValidationError) ErrorName() string {
-	return "GetKanjiV1ResponseValidationError"
+func (e GetKanjiByIdV1ResponseValidationError) ErrorName() string {
+	return "GetKanjiByIdV1ResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetKanjiV1ResponseValidationError) Error() string {
+func (e GetKanjiByIdV1ResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -365,14 +365,14 @@ func (e GetKanjiV1ResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetKanjiV1Response.%s: %s%s",
+		"invalid %sGetKanjiByIdV1Response.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetKanjiV1ResponseValidationError{}
+var _ error = GetKanjiByIdV1ResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -380,24 +380,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetKanjiV1ResponseValidationError{}
+} = GetKanjiByIdV1ResponseValidationError{}
 
-// Validate checks the field values on ListKanjiV1Request with the rules
+// Validate checks the field values on ListKanjiByLevelV1Request with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *ListKanjiV1Request) Validate() error {
+func (m *ListKanjiByLevelV1Request) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ListKanjiV1Request with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on ListKanjiByLevelV1Request with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ListKanjiV1RequestMultiError, or nil if none found.
-func (m *ListKanjiV1Request) ValidateAll() error {
+// ListKanjiByLevelV1RequestMultiError, or nil if none found.
+func (m *ListKanjiByLevelV1Request) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ListKanjiV1Request) validate(all bool) error {
+func (m *ListKanjiByLevelV1Request) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -405,7 +405,7 @@ func (m *ListKanjiV1Request) validate(all bool) error {
 	var errors []error
 
 	if m.GetLevel() <= 0 {
-		err := ListKanjiV1RequestValidationError{
+		err := ListKanjiByLevelV1RequestValidationError{
 			field:  "Level",
 			reason: "value must be greater than 0",
 		}
@@ -416,18 +416,18 @@ func (m *ListKanjiV1Request) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return ListKanjiV1RequestMultiError(errors)
+		return ListKanjiByLevelV1RequestMultiError(errors)
 	}
 	return nil
 }
 
-// ListKanjiV1RequestMultiError is an error wrapping multiple validation errors
-// returned by ListKanjiV1Request.ValidateAll() if the designated constraints
-// aren't met.
-type ListKanjiV1RequestMultiError []error
+// ListKanjiByLevelV1RequestMultiError is an error wrapping multiple validation
+// errors returned by ListKanjiByLevelV1Request.ValidateAll() if the
+// designated constraints aren't met.
+type ListKanjiByLevelV1RequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ListKanjiV1RequestMultiError) Error() string {
+func (m ListKanjiByLevelV1RequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -436,11 +436,11 @@ func (m ListKanjiV1RequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ListKanjiV1RequestMultiError) AllErrors() []error { return m }
+func (m ListKanjiByLevelV1RequestMultiError) AllErrors() []error { return m }
 
-// ListKanjiV1RequestValidationError is the validation error returned by
-// ListKanjiV1Request.Validate if the designated constraints aren't met.
-type ListKanjiV1RequestValidationError struct {
+// ListKanjiByLevelV1RequestValidationError is the validation error returned by
+// ListKanjiByLevelV1Request.Validate if the designated constraints aren't met.
+type ListKanjiByLevelV1RequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -448,24 +448,24 @@ type ListKanjiV1RequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e ListKanjiV1RequestValidationError) Field() string { return e.field }
+func (e ListKanjiByLevelV1RequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ListKanjiV1RequestValidationError) Reason() string { return e.reason }
+func (e ListKanjiByLevelV1RequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ListKanjiV1RequestValidationError) Cause() error { return e.cause }
+func (e ListKanjiByLevelV1RequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ListKanjiV1RequestValidationError) Key() bool { return e.key }
+func (e ListKanjiByLevelV1RequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ListKanjiV1RequestValidationError) ErrorName() string {
-	return "ListKanjiV1RequestValidationError"
+func (e ListKanjiByLevelV1RequestValidationError) ErrorName() string {
+	return "ListKanjiByLevelV1RequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ListKanjiV1RequestValidationError) Error() string {
+func (e ListKanjiByLevelV1RequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -477,14 +477,14 @@ func (e ListKanjiV1RequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sListKanjiV1Request.%s: %s%s",
+		"invalid %sListKanjiByLevelV1Request.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ListKanjiV1RequestValidationError{}
+var _ error = ListKanjiByLevelV1RequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -492,7 +492,124 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ListKanjiV1RequestValidationError{}
+} = ListKanjiByLevelV1RequestValidationError{}
+
+// Validate checks the field values on ListKanjiByIdsV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListKanjiByIdsV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListKanjiByIdsV1Request with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListKanjiByIdsV1RequestMultiError, or nil if none found.
+func (m *ListKanjiByIdsV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListKanjiByIdsV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetKanjiId() {
+		_, _ = idx, item
+
+		if item <= 0 {
+			err := ListKanjiByIdsV1RequestValidationError{
+				field:  fmt.Sprintf("KanjiId[%v]", idx),
+				reason: "value must be greater than 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListKanjiByIdsV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// ListKanjiByIdsV1RequestMultiError is an error wrapping multiple validation
+// errors returned by ListKanjiByIdsV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type ListKanjiByIdsV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListKanjiByIdsV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListKanjiByIdsV1RequestMultiError) AllErrors() []error { return m }
+
+// ListKanjiByIdsV1RequestValidationError is the validation error returned by
+// ListKanjiByIdsV1Request.Validate if the designated constraints aren't met.
+type ListKanjiByIdsV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListKanjiByIdsV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListKanjiByIdsV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListKanjiByIdsV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListKanjiByIdsV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListKanjiByIdsV1RequestValidationError) ErrorName() string {
+	return "ListKanjiByIdsV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListKanjiByIdsV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListKanjiByIdsV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListKanjiByIdsV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListKanjiByIdsV1RequestValidationError{}
 
 // Validate checks the field values on ListKanjiV1Response with the rules
 // defined in the proto definition for this message. If any rules are

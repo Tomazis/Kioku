@@ -1,13 +1,15 @@
 package models
 
+import "database/sql"
+
 type Kanji struct {
-	ID           uint64   `db:"id"`
-	Kanji        string   `db:"kanji"`
-	Primary      string   `db:"kanji_meaning"`
-	Level        uint32   `db:"kanji_level"`
-	Alternatives []string `db:"-"`
-	Onyomi       []string `db:"-"`
-	Kunyomi      []string `db:"-"`
+	ID           uint64         `db:"id"`
+	Kanji        string         `db:"kanji"`
+	Primary      string         `db:"kanji_meaning"`
+	Level        uint32         `db:"kanji_level"`
+	Alternatives sql.NullString `db:"kanji_alternative"`
+	Onyomi       sql.NullString `db:"kanji_onyomi"`
+	Kunyomi      sql.NullString `db:"kanji_kunyomi"`
 }
 
 type KanjiAlternative struct {

@@ -118,7 +118,7 @@ func (x *Kanji) GetKunyomi() []string {
 	return nil
 }
 
-type GetKanjiV1Request struct {
+type GetKanjiByIdV1Request struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -126,8 +126,8 @@ type GetKanjiV1Request struct {
 	KanjiId uint64 `protobuf:"varint,1,opt,name=kanji_id,json=kanjiId,proto3" json:"kanji_id,omitempty"`
 }
 
-func (x *GetKanjiV1Request) Reset() {
-	*x = GetKanjiV1Request{}
+func (x *GetKanjiByIdV1Request) Reset() {
+	*x = GetKanjiByIdV1Request{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -135,13 +135,13 @@ func (x *GetKanjiV1Request) Reset() {
 	}
 }
 
-func (x *GetKanjiV1Request) String() string {
+func (x *GetKanjiByIdV1Request) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetKanjiV1Request) ProtoMessage() {}
+func (*GetKanjiByIdV1Request) ProtoMessage() {}
 
-func (x *GetKanjiV1Request) ProtoReflect() protoreflect.Message {
+func (x *GetKanjiByIdV1Request) ProtoReflect() protoreflect.Message {
 	mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -153,19 +153,19 @@ func (x *GetKanjiV1Request) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetKanjiV1Request.ProtoReflect.Descriptor instead.
-func (*GetKanjiV1Request) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetKanjiByIdV1Request.ProtoReflect.Descriptor instead.
+func (*GetKanjiByIdV1Request) Descriptor() ([]byte, []int) {
 	return file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetKanjiV1Request) GetKanjiId() uint64 {
+func (x *GetKanjiByIdV1Request) GetKanjiId() uint64 {
 	if x != nil {
 		return x.KanjiId
 	}
 	return 0
 }
 
-type GetKanjiV1Response struct {
+type GetKanjiByIdV1Response struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -173,8 +173,8 @@ type GetKanjiV1Response struct {
 	Kanji *Kanji `protobuf:"bytes,1,opt,name=kanji,proto3" json:"kanji,omitempty"`
 }
 
-func (x *GetKanjiV1Response) Reset() {
-	*x = GetKanjiV1Response{}
+func (x *GetKanjiByIdV1Response) Reset() {
+	*x = GetKanjiByIdV1Response{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -182,13 +182,13 @@ func (x *GetKanjiV1Response) Reset() {
 	}
 }
 
-func (x *GetKanjiV1Response) String() string {
+func (x *GetKanjiByIdV1Response) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetKanjiV1Response) ProtoMessage() {}
+func (*GetKanjiByIdV1Response) ProtoMessage() {}
 
-func (x *GetKanjiV1Response) ProtoReflect() protoreflect.Message {
+func (x *GetKanjiByIdV1Response) ProtoReflect() protoreflect.Message {
 	mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -200,19 +200,19 @@ func (x *GetKanjiV1Response) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetKanjiV1Response.ProtoReflect.Descriptor instead.
-func (*GetKanjiV1Response) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetKanjiByIdV1Response.ProtoReflect.Descriptor instead.
+func (*GetKanjiByIdV1Response) Descriptor() ([]byte, []int) {
 	return file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetKanjiV1Response) GetKanji() *Kanji {
+func (x *GetKanjiByIdV1Response) GetKanji() *Kanji {
 	if x != nil {
 		return x.Kanji
 	}
 	return nil
 }
 
-type ListKanjiV1Request struct {
+type ListKanjiByLevelV1Request struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -220,8 +220,8 @@ type ListKanjiV1Request struct {
 	Level uint32 `protobuf:"varint,1,opt,name=level,proto3" json:"level,omitempty"`
 }
 
-func (x *ListKanjiV1Request) Reset() {
-	*x = ListKanjiV1Request{}
+func (x *ListKanjiByLevelV1Request) Reset() {
+	*x = ListKanjiByLevelV1Request{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -229,13 +229,13 @@ func (x *ListKanjiV1Request) Reset() {
 	}
 }
 
-func (x *ListKanjiV1Request) String() string {
+func (x *ListKanjiByLevelV1Request) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListKanjiV1Request) ProtoMessage() {}
+func (*ListKanjiByLevelV1Request) ProtoMessage() {}
 
-func (x *ListKanjiV1Request) ProtoReflect() protoreflect.Message {
+func (x *ListKanjiByLevelV1Request) ProtoReflect() protoreflect.Message {
 	mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -247,16 +247,63 @@ func (x *ListKanjiV1Request) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListKanjiV1Request.ProtoReflect.Descriptor instead.
-func (*ListKanjiV1Request) Descriptor() ([]byte, []int) {
+// Deprecated: Use ListKanjiByLevelV1Request.ProtoReflect.Descriptor instead.
+func (*ListKanjiByLevelV1Request) Descriptor() ([]byte, []int) {
 	return file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ListKanjiV1Request) GetLevel() uint32 {
+func (x *ListKanjiByLevelV1Request) GetLevel() uint32 {
 	if x != nil {
 		return x.Level
 	}
 	return 0
+}
+
+type ListKanjiByIdsV1Request struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	KanjiId []uint64 `protobuf:"varint,1,rep,packed,name=kanji_id,json=kanjiId,proto3" json:"kanji_id,omitempty"`
+}
+
+func (x *ListKanjiByIdsV1Request) Reset() {
+	*x = ListKanjiByIdsV1Request{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListKanjiByIdsV1Request) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListKanjiByIdsV1Request) ProtoMessage() {}
+
+func (x *ListKanjiByIdsV1Request) ProtoReflect() protoreflect.Message {
+	mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListKanjiByIdsV1Request.ProtoReflect.Descriptor instead.
+func (*ListKanjiByIdsV1Request) Descriptor() ([]byte, []int) {
+	return file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListKanjiByIdsV1Request) GetKanjiId() []uint64 {
+	if x != nil {
+		return x.KanjiId
+	}
+	return nil
 }
 
 type ListKanjiV1Response struct {
@@ -270,7 +317,7 @@ type ListKanjiV1Response struct {
 func (x *ListKanjiV1Response) Reset() {
 	*x = ListKanjiV1Response{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[4]
+		mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -283,7 +330,7 @@ func (x *ListKanjiV1Response) String() string {
 func (*ListKanjiV1Response) ProtoMessage() {}
 
 func (x *ListKanjiV1Response) ProtoReflect() protoreflect.Message {
-	mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[4]
+	mi := &file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -296,7 +343,7 @@ func (x *ListKanjiV1Response) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListKanjiV1Response.ProtoReflect.Descriptor instead.
 func (*ListKanjiV1Response) Descriptor() ([]byte, []int) {
-	return file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDescGZIP(), []int{4}
+	return file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ListKanjiV1Response) GetKanji() []*Kanji {
@@ -329,28 +376,33 @@ var file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDesc = []byte{
 	0x6c, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x74, 0x69, 0x76, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x6f,
 	0x6e, 0x79, 0x6f, 0x6d, 0x69, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06, 0x6f, 0x6e, 0x79,
 	0x6f, 0x6d, 0x69, 0x12, 0x18, 0x0a, 0x07, 0x6b, 0x75, 0x6e, 0x79, 0x6f, 0x6d, 0x69, 0x18, 0x07,
-	0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x6b, 0x75, 0x6e, 0x79, 0x6f, 0x6d, 0x69, 0x22, 0x37, 0x0a,
-	0x11, 0x47, 0x65, 0x74, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x56, 0x31, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x22, 0x0a, 0x08, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x07, 0x6b,
-	0x61, 0x6e, 0x6a, 0x69, 0x49, 0x64, 0x22, 0x4a, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x4b, 0x61, 0x6e,
-	0x6a, 0x69, 0x56, 0x31, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x34, 0x0a, 0x05,
-	0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x6b, 0x69,
-	0x6f, 0x6b, 0x75, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x73, 0x72, 0x76, 0x5f, 0x64,
-	0x62, 0x61, 0x2e, 0x76, 0x31, 0x2e, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x52, 0x05, 0x6b, 0x61, 0x6e,
-	0x6a, 0x69, 0x22, 0x33, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x56,
-	0x31, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x05, 0x6c, 0x65, 0x76, 0x65,
-	0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x2a, 0x02, 0x20, 0x00,
-	0x52, 0x05, 0x6c, 0x65, 0x76, 0x65, 0x6c, 0x22, 0x4b, 0x0a, 0x13, 0x4c, 0x69, 0x73, 0x74, 0x4b,
-	0x61, 0x6e, 0x6a, 0x69, 0x56, 0x31, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x34,
-	0x0a, 0x05, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1e, 0x2e,
-	0x6b, 0x69, 0x6f, 0x6b, 0x75, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x73, 0x72, 0x76,
-	0x5f, 0x64, 0x62, 0x61, 0x2e, 0x76, 0x31, 0x2e, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x52, 0x05, 0x6b,
-	0x61, 0x6e, 0x6a, 0x69, 0x42, 0x3d, 0x5a, 0x3b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
-	0x6f, 0x6d, 0x2f, 0x74, 0x6f, 0x6d, 0x61, 0x7a, 0x69, 0x73, 0x2f, 0x6b, 0x69, 0x6f, 0x6b, 0x75,
-	0x2f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x73, 0x72, 0x76, 0x2d, 0x64, 0x62, 0x61, 0x2f,
-	0x70, 0x6b, 0x67, 0x2f, 0x73, 0x72, 0x76, 0x2d, 0x64, 0x62, 0x61, 0x3b, 0x73, 0x72, 0x76, 0x5f,
-	0x64, 0x62, 0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x6b, 0x75, 0x6e, 0x79, 0x6f, 0x6d, 0x69, 0x22, 0x3b, 0x0a,
+	0x15, 0x47, 0x65, 0x74, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x42, 0x79, 0x49, 0x64, 0x56, 0x31, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x22, 0x0a, 0x08, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20,
+	0x00, 0x52, 0x07, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x49, 0x64, 0x22, 0x4e, 0x0a, 0x16, 0x47, 0x65,
+	0x74, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x42, 0x79, 0x49, 0x64, 0x56, 0x31, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x34, 0x0a, 0x05, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1e, 0x2e, 0x6b, 0x69, 0x6f, 0x6b, 0x75, 0x2e, 0x73, 0x65, 0x72, 0x76,
+	0x65, 0x72, 0x2e, 0x73, 0x72, 0x76, 0x5f, 0x64, 0x62, 0x61, 0x2e, 0x76, 0x31, 0x2e, 0x4b, 0x61,
+	0x6e, 0x6a, 0x69, 0x52, 0x05, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x22, 0x3a, 0x0a, 0x19, 0x4c, 0x69,
+	0x73, 0x74, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x42, 0x79, 0x4c, 0x65, 0x76, 0x65, 0x6c, 0x56, 0x31,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x05, 0x6c, 0x65, 0x76, 0x65, 0x6c,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x2a, 0x02, 0x20, 0x00, 0x52,
+	0x05, 0x6c, 0x65, 0x76, 0x65, 0x6c, 0x22, 0x42, 0x0a, 0x17, 0x4c, 0x69, 0x73, 0x74, 0x4b, 0x61,
+	0x6e, 0x6a, 0x69, 0x42, 0x79, 0x49, 0x64, 0x73, 0x56, 0x31, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x27, 0x0a, 0x08, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x03, 0x28, 0x04, 0x42, 0x0c, 0xfa, 0x42, 0x09, 0x92, 0x01, 0x06, 0x22, 0x04, 0x32, 0x02, 0x20,
+	0x00, 0x52, 0x07, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x49, 0x64, 0x22, 0x4b, 0x0a, 0x13, 0x4c, 0x69,
+	0x73, 0x74, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x56, 0x31, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x34, 0x0a, 0x05, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x1e, 0x2e, 0x6b, 0x69, 0x6f, 0x6b, 0x75, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e,
+	0x73, 0x72, 0x76, 0x5f, 0x64, 0x62, 0x61, 0x2e, 0x76, 0x31, 0x2e, 0x4b, 0x61, 0x6e, 0x6a, 0x69,
+	0x52, 0x05, 0x6b, 0x61, 0x6e, 0x6a, 0x69, 0x42, 0x3d, 0x5a, 0x3b, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x74, 0x6f, 0x6d, 0x61, 0x7a, 0x69, 0x73, 0x2f, 0x6b, 0x69,
+	0x6f, 0x6b, 0x75, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2f, 0x73, 0x72, 0x76, 0x2d, 0x64,
+	0x62, 0x61, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x73, 0x72, 0x76, 0x2d, 0x64, 0x62, 0x61, 0x3b, 0x73,
+	0x72, 0x76, 0x5f, 0x64, 0x62, 0x61, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -365,16 +417,17 @@ func file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDescGZIP() []byte {
 	return file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDescData
 }
 
-var file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_kioku_srv_dba_v1_srv_dba_kanji_proto_goTypes = []interface{}{
-	(*Kanji)(nil),               // 0: kioku.server.srv_dba.v1.Kanji
-	(*GetKanjiV1Request)(nil),   // 1: kioku.server.srv_dba.v1.GetKanjiV1Request
-	(*GetKanjiV1Response)(nil),  // 2: kioku.server.srv_dba.v1.GetKanjiV1Response
-	(*ListKanjiV1Request)(nil),  // 3: kioku.server.srv_dba.v1.ListKanjiV1Request
-	(*ListKanjiV1Response)(nil), // 4: kioku.server.srv_dba.v1.ListKanjiV1Response
+	(*Kanji)(nil),                     // 0: kioku.server.srv_dba.v1.Kanji
+	(*GetKanjiByIdV1Request)(nil),     // 1: kioku.server.srv_dba.v1.GetKanjiByIdV1Request
+	(*GetKanjiByIdV1Response)(nil),    // 2: kioku.server.srv_dba.v1.GetKanjiByIdV1Response
+	(*ListKanjiByLevelV1Request)(nil), // 3: kioku.server.srv_dba.v1.ListKanjiByLevelV1Request
+	(*ListKanjiByIdsV1Request)(nil),   // 4: kioku.server.srv_dba.v1.ListKanjiByIdsV1Request
+	(*ListKanjiV1Response)(nil),       // 5: kioku.server.srv_dba.v1.ListKanjiV1Response
 }
 var file_kioku_srv_dba_v1_srv_dba_kanji_proto_depIdxs = []int32{
-	0, // 0: kioku.server.srv_dba.v1.GetKanjiV1Response.kanji:type_name -> kioku.server.srv_dba.v1.Kanji
+	0, // 0: kioku.server.srv_dba.v1.GetKanjiByIdV1Response.kanji:type_name -> kioku.server.srv_dba.v1.Kanji
 	0, // 1: kioku.server.srv_dba.v1.ListKanjiV1Response.kanji:type_name -> kioku.server.srv_dba.v1.Kanji
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
@@ -402,7 +455,7 @@ func file_kioku_srv_dba_v1_srv_dba_kanji_proto_init() {
 			}
 		}
 		file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetKanjiV1Request); i {
+			switch v := v.(*GetKanjiByIdV1Request); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -414,7 +467,7 @@ func file_kioku_srv_dba_v1_srv_dba_kanji_proto_init() {
 			}
 		}
 		file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetKanjiV1Response); i {
+			switch v := v.(*GetKanjiByIdV1Response); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -426,7 +479,7 @@ func file_kioku_srv_dba_v1_srv_dba_kanji_proto_init() {
 			}
 		}
 		file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListKanjiV1Request); i {
+			switch v := v.(*ListKanjiByLevelV1Request); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -438,6 +491,18 @@ func file_kioku_srv_dba_v1_srv_dba_kanji_proto_init() {
 			}
 		}
 		file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListKanjiByIdsV1Request); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_kioku_srv_dba_v1_srv_dba_kanji_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListKanjiV1Response); i {
 			case 0:
 				return &v.state
@@ -456,7 +521,7 @@ func file_kioku_srv_dba_v1_srv_dba_kanji_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_kioku_srv_dba_v1_srv_dba_kanji_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

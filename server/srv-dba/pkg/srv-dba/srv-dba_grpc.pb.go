@@ -19,8 +19,14 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SrvDbaServiceClient interface {
 	//Kanji part
-	GetKanjiV1(ctx context.Context, in *GetKanjiV1Request, opts ...grpc.CallOption) (*GetKanjiV1Response, error)
-	ListKanjiV1(ctx context.Context, in *ListKanjiV1Request, opts ...grpc.CallOption) (*ListKanjiV1Response, error)
+	GetKanjiByIdV1(ctx context.Context, in *GetKanjiByIdV1Request, opts ...grpc.CallOption) (*GetKanjiByIdV1Response, error)
+	ListKanjiByLevelV1(ctx context.Context, in *ListKanjiByLevelV1Request, opts ...grpc.CallOption) (*ListKanjiV1Response, error)
+	ListKanjiByIdsV1(ctx context.Context, in *ListKanjiByIdsV1Request, opts ...grpc.CallOption) (*ListKanjiV1Response, error)
+	//Words part
+	GetWordByIdV1(ctx context.Context, in *GetWordByIdV1Request, opts ...grpc.CallOption) (*GetWordByIdV1Response, error)
+	ListWordsByLevelV1(ctx context.Context, in *ListWordsByLevelV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error)
+	ListWordsByKanjiV1(ctx context.Context, in *ListWordsByKanjiV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error)
+	ListWordsByIdsV1(ctx context.Context, in *ListWordsByIdsV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error)
 }
 
 type srvDbaServiceClient struct {
@@ -31,18 +37,63 @@ func NewSrvDbaServiceClient(cc grpc.ClientConnInterface) SrvDbaServiceClient {
 	return &srvDbaServiceClient{cc}
 }
 
-func (c *srvDbaServiceClient) GetKanjiV1(ctx context.Context, in *GetKanjiV1Request, opts ...grpc.CallOption) (*GetKanjiV1Response, error) {
-	out := new(GetKanjiV1Response)
-	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/GetKanjiV1", in, out, opts...)
+func (c *srvDbaServiceClient) GetKanjiByIdV1(ctx context.Context, in *GetKanjiByIdV1Request, opts ...grpc.CallOption) (*GetKanjiByIdV1Response, error) {
+	out := new(GetKanjiByIdV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/GetKanjiByIdV1", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *srvDbaServiceClient) ListKanjiV1(ctx context.Context, in *ListKanjiV1Request, opts ...grpc.CallOption) (*ListKanjiV1Response, error) {
+func (c *srvDbaServiceClient) ListKanjiByLevelV1(ctx context.Context, in *ListKanjiByLevelV1Request, opts ...grpc.CallOption) (*ListKanjiV1Response, error) {
 	out := new(ListKanjiV1Response)
-	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiV1", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiByLevelV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvDbaServiceClient) ListKanjiByIdsV1(ctx context.Context, in *ListKanjiByIdsV1Request, opts ...grpc.CallOption) (*ListKanjiV1Response, error) {
+	out := new(ListKanjiV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiByIdsV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvDbaServiceClient) GetWordByIdV1(ctx context.Context, in *GetWordByIdV1Request, opts ...grpc.CallOption) (*GetWordByIdV1Response, error) {
+	out := new(GetWordByIdV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/GetWordByIdV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvDbaServiceClient) ListWordsByLevelV1(ctx context.Context, in *ListWordsByLevelV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error) {
+	out := new(ListWordsV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByLevelV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvDbaServiceClient) ListWordsByKanjiV1(ctx context.Context, in *ListWordsByKanjiV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error) {
+	out := new(ListWordsV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByKanjiV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvDbaServiceClient) ListWordsByIdsV1(ctx context.Context, in *ListWordsByIdsV1Request, opts ...grpc.CallOption) (*ListWordsV1Response, error) {
+	out := new(ListWordsV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByIdsV1", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -54,8 +105,14 @@ func (c *srvDbaServiceClient) ListKanjiV1(ctx context.Context, in *ListKanjiV1Re
 // for forward compatibility
 type SrvDbaServiceServer interface {
 	//Kanji part
-	GetKanjiV1(context.Context, *GetKanjiV1Request) (*GetKanjiV1Response, error)
-	ListKanjiV1(context.Context, *ListKanjiV1Request) (*ListKanjiV1Response, error)
+	GetKanjiByIdV1(context.Context, *GetKanjiByIdV1Request) (*GetKanjiByIdV1Response, error)
+	ListKanjiByLevelV1(context.Context, *ListKanjiByLevelV1Request) (*ListKanjiV1Response, error)
+	ListKanjiByIdsV1(context.Context, *ListKanjiByIdsV1Request) (*ListKanjiV1Response, error)
+	//Words part
+	GetWordByIdV1(context.Context, *GetWordByIdV1Request) (*GetWordByIdV1Response, error)
+	ListWordsByLevelV1(context.Context, *ListWordsByLevelV1Request) (*ListWordsV1Response, error)
+	ListWordsByKanjiV1(context.Context, *ListWordsByKanjiV1Request) (*ListWordsV1Response, error)
+	ListWordsByIdsV1(context.Context, *ListWordsByIdsV1Request) (*ListWordsV1Response, error)
 	mustEmbedUnimplementedSrvDbaServiceServer()
 }
 
@@ -63,11 +120,26 @@ type SrvDbaServiceServer interface {
 type UnimplementedSrvDbaServiceServer struct {
 }
 
-func (UnimplementedSrvDbaServiceServer) GetKanjiV1(context.Context, *GetKanjiV1Request) (*GetKanjiV1Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetKanjiV1 not implemented")
+func (UnimplementedSrvDbaServiceServer) GetKanjiByIdV1(context.Context, *GetKanjiByIdV1Request) (*GetKanjiByIdV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKanjiByIdV1 not implemented")
 }
-func (UnimplementedSrvDbaServiceServer) ListKanjiV1(context.Context, *ListKanjiV1Request) (*ListKanjiV1Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListKanjiV1 not implemented")
+func (UnimplementedSrvDbaServiceServer) ListKanjiByLevelV1(context.Context, *ListKanjiByLevelV1Request) (*ListKanjiV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKanjiByLevelV1 not implemented")
+}
+func (UnimplementedSrvDbaServiceServer) ListKanjiByIdsV1(context.Context, *ListKanjiByIdsV1Request) (*ListKanjiV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListKanjiByIdsV1 not implemented")
+}
+func (UnimplementedSrvDbaServiceServer) GetWordByIdV1(context.Context, *GetWordByIdV1Request) (*GetWordByIdV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetWordByIdV1 not implemented")
+}
+func (UnimplementedSrvDbaServiceServer) ListWordsByLevelV1(context.Context, *ListWordsByLevelV1Request) (*ListWordsV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListWordsByLevelV1 not implemented")
+}
+func (UnimplementedSrvDbaServiceServer) ListWordsByKanjiV1(context.Context, *ListWordsByKanjiV1Request) (*ListWordsV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListWordsByKanjiV1 not implemented")
+}
+func (UnimplementedSrvDbaServiceServer) ListWordsByIdsV1(context.Context, *ListWordsByIdsV1Request) (*ListWordsV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListWordsByIdsV1 not implemented")
 }
 func (UnimplementedSrvDbaServiceServer) mustEmbedUnimplementedSrvDbaServiceServer() {}
 
@@ -82,38 +154,128 @@ func RegisterSrvDbaServiceServer(s grpc.ServiceRegistrar, srv SrvDbaServiceServe
 	s.RegisterService(&SrvDbaService_ServiceDesc, srv)
 }
 
-func _SrvDbaService_GetKanjiV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetKanjiV1Request)
+func _SrvDbaService_GetKanjiByIdV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKanjiByIdV1Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SrvDbaServiceServer).GetKanjiV1(ctx, in)
+		return srv.(SrvDbaServiceServer).GetKanjiByIdV1(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/GetKanjiV1",
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/GetKanjiByIdV1",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SrvDbaServiceServer).GetKanjiV1(ctx, req.(*GetKanjiV1Request))
+		return srv.(SrvDbaServiceServer).GetKanjiByIdV1(ctx, req.(*GetKanjiByIdV1Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SrvDbaService_ListKanjiV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListKanjiV1Request)
+func _SrvDbaService_ListKanjiByLevelV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKanjiByLevelV1Request)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SrvDbaServiceServer).ListKanjiV1(ctx, in)
+		return srv.(SrvDbaServiceServer).ListKanjiByLevelV1(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiV1",
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiByLevelV1",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SrvDbaServiceServer).ListKanjiV1(ctx, req.(*ListKanjiV1Request))
+		return srv.(SrvDbaServiceServer).ListKanjiByLevelV1(ctx, req.(*ListKanjiByLevelV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvDbaService_ListKanjiByIdsV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListKanjiByIdsV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvDbaServiceServer).ListKanjiByIdsV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiByIdsV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvDbaServiceServer).ListKanjiByIdsV1(ctx, req.(*ListKanjiByIdsV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvDbaService_GetWordByIdV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetWordByIdV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvDbaServiceServer).GetWordByIdV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/GetWordByIdV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvDbaServiceServer).GetWordByIdV1(ctx, req.(*GetWordByIdV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvDbaService_ListWordsByLevelV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWordsByLevelV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvDbaServiceServer).ListWordsByLevelV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByLevelV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvDbaServiceServer).ListWordsByLevelV1(ctx, req.(*ListWordsByLevelV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvDbaService_ListWordsByKanjiV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWordsByKanjiV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvDbaServiceServer).ListWordsByKanjiV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByKanjiV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvDbaServiceServer).ListWordsByKanjiV1(ctx, req.(*ListWordsByKanjiV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvDbaService_ListWordsByIdsV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWordsByIdsV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvDbaServiceServer).ListWordsByIdsV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByIdsV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvDbaServiceServer).ListWordsByIdsV1(ctx, req.(*ListWordsByIdsV1Request))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -126,12 +288,32 @@ var SrvDbaService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SrvDbaServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetKanjiV1",
-			Handler:    _SrvDbaService_GetKanjiV1_Handler,
+			MethodName: "GetKanjiByIdV1",
+			Handler:    _SrvDbaService_GetKanjiByIdV1_Handler,
 		},
 		{
-			MethodName: "ListKanjiV1",
-			Handler:    _SrvDbaService_ListKanjiV1_Handler,
+			MethodName: "ListKanjiByLevelV1",
+			Handler:    _SrvDbaService_ListKanjiByLevelV1_Handler,
+		},
+		{
+			MethodName: "ListKanjiByIdsV1",
+			Handler:    _SrvDbaService_ListKanjiByIdsV1_Handler,
+		},
+		{
+			MethodName: "GetWordByIdV1",
+			Handler:    _SrvDbaService_GetWordByIdV1_Handler,
+		},
+		{
+			MethodName: "ListWordsByLevelV1",
+			Handler:    _SrvDbaService_ListWordsByLevelV1_Handler,
+		},
+		{
+			MethodName: "ListWordsByKanjiV1",
+			Handler:    _SrvDbaService_ListWordsByKanjiV1_Handler,
+		},
+		{
+			MethodName: "ListWordsByIdsV1",
+			Handler:    _SrvDbaService_ListWordsByIdsV1_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

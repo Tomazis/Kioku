@@ -19,12 +19,12 @@
     "/v1/kanji/{kanjiId}": {
       "get": {
         "summary": "Kanji part",
-        "operationId": "SrvDbaService_GetKanjiV1",
+        "operationId": "SrvDbaService_GetKanjiByIdV1",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetKanjiV1Response"
+              "$ref": "#/definitions/v1GetKanjiByIdV1Response"
             }
           },
           "default": {
@@ -48,14 +48,165 @@
         ]
       }
     },
-    "/v1/kanjis/{level}": {
-      "get": {
-        "operationId": "SrvDbaService_ListKanjiV1",
+    "/v1/kanjis": {
+      "post": {
+        "operationId": "SrvDbaService_ListKanjiByIdsV1",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/v1ListKanjiV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/kanjis/{level}": {
+      "get": {
+        "operationId": "SrvDbaService_ListKanjiByLevelV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListKanjiV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "level",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/word/{wordId}": {
+      "get": {
+        "summary": "Words part",
+        "operationId": "SrvDbaService_GetWordByIdV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetWordByIdV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "wordId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/words": {
+      "get": {
+        "operationId": "SrvDbaService_ListWordsByIdsV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListWordsV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "wordId",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uint64"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/words/kanji/{kanjiId}": {
+      "get": {
+        "operationId": "SrvDbaService_ListWordsByKanjiV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListWordsV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "kanjiId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/words/{level}": {
+      "get": {
+        "operationId": "SrvDbaService_ListWordsByLevelV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListWordsV1Response"
             }
           },
           "default": {
@@ -111,11 +262,19 @@
         }
       }
     },
-    "v1GetKanjiV1Response": {
+    "v1GetKanjiByIdV1Response": {
       "type": "object",
       "properties": {
         "kanji": {
           "$ref": "#/definitions/v1Kanji"
+        }
+      }
+    },
+    "v1GetWordByIdV1Response": {
+      "type": "object",
+      "properties": {
+        "word": {
+          "$ref": "#/definitions/v1Word"
         }
       }
     },
@@ -163,6 +322,92 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/v1Kanji"
+          }
+        }
+      }
+    },
+    "v1ListWordsV1Response": {
+      "type": "object",
+      "properties": {
+        "words": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Word"
+          }
+        }
+      }
+    },
+    "v1Sentence": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string"
+        },
+        "translations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1SentenceTranslation"
+          }
+        }
+      }
+    },
+    "v1SentenceTranslation": {
+      "type": "object",
+      "properties": {
+        "language": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "translation": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Word": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "word": {
+          "type": "string"
+        },
+        "primary": {
+          "type": "string"
+        },
+        "level": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "composition": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Kanji"
+          }
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "readings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sentences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1Sentence"
           }
         }
       }

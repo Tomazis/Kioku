@@ -1,9 +1,14 @@
 package repo
 
-import "github.com/jmoiron/sqlx"
+import (
+	"sync"
+
+	"github.com/jmoiron/sqlx"
+)
 
 type repo struct {
-	db *sqlx.DB
+	db    *sqlx.DB
+	mutex sync.Mutex
 }
 
 func NewRepo(db_ *sqlx.DB) *repo {

@@ -37,6 +37,7 @@ func main() {
 		"commitHash", cfg.Project.CommitHash,
 		"debug", cfg.Project.Debug,
 		"environment", cfg.Project.Environment,
+		"importDB", cfg.Project.ImportDB,
 	)
 
 	migration := flag.Bool("migration", true, "Defines the migration start option")

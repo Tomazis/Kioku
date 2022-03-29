@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package kioku.server.srv_dba.v1;
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "kioku/srv-dba/v1/srv-dba-kanji.proto";
+
+option go_package = "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba;srv_dba";
+
+message SentenceTranslation {
+    uint32 language = 1;
+    string translation = 2;
+}
+
+message Sentence {
+             string              origin = 1;
+    repeated SentenceTranslation translations = 2;
+}
+
+message Word {
+             uint64   id = 1;
+             string   word = 2;
+             string   primary = 3;
+             uint32   level = 4;
+    repeated Kanji    composition = 5;
+    repeated string   alternatives = 6;
+    repeated string   readings = 7;
+    repeated string   types = 8;
+    repeated Sentence sentences = 9;
+}
+
+message GetWordByIdV1Request {
+    uint64 word_id = 1 [(validate.rules).uint64.gt = 0]; 
+}
+
+message GetWordByIdV1Response {
+    Word word = 1;
+}
+
+message ListWordsByLevelV1Request {
+    uint32 level = 1 [(validate.rules).uint32.gt = 0];
+}
+
+message ListWordsByKanjiV1Request {
+    uint64 kanji_id = 1 [(validate.rules).uint64.gt = 0];
+}
+
+message ListWordsByIdsV1Request {
+    repeated uint64 word_id = 1 [(validate.rules).repeated.items.uint64.gt = 0];
+}
+
+message ListWordsV1Response {
+    repeated Word words = 1;
+}

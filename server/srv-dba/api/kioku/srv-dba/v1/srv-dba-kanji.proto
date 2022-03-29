@@ -18,18 +18,25 @@ message Kanji {
     repeated string kunyomi      = 7;
 }
 
-message GetKanjiV1Request {
+message GetKanjiByIdV1Request {
     uint64 kanji_id = 1 [(validate.rules).uint64.gt = 0]; 
 }
 
-message GetKanjiV1Response {
+message GetKanjiByIdV1Response {
     Kanji kanji = 1;
 }
 
-message ListKanjiV1Request {
+message ListKanjiByLevelV1Request {
     uint32 level = 1 [(validate.rules).uint32.gt = 0];
+}
+
+message ListKanjiByIdsV1Request {
+    repeated uint64 kanji_id = 1 [(validate.rules).repeated.items.uint64.gt = 0];
 }
 
 message ListKanjiV1Response {
     repeated Kanji kanji = 1;
 }
+
+
+

@@ -31,8 +31,8 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
-func request_SrvDbaService_GetKanjiV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetKanjiV1Request
+func request_SrvDbaService_GetKanjiByIdV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetKanjiByIdV1Request
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -52,13 +52,13 @@ func request_SrvDbaService_GetKanjiV1_0(ctx context.Context, marshaler runtime.M
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "kanji_id", err)
 	}
 
-	msg, err := client.GetKanjiV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.GetKanjiByIdV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_SrvDbaService_GetKanjiV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetKanjiV1Request
+func local_request_SrvDbaService_GetKanjiByIdV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetKanjiByIdV1Request
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -78,13 +78,13 @@ func local_request_SrvDbaService_GetKanjiV1_0(ctx context.Context, marshaler run
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "kanji_id", err)
 	}
 
-	msg, err := server.GetKanjiV1(ctx, &protoReq)
+	msg, err := server.GetKanjiByIdV1(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
-func request_SrvDbaService_ListKanjiV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListKanjiV1Request
+func request_SrvDbaService_ListKanjiByLevelV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListKanjiByLevelV1Request
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -104,13 +104,13 @@ func request_SrvDbaService_ListKanjiV1_0(ctx context.Context, marshaler runtime.
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "level", err)
 	}
 
-	msg, err := client.ListKanjiV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.ListKanjiByLevelV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_SrvDbaService_ListKanjiV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListKanjiV1Request
+func local_request_SrvDbaService_ListKanjiByLevelV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListKanjiByLevelV1Request
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -130,7 +130,235 @@ func local_request_SrvDbaService_ListKanjiV1_0(ctx context.Context, marshaler ru
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "level", err)
 	}
 
-	msg, err := server.ListKanjiV1(ctx, &protoReq)
+	msg, err := server.ListKanjiByLevelV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_SrvDbaService_ListKanjiByIdsV1_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_SrvDbaService_ListKanjiByIdsV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListKanjiByIdsV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SrvDbaService_ListKanjiByIdsV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.ListKanjiByIdsV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_SrvDbaService_ListKanjiByIdsV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListKanjiByIdsV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SrvDbaService_ListKanjiByIdsV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.ListKanjiByIdsV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+func request_SrvDbaService_GetWordByIdV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetWordByIdV1Request
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["word_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "word_id")
+	}
+
+	protoReq.WordId, err = runtime.Uint64(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "word_id", err)
+	}
+
+	msg, err := client.GetWordByIdV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_SrvDbaService_GetWordByIdV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetWordByIdV1Request
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["word_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "word_id")
+	}
+
+	protoReq.WordId, err = runtime.Uint64(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "word_id", err)
+	}
+
+	msg, err := server.GetWordByIdV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+func request_SrvDbaService_ListWordsByLevelV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListWordsByLevelV1Request
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["level"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "level")
+	}
+
+	protoReq.Level, err = runtime.Uint32(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "level", err)
+	}
+
+	msg, err := client.ListWordsByLevelV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_SrvDbaService_ListWordsByLevelV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListWordsByLevelV1Request
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["level"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "level")
+	}
+
+	protoReq.Level, err = runtime.Uint32(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "level", err)
+	}
+
+	msg, err := server.ListWordsByLevelV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+func request_SrvDbaService_ListWordsByKanjiV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListWordsByKanjiV1Request
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["kanji_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "kanji_id")
+	}
+
+	protoReq.KanjiId, err = runtime.Uint64(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "kanji_id", err)
+	}
+
+	msg, err := client.ListWordsByKanjiV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_SrvDbaService_ListWordsByKanjiV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListWordsByKanjiV1Request
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["kanji_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "kanji_id")
+	}
+
+	protoReq.KanjiId, err = runtime.Uint64(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "kanji_id", err)
+	}
+
+	msg, err := server.ListWordsByKanjiV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_SrvDbaService_ListWordsByIdsV1_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_SrvDbaService_ListWordsByIdsV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListWordsByIdsV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SrvDbaService_ListWordsByIdsV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.ListWordsByIdsV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_SrvDbaService_ListWordsByIdsV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq ListWordsByIdsV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SrvDbaService_ListWordsByIdsV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.ListWordsByIdsV1(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -141,18 +369,18 @@ func local_request_SrvDbaService_ListKanjiV1_0(ctx context.Context, marshaler ru
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterSrvDbaServiceHandlerFromEndpoint instead.
 func RegisterSrvDbaServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server SrvDbaServiceServer) error {
 
-	mux.Handle("GET", pattern_SrvDbaService_GetKanjiV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_SrvDbaService_GetKanjiByIdV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/GetKanjiV1", runtime.WithHTTPPathPattern("/v1/kanji/{kanji_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/GetKanjiByIdV1", runtime.WithHTTPPathPattern("/v1/kanji/{kanji_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_SrvDbaService_GetKanjiV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_SrvDbaService_GetKanjiByIdV1_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -160,22 +388,22 @@ func RegisterSrvDbaServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_SrvDbaService_GetKanjiV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_SrvDbaService_GetKanjiByIdV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_SrvDbaService_ListKanjiV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_SrvDbaService_ListKanjiByLevelV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiV1", runtime.WithHTTPPathPattern("/v1/kanjis/{level}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiByLevelV1", runtime.WithHTTPPathPattern("/v1/kanjis/{level}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_SrvDbaService_ListKanjiV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_SrvDbaService_ListKanjiByLevelV1_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -183,7 +411,122 @@ func RegisterSrvDbaServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_SrvDbaService_ListKanjiV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_SrvDbaService_ListKanjiByLevelV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_SrvDbaService_ListKanjiByIdsV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiByIdsV1", runtime.WithHTTPPathPattern("/v1/kanjis"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_SrvDbaService_ListKanjiByIdsV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_ListKanjiByIdsV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_SrvDbaService_GetWordByIdV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/GetWordByIdV1", runtime.WithHTTPPathPattern("/v1/word/{word_id}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_SrvDbaService_GetWordByIdV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_GetWordByIdV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_SrvDbaService_ListWordsByLevelV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByLevelV1", runtime.WithHTTPPathPattern("/v1/words/{level}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_SrvDbaService_ListWordsByLevelV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_ListWordsByLevelV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_SrvDbaService_ListWordsByKanjiV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByKanjiV1", runtime.WithHTTPPathPattern("/v1/words/kanji/{kanji_id}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_SrvDbaService_ListWordsByKanjiV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_ListWordsByKanjiV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_SrvDbaService_ListWordsByIdsV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByIdsV1", runtime.WithHTTPPathPattern("/v1/words"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_SrvDbaService_ListWordsByIdsV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_ListWordsByIdsV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -228,43 +571,143 @@ func RegisterSrvDbaServiceHandler(ctx context.Context, mux *runtime.ServeMux, co
 // "SrvDbaServiceClient" to call the correct interceptors.
 func RegisterSrvDbaServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client SrvDbaServiceClient) error {
 
-	mux.Handle("GET", pattern_SrvDbaService_GetKanjiV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_SrvDbaService_GetKanjiByIdV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/GetKanjiV1", runtime.WithHTTPPathPattern("/v1/kanji/{kanji_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/GetKanjiByIdV1", runtime.WithHTTPPathPattern("/v1/kanji/{kanji_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_SrvDbaService_GetKanjiV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_SrvDbaService_GetKanjiByIdV1_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_SrvDbaService_GetKanjiV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_SrvDbaService_GetKanjiByIdV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_SrvDbaService_ListKanjiV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_SrvDbaService_ListKanjiByLevelV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiV1", runtime.WithHTTPPathPattern("/v1/kanjis/{level}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiByLevelV1", runtime.WithHTTPPathPattern("/v1/kanjis/{level}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_SrvDbaService_ListKanjiV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_SrvDbaService_ListKanjiByLevelV1_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_SrvDbaService_ListKanjiV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_SrvDbaService_ListKanjiByLevelV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_SrvDbaService_ListKanjiByIdsV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListKanjiByIdsV1", runtime.WithHTTPPathPattern("/v1/kanjis"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_SrvDbaService_ListKanjiByIdsV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_ListKanjiByIdsV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_SrvDbaService_GetWordByIdV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/GetWordByIdV1", runtime.WithHTTPPathPattern("/v1/word/{word_id}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_SrvDbaService_GetWordByIdV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_GetWordByIdV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_SrvDbaService_ListWordsByLevelV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByLevelV1", runtime.WithHTTPPathPattern("/v1/words/{level}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_SrvDbaService_ListWordsByLevelV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_ListWordsByLevelV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_SrvDbaService_ListWordsByKanjiV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByKanjiV1", runtime.WithHTTPPathPattern("/v1/words/kanji/{kanji_id}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_SrvDbaService_ListWordsByKanjiV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_ListWordsByKanjiV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_SrvDbaService_ListWordsByIdsV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/ListWordsByIdsV1", runtime.WithHTTPPathPattern("/v1/words"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_SrvDbaService_ListWordsByIdsV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_ListWordsByIdsV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -272,13 +715,33 @@ func RegisterSrvDbaServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 }
 
 var (
-	pattern_SrvDbaService_GetKanjiV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "kanji", "kanji_id"}, ""))
+	pattern_SrvDbaService_GetKanjiByIdV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "kanji", "kanji_id"}, ""))
 
-	pattern_SrvDbaService_ListKanjiV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "kanjis", "level"}, ""))
+	pattern_SrvDbaService_ListKanjiByLevelV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "kanjis", "level"}, ""))
+
+	pattern_SrvDbaService_ListKanjiByIdsV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "kanjis"}, ""))
+
+	pattern_SrvDbaService_GetWordByIdV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "word", "word_id"}, ""))
+
+	pattern_SrvDbaService_ListWordsByLevelV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "words", "level"}, ""))
+
+	pattern_SrvDbaService_ListWordsByKanjiV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "words", "kanji", "kanji_id"}, ""))
+
+	pattern_SrvDbaService_ListWordsByIdsV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"v1", "words"}, ""))
 )
 
 var (
-	forward_SrvDbaService_GetKanjiV1_0 = runtime.ForwardResponseMessage
+	forward_SrvDbaService_GetKanjiByIdV1_0 = runtime.ForwardResponseMessage
 
-	forward_SrvDbaService_ListKanjiV1_0 = runtime.ForwardResponseMessage
+	forward_SrvDbaService_ListKanjiByLevelV1_0 = runtime.ForwardResponseMessage
+
+	forward_SrvDbaService_ListKanjiByIdsV1_0 = runtime.ForwardResponseMessage
+
+	forward_SrvDbaService_GetWordByIdV1_0 = runtime.ForwardResponseMessage
+
+	forward_SrvDbaService_ListWordsByLevelV1_0 = runtime.ForwardResponseMessage
+
+	forward_SrvDbaService_ListWordsByKanjiV1_0 = runtime.ForwardResponseMessage
+
+	forward_SrvDbaService_ListWordsByIdsV1_0 = runtime.ForwardResponseMessage
 )
