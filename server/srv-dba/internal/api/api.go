@@ -21,9 +21,9 @@ func NewDbaAPI(r Repo) pb.SrvDbaServiceServer {
 	return &dbaAPI{repo: r}
 }
 
-func aggStringToSlice(s sql.NullString) []string {
+func aggStringToSlice(s sql.NullString, delim string) []string {
 	if s.Valid {
-		res := strings.Split(s.String, "|")
+		res := strings.Split(s.String, delim)
 		return res
 	}
 	return nil

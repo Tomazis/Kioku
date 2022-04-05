@@ -45,9 +45,9 @@ func (api *dbaAPI) GetKanjiByIdV1(ctx context.Context, req *pb.GetKanjiByIdV1Req
 		Kanji:        kanji.Kanji,
 		Primary:      kanji.Primary,
 		Level:        kanji.Level,
-		Alternatives: aggStringToSlice(kanji.Alternatives),
-		Onyomi:       aggStringToSlice(kanji.Onyomi),
-		Kunyomi:      aggStringToSlice(kanji.Kunyomi),
+		Alternatives: aggStringToSlice(kanji.Alternatives, "|"),
+		Onyomi:       aggStringToSlice(kanji.Onyomi, "|"),
+		Kunyomi:      aggStringToSlice(kanji.Kunyomi, "|"),
 	}}, nil
 }
 
@@ -78,9 +78,9 @@ func (api *dbaAPI) ListKanjiByLevelV1(ctx context.Context, req *pb.ListKanjiByLe
 			Kanji:        k.Kanji,
 			Primary:      k.Primary,
 			Level:        k.Level,
-			Alternatives: aggStringToSlice(k.Alternatives),
-			Onyomi:       aggStringToSlice(k.Onyomi),
-			Kunyomi:      aggStringToSlice(k.Kunyomi),
+			Alternatives: aggStringToSlice(k.Alternatives, "|"),
+			Onyomi:       aggStringToSlice(k.Onyomi, "|"),
+			Kunyomi:      aggStringToSlice(k.Kunyomi, "|"),
 		}
 	}
 
@@ -116,9 +116,9 @@ func (api *dbaAPI) ListKanjiByIdsV1(ctx context.Context, req *pb.ListKanjiByIdsV
 			Kanji:        k.Kanji,
 			Primary:      k.Primary,
 			Level:        k.Level,
-			Alternatives: aggStringToSlice(k.Alternatives),
-			Onyomi:       aggStringToSlice(k.Onyomi),
-			Kunyomi:      aggStringToSlice(k.Kunyomi),
+			Alternatives: aggStringToSlice(k.Alternatives, "|"),
+			Onyomi:       aggStringToSlice(k.Onyomi, "|"),
+			Kunyomi:      aggStringToSlice(k.Kunyomi, "|"),
 		}
 	}
 

@@ -2,6 +2,8 @@ package api
 
 import (
 	"context"
+	"database/sql"
+	"strconv"
 
 	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
 	m_word "github.com/tomazis/kioku/server/srv-dba/internal/models/word"
@@ -25,23 +27,31 @@ func pack_word(word *m_word.Word) *pb.Word {
 			Kanji:        kanji.Kanji,
 			Primary:      kanji.Primary,
 			Level:        kanji.Level,
-			Alternatives: aggStringToSlice(kanji.Alternatives),
-			Onyomi:       aggStringToSlice(kanji.Onyomi),
-			Kunyomi:      aggStringToSlice(kanji.Kunyomi),
+			Alternatives: aggStringToSlice(kanji.Alternatives, "|"),
+			Onyomi:       aggStringToSlice(kanji.Onyomi, "|"),
+			Kunyomi:      aggStringToSlice(kanji.Kunyomi, "|"),
 		}
 	}
-
-	sentences := make([]*pb.Sentence, len(word.Sentences))
-	for i, sentence := range word.Sentences {
-		translations := make([]*pb.SentenceTranslation, len(sentence.Translations))
-		for j, trans := range sentence.Translations {
+	sen := aggStringToSlice(word.Sentences, "|")
+	trans := aggStringToSlice(word.SentenceTranslations, "|")
+	lang := aggStringToSlice(word.SentenceLanguage, "|")
+	sentences := make([]*pb.Sentence, len(sen))
+	for i, sentence := range sen {
+		var t, l sql.NullString
+		t.Scan(trans[i])
+		l.Scan(lang[i])
+		tr := aggStringToSlice(t, "/")
+		la := aggStringToSlice(l, "/")
+		translations := make([]*pb.SentenceTranslation, len(tr))
+		for j, t := range tr {
+			language, _ := strconv.Atoi(la[j])
 			translations[j] = &pb.SentenceTranslation{
-				Language:    trans.Language,
-				Translation: trans.Translation,
+				Language:    uint32(language),
+				Translation: t,
 			}
 		}
 		sentences[i] = &pb.Sentence{
-			Origin:       sentence.Origin,
+			Origin:       sentence,
 			Translations: translations,
 		}
 	}
@@ -52,9 +62,9 @@ func pack_word(word *m_word.Word) *pb.Word {
 		Primary:      word.Primary,
 		Level:        word.Level,
 		Composition:  compostion,
-		Alternatives: word.Alternatives,
-		Readings:     word.Readings,
-		Types:        word.Types,
+		Alternatives: aggStringToSlice(word.Alternatives, "|"),
+		Readings:     aggStringToSlice(word.Readings, "|"),
+		Types:        aggStringToSlice(word.Types, "|"),
 		Sentences:    sentences,
 	}
 

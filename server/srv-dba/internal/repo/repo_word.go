@@ -2,16 +2,13 @@ package repo
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
-	models "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
-	m_word "github.com/tomazis/kioku/server/srv-dba/internal/models/word"
-
 	"github.com/davecgh/go-spew/spew"
+	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
+	m_word "github.com/tomazis/kioku/server/srv-dba/internal/models/word"
 )
 
 func prepareSubWordStatement(tableName string, tableArg string, suffix string) (string, []interface{}, error) {
@@ -45,12 +42,16 @@ func prepareWordStatement(whereSq interface{}, args ...interface{}) (string, []i
 		return "", nil, err
 	}
 
-	sub_q_trans, _, err := sq.Select("word_id as sentences_word_id, sentence_id as sen_id, string_agg(sentence_translation, '@@') AS sentence_translation, sentence_language").
+	sub_q_trans, _, err := sq.Select("word_id as sentences_word_id, sentence_id as sen_id, string_agg(sentence_translation, '/') AS sentence_translation, array_to_string(array_agg(sentence_language), '/') AS sentence_language").
 		Distinct().
 		From("sentences").
 		LeftJoin("sentence_translations ON (sentences.id = sentence_translations.sentence_id)").
-		GroupBy("sentences.id, sen_id, sentence_language").
+		GroupBy("sentences.id, sen_id").
 		ToSql()
+
+	if err != nil {
+		return "", nil, err
+	}
 
 	sub_q_sen, _, err := sq.Select("sentences.word_id as sentences_word_id, string_agg(japanese_sentence, '|') AS japanese_sentence, string_agg(sentence_translation, '|') AS sentence_translation, array_to_string(array_agg(sentence_language), '|') AS sentence_language").
 		Distinct().
@@ -83,39 +84,65 @@ func prepareWordStatement(whereSq interface{}, args ...interface{}) (string, []i
 	return query, args, nil
 }
 
-type word struct {
-	ID                   uint64         `db:"id"`
-	Word                 string         `db:"word"`
-	Primary              string         `db:"word_meaning"`
-	Level                uint32         `db:"word_level"`
-	Composition          []models.Kanji `db:"-"`
-	Alternatives         sql.NullString `db:"word_alternative"`
-	Readings             sql.NullString `db:"word_reading"`
-	Types                sql.NullString `db:"word_type"`
-	Sentences            sql.NullString `db:"japanese_sentence"`
-	SentenceTranslations sql.NullString `db:"sentence_translation"`
-	SentenceLanguage     sql.NullString `db:"sentence_language"`
+func prepareCompStatement(whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
+	q, args, err := psql.Select("kanji_id").
+		From("compositions").
+		Where(whereSq).ToSql()
+
+	return q, args, err
 }
 
 func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, error) {
+	var kanjiIds []uint64
+	var word m_word.Word
+	var kanji []*m_kanji.Kanji
 	query, args, err := prepareWordStatement(sq.Eq{"words.id": wordID}, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	logger.InfoKV(ctx, "query", query)
+	print(query)
 
-	var word word
-
-	err = r.db.GetContext(ctx, &word, query, args...)
+	queryComp, argsComp, err := prepareCompStatement(sq.Eq{"word_id": wordID}, nil)
 
 	if err != nil {
 		return nil, err
 	}
 
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	tx := r.db.MustBegin()
+
+	tx.GetContext(ctx, &word, query, args...)
+	err = tx.SelectContext(ctx, &kanjiIds, queryComp, argsComp...)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	queryKanji, argsKanji, err := prepareKanjiStatement(sq.Eq{"kanji.id": kanjiIds}, nil)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.SelectContext(ctx, &kanji, queryKanji, argsKanji...)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	err = tx.Commit()
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	word.Composition = kanji
+
 	spew.Dump(word)
 
-	return nil, errors.New("not implemented")
+	return &word, nil
 }
 func (r *repo) ListWordsByLevel(ctx context.Context, level uint32) ([]*m_word.Word, error) {
 	return nil, errors.New("not implemented")
