@@ -8,8 +8,6 @@ import (
 	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
 )
 
-var psql = sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
-
 func prepareKanjiStatement(whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
 	sub_q_alt, _, err := sq.Select("kanji_id as alt_kanji_id, string_agg(kanji_alternative, '|') AS kanji_alternative").Distinct().
 		From("kanji").

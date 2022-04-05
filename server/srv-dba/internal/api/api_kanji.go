@@ -2,8 +2,6 @@ package api
 
 import (
 	"context"
-	"database/sql"
-	"strings"
 
 	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
 	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
@@ -17,14 +15,6 @@ type RepoKanji interface {
 	GetKanjiByID(ctx context.Context, kanjiID uint64) (*m_kanji.Kanji, error)
 	ListKanjiByLevel(ctx context.Context, level uint32) ([]*m_kanji.Kanji, error)
 	ListKanjiByIDs(ctx context.Context, ids []uint64) ([]*m_kanji.Kanji, error)
-}
-
-func aggStringToSlice(s sql.NullString) []string {
-	if s.Valid {
-		res := strings.Split(s.String, "|")
-		return res
-	}
-	return nil
 }
 
 func (api *dbaAPI) GetKanjiByIdV1(ctx context.Context, req *pb.GetKanjiByIdV1Request,

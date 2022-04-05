@@ -20,6 +20,7 @@ require (
 
 require (
 	github.com/Masterminds/squirrel v1.5.2
+	github.com/davecgh/go-spew v1.1.1
 	github.com/envoyproxy/protoc-gen-validate v0.6.6 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.3 // indirect
