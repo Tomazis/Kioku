@@ -2,11 +2,11 @@ package repo
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/jmoiron/sqlx"
 	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
 	m_word "github.com/tomazis/kioku/server/srv-dba/internal/models/word"
 )
@@ -84,8 +84,8 @@ func prepareWordStatement(whereSq interface{}, args ...interface{}) (string, []i
 	return query, args, nil
 }
 
-func prepareCompStatement(whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
-	q, args, err := psql.Select("kanji_id").
+func prepareCompStatement(whatSelect string, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
+	q, args, err := psql.Select(whatSelect).
 		From("compositions").
 		Where(whereSq).ToSql()
 
@@ -101,9 +101,7 @@ func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, er
 		return nil, err
 	}
 
-	print(query)
-
-	queryComp, argsComp, err := prepareCompStatement(sq.Eq{"word_id": wordID}, nil)
+	queryComp, argsComp, err := prepareCompStatement("kanji_id", sq.Eq{"word_id": wordID}, nil)
 
 	if err != nil {
 		return nil, err
@@ -144,12 +142,126 @@ func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, er
 
 	return &word, nil
 }
+
+func selectWordsList(ctx context.Context, tx *sqlx.Tx, whereSq interface{}, args ...interface{}) ([]*m_word.Word, error) {
+	var words []*m_word.Word
+
+	query, args, err := prepareWordStatement(whereSq, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	err = tx.SelectContext(ctx, &words, query, args...)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	for i, w := range words {
+		var kanjiIds []uint64
+		var kanji []*m_kanji.Kanji
+		queryComp, argsComp, err := prepareCompStatement("kanji_id", sq.Eq{"word_id": w.ID}, nil)
+
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		err = tx.SelectContext(ctx, &kanjiIds, queryComp, argsComp...)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		queryKanji, argsKanji, err := prepareKanjiStatement(sq.Eq{"kanji.id": kanjiIds}, nil)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		err = tx.SelectContext(ctx, &kanji, queryKanji, argsKanji...)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		words[i].Composition = kanji
+	}
+
+	return words, nil
+}
+
 func (r *repo) ListWordsByLevel(ctx context.Context, level uint32) ([]*m_word.Word, error) {
-	return nil, errors.New("not implemented")
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	tx := r.db.MustBegin()
+	words, err := selectWordsList(ctx, tx, sq.Eq{"word_level": level}, nil)
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.Commit()
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	return words, nil
 }
 func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64) ([]*m_word.Word, error) {
-	return nil, errors.New("not implemented")
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	tx := r.db.MustBegin()
+
+	var wordsIds []uint64
+	q_words, args_words, err := prepareCompStatement("word_id", sq.Eq{"kanji_id": kanjiID}, nil)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	err = tx.SelectContext(ctx, &wordsIds, q_words, args_words...)
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	words, err := selectWordsList(ctx, tx, sq.Eq{"words.id": wordsIds}, nil)
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.Commit()
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	return words, nil
 }
 func (r *repo) ListWordsByIds(ctx context.Context, word_ids []uint64) ([]*m_word.Word, error) {
-	return nil, errors.New("not implemented")
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	tx := r.db.MustBegin()
+
+	words, err := selectWordsList(ctx, tx, sq.Eq{"words.id": word_ids}, nil)
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.Commit()
+
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	return words, nil
 }
