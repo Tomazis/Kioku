@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
 	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
@@ -17,30 +18,8 @@ type RepoKanji interface {
 	ListKanjiByIDs(ctx context.Context, ids []uint64) ([]*m_kanji.Kanji, error)
 }
 
-func (api *dbaAPI) GetKanjiByIdV1(ctx context.Context, req *pb.GetKanjiByIdV1Request,
-) (*pb.GetKanjiByIdV1Response, error) {
-
-	ctx = logger.SetLevelFromContext(ctx)
-
-	if err := req.Validate(); err != nil {
-		logger.ErrorKV(ctx, "GetKanjiV1 -- validation failed", "error", err)
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	logger.InfoKV(ctx, "Get request", "kanjiID", req.GetKanjiId())
-
-	kanji, err := api.repo.GetKanjiByID(ctx, req.GetKanjiId())
-	if err != nil {
-		logger.ErrorKV(ctx, "GetKanjiV1 -- failed to get from db", "error", err)
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-	if kanji == nil {
-		logger.ErrorKV(ctx, "GetKanjiV1 -- returned nil from db", "error", err)
-		return nil, status.Error(codes.NotFound, "kanji not found")
-	}
-	logger.DebugKV(ctx, "GetKanjiV1 -- success")
-
-	return &pb.GetKanjiByIdV1Response{Kanji: &pb.Kanji{
+func packKanji(kanji *m_kanji.Kanji) *pb.Kanji {
+	retKanji := &pb.Kanji{
 		Id:           kanji.ID,
 		Kanji:        kanji.Kanji,
 		Primary:      kanji.Primary,
@@ -48,43 +27,64 @@ func (api *dbaAPI) GetKanjiByIdV1(ctx context.Context, req *pb.GetKanjiByIdV1Req
 		Alternatives: aggStringToSlice(kanji.Alternatives, "|"),
 		Onyomi:       aggStringToSlice(kanji.Onyomi, "|"),
 		Kunyomi:      aggStringToSlice(kanji.Kunyomi, "|"),
-	}}, nil
+	}
+	return retKanji
+}
+
+func (api *dbaAPI) GetKanjiByIdV1(ctx context.Context, req *pb.GetKanjiByIdV1Request,
+) (*pb.GetKanjiByIdV1Response, error) {
+
+	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
+
+	if err := req.Validate(); err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	logger.InfoKV(ctx, "Get request", "kanjiID", req.GetKanjiId())
+
+	kanji, err := api.repo.GetKanjiByID(ctx, req.GetKanjiId())
+	if err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	if kanji == nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- returned nil from db", funcName), "error", err)
+		return nil, status.Error(codes.NotFound, "kanji not found")
+	}
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
+
+	return &pb.GetKanjiByIdV1Response{Kanji: packKanji(kanji)}, nil
 }
 
 func (api *dbaAPI) ListKanjiByLevelV1(ctx context.Context, req *pb.ListKanjiByLevelV1Request,
 ) (*pb.ListKanjiV1Response, error) {
 
 	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
 
 	if err := req.Validate(); err != nil {
-		logger.ErrorKV(ctx, "ListKanjiByLevelV1 -- validation failed", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	kanji, err := api.repo.ListKanjiByLevel(ctx, req.GetLevel())
 	if err != nil {
-		logger.ErrorKV(ctx, "ListKanjiByLevelV1 -- failed to List from db", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if len(kanji) == 0 {
-		logger.ErrorKV(ctx, "ListKanjiByLevelV1 -- returned zero items from db", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- returned zero items from db", funcName), "error", err)
 		return nil, status.Error(codes.NotFound, "kanji not found")
 	}
 
 	res := make([]*pb.Kanji, len(kanji))
 	for i, k := range kanji {
-		res[i] = &pb.Kanji{
-			Id:           k.ID,
-			Kanji:        k.Kanji,
-			Primary:      k.Primary,
-			Level:        k.Level,
-			Alternatives: aggStringToSlice(k.Alternatives, "|"),
-			Onyomi:       aggStringToSlice(k.Onyomi, "|"),
-			Kunyomi:      aggStringToSlice(k.Kunyomi, "|"),
-		}
+		res[i] = packKanji(k)
 	}
 
-	logger.DebugKV(ctx, "ListKanjiByLevelV1 -- success")
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
 	return &pb.ListKanjiV1Response{Kanji: res}, nil
 }
@@ -93,36 +93,29 @@ func (api *dbaAPI) ListKanjiByIdsV1(ctx context.Context, req *pb.ListKanjiByIdsV
 ) (*pb.ListKanjiV1Response, error) {
 
 	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
 
 	if err := req.Validate(); err != nil {
-		logger.ErrorKV(ctx, "ListKanjiByIdsV1 -- validation failed", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	kanji, err := api.repo.ListKanjiByIDs(ctx, req.GetKanjiId())
 	if err != nil {
-		logger.ErrorKV(ctx, "ListKanjiByIdsV1 -- failed to List from db", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if len(kanji) == 0 {
-		logger.ErrorKV(ctx, "ListKanjiByIdsV1 -- returned zero items from db", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- returned zero items from db", funcName), "error", err)
 		return nil, status.Error(codes.NotFound, "kanji not found")
 	}
 
 	res := make([]*pb.Kanji, len(kanji))
 	for i, k := range kanji {
-		res[i] = &pb.Kanji{
-			Id:           k.ID,
-			Kanji:        k.Kanji,
-			Primary:      k.Primary,
-			Level:        k.Level,
-			Alternatives: aggStringToSlice(k.Alternatives, "|"),
-			Onyomi:       aggStringToSlice(k.Onyomi, "|"),
-			Kunyomi:      aggStringToSlice(k.Kunyomi, "|"),
-		}
+		res[i] = packKanji(k)
 	}
 
-	logger.DebugKV(ctx, "ListKanjiByIdsV1 -- success")
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
 	return &pb.ListKanjiV1Response{Kanji: res}, nil
 }

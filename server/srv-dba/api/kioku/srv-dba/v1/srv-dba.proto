@@ -8,6 +8,7 @@ import "google/protobuf/timestamp.proto";
 
 import "kioku/srv-dba/v1/srv-dba-kanji.proto";
 import "kioku/srv-dba/v1/srv-dba-word.proto";
+import "kioku/srv-dba/v1/srv-dba-kanji-progress.proto";
 
 option go_package = "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba;srv_dba";
 
@@ -57,4 +58,31 @@ service SrvDbaService {
             get: "/v1/words"
         };
     }
+
+    //KanjiProgress part
+    rpc GetKanjiProgressByIdV1(GetKanjiProgressByIdV1Request) returns (GetKanjiProgressByIdV1Response) {
+        option (google.api.http) = {
+            post: "/v1/progress/kanji"
+        };
+    }
+
+    rpc ListKanjiProgressByTimeV1(ListKanjiProgressByTimeV1Request) returns (ListKanjiProgressV1Response) {
+        option (google.api.http) = {
+            post: "/v1/progress/kanjis"
+        };
+    }
+
+    rpc ListKanjiProgressByIdsV1(ListKanjiProgressByIdsV1Request) returns (ListKanjiProgressV1Response) {
+        option (google.api.http) = {
+            post: "/v1/progress/kanji/ids"
+        };
+    }
+
+    rpc ListKanjiProgressBySrsLevelV1(ListKanjiProgressBySrsLevelV1Request) returns (ListKanjiProgressV1Response) {
+        option (google.api.http) = {
+            post: "/v1/progress/kanjis"
+        };
+    }
+
+    
 }

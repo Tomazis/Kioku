@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"strconv"
 
 	"github.com/tomazis/kioku/server/srv-dba/internal/logger"
@@ -19,7 +20,7 @@ type RepoWord interface {
 	ListWordsByIds(ctx context.Context, word_ids []uint64) ([]*m_word.Word, error)
 }
 
-func pack_word(word *m_word.Word) *pb.Word {
+func packWord(word *m_word.Word) *pb.Word {
 	compostion := make([]*pb.Kanji, len(word.Composition))
 	for i, kanji := range word.Composition {
 		compostion[i] = &pb.Kanji{
@@ -75,9 +76,10 @@ func (api *dbaAPI) GetWordByIdV1(ctx context.Context, req *pb.GetWordByIdV1Reque
 ) (*pb.GetWordByIdV1Response, error) {
 
 	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
 
 	if err := req.Validate(); err != nil {
-		logger.ErrorKV(ctx, "GetWordByIdV1 -- validation failed", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
@@ -85,44 +87,44 @@ func (api *dbaAPI) GetWordByIdV1(ctx context.Context, req *pb.GetWordByIdV1Reque
 
 	word, err := api.repo.GetWordByID(ctx, req.GetWordId())
 	if err != nil {
-		logger.ErrorKV(ctx, "GetWordByIdV1 -- failed to get from db", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if word == nil {
-		logger.ErrorKV(ctx, "GetWordByIdV1 -- returned nil from db", "error", err)
-		return nil, status.Error(codes.NotFound, "word not found")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- returned nil from db", funcName), "error", err)
+		return nil, status.Error(codes.NotFound, "kanji not found")
 	}
-	logger.DebugKV(ctx, "GetWordByIdV1 -- success")
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
-	return &pb.GetWordByIdV1Response{Word: pack_word(word)}, nil
+	return &pb.GetWordByIdV1Response{Word: packWord(word)}, nil
 }
 
 func (api *dbaAPI) ListWordsByLevelV1(ctx context.Context, req *pb.ListWordsByLevelV1Request,
 ) (*pb.ListWordsV1Response, error) {
 
 	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
 
 	if err := req.Validate(); err != nil {
-		logger.ErrorKV(ctx, "ListWordsByLevelV1 -- validation failed", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	words, err := api.repo.ListWordsByLevel(ctx, req.GetLevel())
 	if err != nil {
-		logger.ErrorKV(ctx, "ListWordsByLevelV1 -- failed to List from db", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if len(words) == 0 {
-		logger.ErrorKV(ctx, "ListWordsByLevelV1 -- returned zero items from db", "error", err)
-		return nil, status.Error(codes.NotFound, "word not found")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- returned zero items from db", funcName), "error", err)
+		return nil, status.Error(codes.NotFound, "words not found")
 	}
-
 	res := make([]*pb.Word, len(words))
 	for i, word := range words {
-		res[i] = pack_word(word)
+		res[i] = packWord(word)
 	}
 
-	logger.DebugKV(ctx, "ListWordsByLevelV1 -- success")
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
 	return &pb.ListWordsV1Response{Words: res}, nil
 }
@@ -131,28 +133,27 @@ func (api *dbaAPI) ListWordsByKanjiV1(ctx context.Context, req *pb.ListWordsByKa
 ) (*pb.ListWordsV1Response, error) {
 
 	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
 
 	if err := req.Validate(); err != nil {
-		logger.ErrorKV(ctx, "ListWordsByKanjiV1 -- validation failed", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
-
 	words, err := api.repo.ListWordsByKanji(ctx, req.GetKanjiId())
 	if err != nil {
-		logger.ErrorKV(ctx, "ListWordsByKanjiV1 -- failed to List from db", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if len(words) == 0 {
-		logger.ErrorKV(ctx, "ListWordsByKanjiV1 -- returned zero items from db", "error", err)
-		return nil, status.Error(codes.NotFound, "word not found")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- returned zero items from db", funcName), "error", err)
+		return nil, status.Error(codes.NotFound, "words not found")
 	}
-
 	res := make([]*pb.Word, len(words))
 	for i, word := range words {
-		res[i] = pack_word(word)
+		res[i] = packWord(word)
 	}
 
-	logger.DebugKV(ctx, "ListWordsByKanjiV1 -- success")
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
 	return &pb.ListWordsV1Response{Words: res}, nil
 }
@@ -161,28 +162,28 @@ func (api *dbaAPI) ListWordsByIdsV1(ctx context.Context, req *pb.ListWordsByIdsV
 ) (*pb.ListWordsV1Response, error) {
 
 	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
 
 	if err := req.Validate(); err != nil {
-		logger.ErrorKV(ctx, "ListWordsByIdsV1 -- validation failed", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	words, err := api.repo.ListWordsByIds(ctx, req.GetWordId())
 	if err != nil {
-		logger.ErrorKV(ctx, "ListWordsByIdsV1 -- failed to List from db", "error", err)
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	if len(words) == 0 {
-		logger.ErrorKV(ctx, "ListWordsByIdsV1 -- returned zero items from db", "error", err)
-		return nil, status.Error(codes.NotFound, "word not found")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- returned zero items from db", funcName), "error", err)
+		return nil, status.Error(codes.NotFound, "words not found")
 	}
-
 	res := make([]*pb.Word, len(words))
 	for i, word := range words {
-		res[i] = pack_word(word)
+		res[i] = packWord(word)
 	}
 
-	logger.DebugKV(ctx, "ListWordsByIdsV1 -- success")
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
 	return &pb.ListWordsV1Response{Words: res}, nil
 }

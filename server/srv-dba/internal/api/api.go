@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"runtime"
 	"strings"
 
 	pb "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba"
@@ -10,6 +11,7 @@ import (
 type Repo interface {
 	RepoKanji
 	RepoWord
+	RepoKanjiProgress
 }
 
 type dbaAPI struct {
@@ -27,4 +29,11 @@ func aggStringToSlice(s sql.NullString, delim string) []string {
 		return res
 	}
 	return nil
+}
+
+func runFuncName() string {
+	pc := make([]uintptr, 1)
+	runtime.Callers(2, pc)
+	f := runtime.FuncForPC(pc[0])
+	return f.Name()
 }
