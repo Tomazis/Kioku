@@ -27,7 +27,9 @@ message GetKanjiByIdV1Response {
 }
 
 message ListKanjiByLevelV1Request {
-    uint32 level = 1 [(validate.rules).uint32.gt = 0];
+    uint32 level  = 1 [(validate.rules).uint32.gt = 0];
+    uint64 limit  = 2 [(validate.rules).uint64.lt = 1000];
+    uint64 offset = 3;
 }
 
 message ListKanjiByIdsV1Request {

@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"time"
 
@@ -10,23 +9,15 @@ import (
 	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/timestamppb"
 
 	pb "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba"
 )
 
 type RepoKanjiProgress interface {
 	GetKanjiProgressById(ctx context.Context, userID uint64, kanjiID uint64) (*m_kanji.KanjiProgress, error)
-	ListKanjiProgressByTime(ctx context.Context, userID uint64, now time.Time) ([]*m_kanji.KanjiProgress, error)
+	ListKanjiProgressByTime(ctx context.Context, userID uint64, now time.Time, limit uint64, offset uint64) ([]*m_kanji.KanjiProgress, error)
 	ListKanjiProgressByIDs(ctx context.Context, userID uint64, kanjiIDs []uint64) ([]*m_kanji.KanjiProgress, error)
-	ListKanjiProgressBySRSLevel(ctx context.Context, userID uint64, srsLevel uint32) ([]*m_kanji.KanjiProgress, error)
-}
-
-func nullTimeToTimestamppb(t sql.NullTime) *timestamppb.Timestamp {
-	if t.Valid {
-		return timestamppb.New(t.Time)
-	}
-	return nil
+	ListKanjiProgressBySRSLevel(ctx context.Context, userID uint64, srsLevel uint32, limit uint64, offset uint64) ([]*m_kanji.KanjiProgress, error)
 }
 
 func packKanjiProgress(progress *m_kanji.KanjiProgress) *pb.KanjiProgress {
@@ -82,7 +73,7 @@ func (api *dbaAPI) ListKanjiProgressByTimeV1(ctx context.Context, req *pb.ListKa
 
 	now := time.Now()
 
-	kanjiProgress, err := api.repo.ListKanjiProgressByTime(ctx, req.GetUserId(), now)
+	kanjiProgress, err := api.repo.ListKanjiProgressByTime(ctx, req.GetUserId(), now, req.GetLimit(), req.GetOffset())
 	if err != nil {
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -144,7 +135,7 @@ func (api *dbaAPI) ListKanjiProgressBySrsLevelV1(ctx context.Context, req *pb.Li
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	kanjiProgress, err := api.repo.ListKanjiProgressBySRSLevel(ctx, req.GetUserId(), req.GetSrsLevel())
+	kanjiProgress, err := api.repo.ListKanjiProgressBySRSLevel(ctx, req.GetUserId(), req.GetSrsLevel(), req.GetLimit(), req.GetOffset())
 	if err != nil {
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())

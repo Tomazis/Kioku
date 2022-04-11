@@ -415,6 +415,19 @@ func (m *ListKanjiByLevelV1Request) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if m.GetLimit() >= 1000 {
+		err := ListKanjiByLevelV1RequestValidationError{
+			field:  "Limit",
+			reason: "value must be less than 1000",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Offset
+
 	if len(errors) > 0 {
 		return ListKanjiByLevelV1RequestMultiError(errors)
 	}

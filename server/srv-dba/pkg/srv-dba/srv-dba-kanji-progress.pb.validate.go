@@ -672,6 +672,19 @@ func (m *ListKanjiProgressByTimeV1Request) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if m.GetLimit() >= 1000 {
+		err := ListKanjiProgressByTimeV1RequestValidationError{
+			field:  "Limit",
+			reason: "value must be less than 1000",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Offset
+
 	if len(errors) > 0 {
 		return ListKanjiProgressByTimeV1RequestMultiError(errors)
 	}
@@ -797,6 +810,19 @@ func (m *ListKanjiProgressBySrsLevelV1Request) validate(all bool) error {
 		}
 		errors = append(errors, err)
 	}
+
+	if m.GetLimit() >= 1000 {
+		err := ListKanjiProgressBySrsLevelV1RequestValidationError{
+			field:  "Limit",
+			reason: "value must be less than 1000",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Offset
 
 	if len(errors) > 0 {
 		return ListKanjiProgressBySrsLevelV1RequestMultiError(errors)

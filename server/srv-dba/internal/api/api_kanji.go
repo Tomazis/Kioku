@@ -14,7 +14,7 @@ import (
 
 type RepoKanji interface {
 	GetKanjiByID(ctx context.Context, kanjiID uint64) (*m_kanji.Kanji, error)
-	ListKanjiByLevel(ctx context.Context, level uint32) ([]*m_kanji.Kanji, error)
+	ListKanjiByLevel(ctx context.Context, level uint32, limit uint64, offset uint64) ([]*m_kanji.Kanji, error)
 	ListKanjiByIDs(ctx context.Context, ids []uint64) ([]*m_kanji.Kanji, error)
 }
 
@@ -69,7 +69,7 @@ func (api *dbaAPI) ListKanjiByLevelV1(ctx context.Context, req *pb.ListKanjiByLe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	kanji, err := api.repo.ListKanjiByLevel(ctx, req.GetLevel())
+	kanji, err := api.repo.ListKanjiByLevel(ctx, req.GetLevel(), req.GetLimit(), req.GetOffset())
 	if err != nil {
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())

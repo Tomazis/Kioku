@@ -94,6 +94,20 @@
             "required": true,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
           }
         ],
         "tags": [
@@ -154,6 +168,73 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/v1ListKanjiProgressV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/progress/word": {
+      "post": {
+        "summary": "WordProgress part",
+        "operationId": "SrvDbaService_GetWordProgressByIdV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetWordProgressByIdV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/progress/word/ids": {
+      "post": {
+        "operationId": "SrvDbaService_ListWordProgressByIdsV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListWordProgressV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/progress/words": {
+      "post": {
+        "operationId": "SrvDbaService_ListWordProgressBySrsLevelV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListWordProgressV1Response"
             }
           },
           "default": {
@@ -259,6 +340,20 @@
             "required": true,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
           }
         ],
         "tags": [
@@ -290,6 +385,20 @@
             "required": true,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
           }
         ],
         "tags": [
@@ -350,6 +459,14 @@
       "properties": {
         "word": {
           "$ref": "#/definitions/v1Word"
+        }
+      }
+    },
+    "v1GetWordProgressByIdV1Response": {
+      "type": "object",
+      "properties": {
+        "wordProgress": {
+          "$ref": "#/definitions/v1WordProgress"
         }
       }
     },
@@ -440,6 +557,17 @@
         }
       }
     },
+    "v1ListWordProgressV1Response": {
+      "type": "object",
+      "properties": {
+        "wordProgress": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1WordProgress"
+          }
+        }
+      }
+    },
     "v1ListWordsV1Response": {
       "type": "object",
       "properties": {
@@ -523,6 +651,34 @@
           "items": {
             "$ref": "#/definitions/v1Sentence"
           }
+        }
+      }
+    },
+    "v1WordProgress": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "word": {
+          "$ref": "#/definitions/v1Word"
+        },
+        "srsLevel": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "unlockDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "nextDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "burnDate": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     }

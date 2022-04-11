@@ -8,7 +8,7 @@ import (
 	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
 )
 
-func prepareKanjiStatement(whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
+func prepareKanjiStatement(limit uint64, offset uint64, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
 	sub_q_alt, _, err := sq.Select("kanji_id as alt_kanji_id, string_agg(kanji_alternative, '|') AS kanji_alternative").Distinct().
 		From("kanji").
 		LeftJoin("kanji_alternatives ON (kanji.id = kanji_alternatives.kanji_id)").
@@ -47,6 +47,8 @@ func prepareKanjiStatement(whereSq interface{}, args ...interface{}) (string, []
 
 	query, args, err := q.GroupBy("kanji.id, kanji_alternative, kanji_onyomi, kanji_kunyomi").
 		OrderBy("id").
+		Limit(limit).
+		Offset(offset).
 		ToSql()
 
 	if err != nil {
@@ -57,8 +59,8 @@ func prepareKanjiStatement(whereSq interface{}, args ...interface{}) (string, []
 }
 
 func (r *repo) GetKanjiByID(ctx context.Context, kanjiID uint64) (*m_kanji.Kanji, error) {
-
-	query, args, err := prepareKanjiStatement(sq.Eq{"kanji.id": kanjiID}, nil)
+	whereSq := sq.Eq{"kanji.id": kanjiID}
+	query, args, err := prepareKanjiStatement(1, 0, whereSq, nil)
 
 	if err != nil {
 		return nil, err
@@ -74,8 +76,10 @@ func (r *repo) GetKanjiByID(ctx context.Context, kanjiID uint64) (*m_kanji.Kanji
 	return &kanji, nil
 }
 
-func (r *repo) ListKanjiByLevel(ctx context.Context, level uint32) ([]*m_kanji.Kanji, error) {
-	query, args, err := prepareKanjiStatement(sq.Eq{"kanji.kanji_level": level}, nil)
+func (r *repo) ListKanjiByLevel(ctx context.Context, level uint32, limit uint64, offset uint64) ([]*m_kanji.Kanji, error) {
+	whereSq := sq.Eq{"kanji.kanji_level": level}
+
+	query, args, err := prepareKanjiStatement(limit, offset, whereSq, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +96,9 @@ func (r *repo) ListKanjiByLevel(ctx context.Context, level uint32) ([]*m_kanji.K
 }
 
 func (r *repo) ListKanjiByIDs(ctx context.Context, ids []uint64) ([]*m_kanji.Kanji, error) {
-	query, args, err := prepareKanjiStatement(sq.Eq{"kanji.id": ids}, nil)
+	whereSq := sq.Eq{"kanji.id": ids}
+
+	query, args, err := prepareKanjiStatement(uint64(len(ids)), 0, whereSq, nil)
 	if err != nil {
 		return nil, err
 	}

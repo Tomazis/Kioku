@@ -6,12 +6,14 @@ import (
 	"strings"
 
 	pb "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type Repo interface {
 	RepoKanji
 	RepoWord
 	RepoKanjiProgress
+	RepoWordProgress
 }
 
 type dbaAPI struct {
@@ -36,4 +38,11 @@ func runFuncName() string {
 	runtime.Callers(2, pc)
 	f := runtime.FuncForPC(pc[0])
 	return f.Name()
+}
+
+func nullTimeToTimestamppb(t sql.NullTime) *timestamppb.Timestamp {
+	if t.Valid {
+		return timestamppb.New(t.Time)
+	}
+	return nil
 }

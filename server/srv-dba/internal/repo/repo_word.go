@@ -23,7 +23,7 @@ func prepareSubWordStatement(tableName string, tableArg string, suffix string) (
 	return sub, args, err
 }
 
-func prepareWordStatement(whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
+func prepareWordStatement(limit uint64, offset uint64, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
 	sub_q_alt, _, err := prepareSubWordStatement("word_alternatives", "word_alternative", "")
 
 	if err != nil {
@@ -75,6 +75,8 @@ func prepareWordStatement(whereSq interface{}, args ...interface{}) (string, []i
 
 	query, args, err := q.GroupBy("words.id, word_alternative, word_reading, word_type, japanese_sentence, sentence_translation, sentence_language").
 		OrderBy("id").
+		Limit(limit).
+		Offset(offset).
 		ToSql()
 
 	if err != nil {
@@ -96,7 +98,7 @@ func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, er
 	var kanjiIds []uint64
 	var word m_word.Word
 	var kanji []*m_kanji.Kanji
-	query, args, err := prepareWordStatement(sq.Eq{"words.id": wordID}, nil)
+	query, args, err := prepareWordStatement(1, 0, sq.Eq{"words.id": wordID}, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +120,7 @@ func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, er
 		return nil, err
 	}
 
-	queryKanji, argsKanji, err := prepareKanjiStatement(sq.Eq{"kanji.id": kanjiIds}, nil)
+	queryKanji, argsKanji, err := prepareKanjiStatement(uint64(len(kanjiIds)), 0, sq.Eq{"kanji.id": kanjiIds}, nil)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -143,10 +145,10 @@ func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, er
 	return &word, nil
 }
 
-func selectWordsList(ctx context.Context, tx *sqlx.Tx, whereSq interface{}, args ...interface{}) ([]*m_word.Word, error) {
+func selectWordsList(ctx context.Context, tx *sqlx.Tx, limit uint64, offset uint64, whereSq interface{}, args ...interface{}) ([]*m_word.Word, error) {
 	var words []*m_word.Word
 
-	query, args, err := prepareWordStatement(whereSq, nil)
+	query, args, err := prepareWordStatement(limit, offset, whereSq, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +175,7 @@ func selectWordsList(ctx context.Context, tx *sqlx.Tx, whereSq interface{}, args
 			return nil, err
 		}
 
-		queryKanji, argsKanji, err := prepareKanjiStatement(sq.Eq{"kanji.id": kanjiIds}, nil)
+		queryKanji, argsKanji, err := prepareKanjiStatement(uint64(len(kanjiIds)), 0, sq.Eq{"kanji.id": kanjiIds}, nil)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
@@ -190,11 +192,11 @@ func selectWordsList(ctx context.Context, tx *sqlx.Tx, whereSq interface{}, args
 	return words, nil
 }
 
-func (r *repo) ListWordsByLevel(ctx context.Context, level uint32) ([]*m_word.Word, error) {
+func (r *repo) ListWordsByLevel(ctx context.Context, level uint32, limit uint64, offset uint64) ([]*m_word.Word, error) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 	tx := r.db.MustBegin()
-	words, err := selectWordsList(ctx, tx, sq.Eq{"word_level": level}, nil)
+	words, err := selectWordsList(ctx, tx, limit, offset, sq.Eq{"word_level": level}, nil)
 
 	if err != nil {
 		tx.Rollback()
@@ -210,7 +212,7 @@ func (r *repo) ListWordsByLevel(ctx context.Context, level uint32) ([]*m_word.Wo
 
 	return words, nil
 }
-func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64) ([]*m_word.Word, error) {
+func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint64, offset uint64) ([]*m_word.Word, error) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 	tx := r.db.MustBegin()
@@ -228,7 +230,7 @@ func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64) ([]*m_word.
 		return nil, err
 	}
 
-	words, err := selectWordsList(ctx, tx, sq.Eq{"words.id": wordsIds}, nil)
+	words, err := selectWordsList(ctx, tx, limit, offset, sq.Eq{"words.id": wordsIds}, nil)
 
 	if err != nil {
 		tx.Rollback()
@@ -249,7 +251,7 @@ func (r *repo) ListWordsByIds(ctx context.Context, word_ids []uint64) ([]*m_word
 	defer r.mutex.Unlock()
 	tx := r.db.MustBegin()
 
-	words, err := selectWordsList(ctx, tx, sq.Eq{"words.id": word_ids}, nil)
+	words, err := selectWordsList(ctx, tx, uint64(len(word_ids)), 0, sq.Eq{"words.id": word_ids}, nil)
 
 	if err != nil {
 		tx.Rollback()

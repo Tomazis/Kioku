@@ -5,46 +5,46 @@ package kioku.server.srv_dba.v1;
 import "validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "kioku/srv-dba/v1/srv-dba-kanji.proto";
+import "kioku/srv-dba/v1/srv-dba-word.proto";
 
 option go_package = "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba;srv_dba";
 
-message KanjiProgress {
+message WordProgress {
     uint64                    id = 1;
-    Kanji                     kanji = 2;
+    Word                     word = 2;
     uint32                    srs_level = 3;
     google.protobuf.Timestamp unlock_date = 4;
     google.protobuf.Timestamp next_date = 5;
     google.protobuf.Timestamp burn_date = 6;
 }
 
-message GetKanjiProgressByIdV1Request {
+message GetWordProgressByIdV1Request {
     uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
-    uint64 kanji_id = 2 [(validate.rules).uint64.gt = 0];
+    uint64 word_id = 2 [(validate.rules).uint64.gt = 0];
 }
 
-message GetKanjiProgressByIdV1Response {
-    KanjiProgress kanji_progress = 1;
+message GetWordProgressByIdV1Response {
+    WordProgress word_progress = 1;
 }
 
-message ListKanjiProgressByIdsV1Request {
+message ListWordProgressByIdsV1Request {
     uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
-    repeated uint64 kanji_id = 2 [(validate.rules).repeated.items.uint64.gt = 0];
+    repeated uint64 word_id = 2 [(validate.rules).repeated.items.uint64.gt = 0];
 }
 
-message ListKanjiProgressByTimeV1Request {
+message ListWordProgressByTimeV1Request {
     uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
     uint64 limit  = 2 [(validate.rules).uint64.lt = 1000];
     uint64 offset = 3;
 }
 
-message ListKanjiProgressBySrsLevelV1Request {
+message ListWordProgressBySrsLevelV1Request {
     uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
     uint32 srs_level = 2 [(validate.rules).uint32.gt = 0];
     uint64 limit  = 3 [(validate.rules).uint64.lt = 1000];
     uint64 offset = 4;
 }
 
-message ListKanjiProgressV1Response {
-    repeated KanjiProgress kanji_progress = 1;
+message ListWordProgressV1Response {
+    repeated WordProgress word_progress = 1;
 }

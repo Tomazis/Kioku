@@ -15,8 +15,8 @@ import (
 
 type RepoWord interface {
 	GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, error)
-	ListWordsByLevel(ctx context.Context, level uint32) ([]*m_word.Word, error)
-	ListWordsByKanji(ctx context.Context, kanjiID uint64) ([]*m_word.Word, error)
+	ListWordsByLevel(ctx context.Context, level uint32, limit uint64, offset uint64) ([]*m_word.Word, error)
+	ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint64, offset uint64) ([]*m_word.Word, error)
 	ListWordsByIds(ctx context.Context, word_ids []uint64) ([]*m_word.Word, error)
 }
 
@@ -110,7 +110,7 @@ func (api *dbaAPI) ListWordsByLevelV1(ctx context.Context, req *pb.ListWordsByLe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	words, err := api.repo.ListWordsByLevel(ctx, req.GetLevel())
+	words, err := api.repo.ListWordsByLevel(ctx, req.GetLevel(), req.GetLimit(), req.GetOffset())
 	if err != nil {
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -139,7 +139,7 @@ func (api *dbaAPI) ListWordsByKanjiV1(ctx context.Context, req *pb.ListWordsByKa
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
-	words, err := api.repo.ListWordsByKanji(ctx, req.GetKanjiId())
+	words, err := api.repo.ListWordsByKanji(ctx, req.GetKanjiId(), req.GetLimit(), req.GetOffset())
 	if err != nil {
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())

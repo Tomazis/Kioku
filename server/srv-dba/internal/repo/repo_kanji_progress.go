@@ -9,12 +9,14 @@ import (
 	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
 )
 
-func prepareKanjiProgressStatement(whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
+func prepareKanjiProgressStatement(limit uint64, offset uint64, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
 	query, args, err := psql.Select("id, kanji_id, srs_level, unlock_date, next_date, burn_date").
 		From("kanji_progress").
 		Where(whereSq).
 		GroupBy("id").
 		OrderBy("id").
+		Limit(limit).
+		Offset(offset).
 		ToSql()
 	if err != nil {
 		return "", nil, err
@@ -27,12 +29,12 @@ func (r *repo) GetKanjiProgressById(ctx context.Context, userID uint64, kanjiID 
 	var progress m_kanji.KanjiProgress
 	var kanji m_kanji.Kanji
 
-	query, args, err := prepareKanjiProgressStatement(sq.Eq{"user_id": userID}, nil)
+	query, args, err := prepareKanjiProgressStatement(1, 0, sq.And{sq.Eq{"user_id": userID}, sq.Eq{"kanji_id": kanjiID}}, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	queryKanji, argsKanji, err := prepareKanjiStatement(sq.Eq{"kanji.id": kanjiID}, nil)
+	queryKanji, argsKanji, err := prepareKanjiStatement(1, 0, sq.Eq{"kanji.id": kanjiID}, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -66,11 +68,11 @@ func (r *repo) GetKanjiProgressById(ctx context.Context, userID uint64, kanjiID 
 	return &progress, nil
 
 }
-func (r *repo) ListKanjiProgressByTime(ctx context.Context, userID uint64, now time.Time) ([]*m_kanji.KanjiProgress, error) {
+func (r *repo) ListKanjiProgressByTime(ctx context.Context, userID uint64, now time.Time, limit uint64, offset uint64) ([]*m_kanji.KanjiProgress, error) {
 	var progress []*m_kanji.KanjiProgress
 	var kanji m_kanji.Kanji
 
-	query, args, err := prepareKanjiProgressStatement(sq.And{sq.Eq{"user_id": userID}, sq.LtOrEq{"next_date": now}}, nil)
+	query, args, err := prepareKanjiProgressStatement(limit, offset, sq.And{sq.Eq{"user_id": userID}, sq.LtOrEq{"next_date": now}}, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +88,7 @@ func (r *repo) ListKanjiProgressByTime(ctx context.Context, userID uint64, now t
 	}
 
 	for i, p := range progress {
-		queryKanji, argsKanji, err := prepareKanjiStatement(sq.Eq{"kanji.id": p.KanjiID}, nil)
+		queryKanji, argsKanji, err := prepareKanjiStatement(1, 0, sq.Eq{"kanji.id": p.KanjiID}, nil)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
@@ -113,7 +115,7 @@ func (r *repo) ListKanjiProgressByIDs(ctx context.Context, userID uint64, kanjiI
 	var progress []*m_kanji.KanjiProgress
 	var kanji m_kanji.Kanji
 
-	query, args, err := prepareKanjiProgressStatement(sq.And{sq.Eq{"user_id": userID}, sq.Eq{"kanji_id": kanjiIDs}}, nil)
+	query, args, err := prepareKanjiProgressStatement(uint64(len(kanjiIDs)), 0, sq.And{sq.Eq{"user_id": userID}, sq.Eq{"kanji_id": kanjiIDs}}, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +131,7 @@ func (r *repo) ListKanjiProgressByIDs(ctx context.Context, userID uint64, kanjiI
 	}
 
 	for i, p := range progress {
-		queryKanji, argsKanji, err := prepareKanjiStatement(sq.Eq{"kanji.id": p.KanjiID}, nil)
+		queryKanji, argsKanji, err := prepareKanjiStatement(1, 0, sq.Eq{"kanji.id": p.KanjiID}, nil)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
@@ -153,11 +155,11 @@ func (r *repo) ListKanjiProgressByIDs(ctx context.Context, userID uint64, kanjiI
 	return progress, nil
 }
 
-func (r *repo) ListKanjiProgressBySRSLevel(ctx context.Context, userID uint64, srsLevel uint32) ([]*m_kanji.KanjiProgress, error) {
+func (r *repo) ListKanjiProgressBySRSLevel(ctx context.Context, userID uint64, srsLevel uint32, limit uint64, offset uint64) ([]*m_kanji.KanjiProgress, error) {
 	var progress []*m_kanji.KanjiProgress
 	var kanji m_kanji.Kanji
 
-	query, args, err := prepareKanjiProgressStatement(sq.And{sq.Eq{"user_id": userID}, sq.Eq{"srs_level": srsLevel}}, nil)
+	query, args, err := prepareKanjiProgressStatement(limit, offset, sq.And{sq.Eq{"user_id": userID}, sq.Eq{"srs_level": srsLevel}}, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +175,7 @@ func (r *repo) ListKanjiProgressBySRSLevel(ctx context.Context, userID uint64, s
 	}
 
 	for i, p := range progress {
-		queryKanji, argsKanji, err := prepareKanjiStatement(sq.Eq{"kanji.id": p.KanjiID}, nil)
+		queryKanji, argsKanji, err := prepareKanjiStatement(1, 0, sq.Eq{"kanji.id": p.KanjiID}, nil)
 		if err != nil {
 			tx.Rollback()
 			return nil, err
