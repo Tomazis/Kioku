@@ -86,12 +86,22 @@ func prepareWordStatement(limit uint64, offset uint64, whereSq interface{}, args
 	return query, args, nil
 }
 
-func prepareCompStatement(whatSelect string, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
-	q, args, err := psql.Select(whatSelect).
-		From("compositions").
-		Where(whereSq).ToSql()
+func prepareMinWordStatement(limit uint64, offset uint64, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
+	query, args, err := psql.Select("words.id, word, word_meaning, word_level, word_reading").
+		From("words").
+		LeftJoin("word_readings ON words.id = word_readings.word_id").
+		Where(whereSq).
+		GroupBy("words.id, word_reading").
+		OrderBy("id").
+		Limit(limit).
+		Offset(offset).
+		ToSql()
 
-	return q, args, err
+	if err != nil {
+		return "", nil, err
+	}
+
+	return query, args, nil
 }
 
 func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, error) {

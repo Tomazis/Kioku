@@ -117,13 +117,32 @@
     },
     "/v1/progress/kanji": {
       "post": {
-        "summary": "KanjiProgress part",
-        "operationId": "SrvDbaService_GetKanjiProgressByIdV1",
+        "operationId": "SrvDbaService_UpdateKanjiProgressV1",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetKanjiProgressByIdV1Response"
+              "$ref": "#/definitions/v1DefaultKanjiProgressV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SrvDbaService"
+        ]
+      },
+      "put": {
+        "operationId": "SrvDbaService_AddKanjiProgressV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DefaultKanjiProgressV1Response"
             }
           },
           "default": {
@@ -435,6 +454,14 @@
           "items": {
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1DefaultKanjiProgressV1Response": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
         }
       }
     },

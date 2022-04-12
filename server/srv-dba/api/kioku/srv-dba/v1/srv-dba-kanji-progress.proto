@@ -48,3 +48,20 @@ message ListKanjiProgressBySrsLevelV1Request {
 message ListKanjiProgressV1Response {
     repeated KanjiProgress kanji_progress = 1;
 }
+
+message AddKanjiProgressV1Request {
+    uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
+    repeated uint64 kanji_id = 2 [(validate.rules).repeated.items.uint64.gt = 0];
+}
+
+message UpdateKanjiProgressV1Request {
+    uint64 progress_id = 1 [(validate.rules).uint64.gt = 0];
+    uint32 srs_level = 2 [(validate.rules).uint32.gt = 0];
+    google.protobuf.Timestamp next_date = 3;
+    google.protobuf.Timestamp burn_date = 4;
+}
+
+message DefaultKanjiProgressV1Response {
+    bool success = 1;
+}
+

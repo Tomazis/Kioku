@@ -58,6 +58,23 @@ func prepareKanjiStatement(limit uint64, offset uint64, whereSq interface{}, arg
 	return query, args, nil
 }
 
+func prepareMinKanjiStatement(limit uint64, offset uint64, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
+	query, args, err := psql.Select("id, kanji, kanji_meaning, kanji_level").
+		From("kanji").
+		Where(whereSq).
+		GroupBy("kanji.id").
+		OrderBy("id").
+		Limit(limit).
+		Offset(offset).
+		ToSql()
+
+	if err != nil {
+		return "", nil, err
+	}
+
+	return query, args, nil
+}
+
 func (r *repo) GetKanjiByID(ctx context.Context, kanjiID uint64) (*m_kanji.Kanji, error) {
 	whereSq := sq.Eq{"kanji.id": kanjiID}
 	query, args, err := prepareKanjiStatement(1, 0, whereSq, nil)

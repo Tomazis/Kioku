@@ -46,6 +46,7 @@ func (t *transfer) CreateTestUser(ctx context.Context) (int64, error) {
 }
 
 func (t *transfer) ImportKanji(ctx context.Context, kModel []kanjiModel, user_id int64) error {
+	now := time.Now()
 	q_kan := psql.Insert("kanji").
 		Columns("id", "kanji", "kanji_meaning", "kanji_level")
 
@@ -59,7 +60,7 @@ func (t *transfer) ImportKanji(ctx context.Context, kModel []kanjiModel, user_id
 		Columns("kanji_kunyomi", "kanji_id")
 
 	q_prog := psql.Insert("kanji_progress").
-		Columns("user_id", "kanji_id", "srs_level", "unlock_date")
+		Columns("user_id", "kanji_id", "srs_level", "unlock_date", "next_date", "burn_date")
 
 	for _, k := range kModel {
 		q_kan = q_kan.Values(k.ID, k.Kanji, k.Primary, k.Level)
@@ -79,7 +80,12 @@ func (t *transfer) ImportKanji(ctx context.Context, kModel []kanjiModel, user_id
 			}
 		}
 		if k.Progress.Valid {
-			q_prog = q_prog.Values(user_id, k.ID, parseSRS(k.Progress.String), time.Now())
+			srs := parseSRS(k.Progress.String)
+			if srs == 9 {
+				q_prog = q_prog.Values(user_id, k.ID, srs, now, nil, now)
+			} else {
+				q_prog = q_prog.Values(user_id, k.ID, srs, now, now, nil)
+			}
 		}
 	}
 
@@ -131,6 +137,8 @@ func (t *transfer) ImportKanji(ctx context.Context, kModel []kanjiModel, user_id
 }
 
 func (t *transfer) ImportWords(ctx context.Context, wModel []wordModel, user_id int64) error {
+	now := time.Now()
+
 	q_words := psql.Insert("words").
 		Columns("id", "word", "word_meaning", "word_level")
 
@@ -150,7 +158,7 @@ func (t *transfer) ImportWords(ctx context.Context, wModel []wordModel, user_id 
 		Columns("sentence_language", "sentence_translation", "sentence_id")
 
 	q_prog := psql.Insert("word_progress").
-		Columns("user_id", "word_id", "srs_level", "unlock_date")
+		Columns("user_id", "word_id", "srs_level", "unlock_date", "next_date", "burn_date")
 
 	for _, w := range wModel {
 		q_words = q_words.Values(w.ID, w.Word, w.WordMeaning, w.WordLevel)
@@ -189,7 +197,12 @@ func (t *transfer) ImportWords(ctx context.Context, wModel []wordModel, user_id 
 			}
 		}
 		if w.Progress.Valid {
-			q_prog = q_prog.Values(user_id, w.ID, parseSRS(w.Progress.String), time.Now())
+			srs := parseSRS(w.Progress.String)
+			if srs == 9 {
+				q_prog = q_prog.Values(user_id, w.ID, srs, now, nil, now)
+			} else {
+				q_prog = q_prog.Values(user_id, w.ID, srs, now, now, nil)
+			}
 		}
 	}
 

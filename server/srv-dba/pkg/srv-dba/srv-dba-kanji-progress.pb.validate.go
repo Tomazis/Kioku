@@ -1040,3 +1040,417 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListKanjiProgressV1ResponseValidationError{}
+
+// Validate checks the field values on AddKanjiProgressV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *AddKanjiProgressV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddKanjiProgressV1Request with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddKanjiProgressV1RequestMultiError, or nil if none found.
+func (m *AddKanjiProgressV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AddKanjiProgressV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetUserId() <= 0 {
+		err := AddKanjiProgressV1RequestValidationError{
+			field:  "UserId",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	for idx, item := range m.GetKanjiId() {
+		_, _ = idx, item
+
+		if item <= 0 {
+			err := AddKanjiProgressV1RequestValidationError{
+				field:  fmt.Sprintf("KanjiId[%v]", idx),
+				reason: "value must be greater than 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return AddKanjiProgressV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// AddKanjiProgressV1RequestMultiError is an error wrapping multiple validation
+// errors returned by AddKanjiProgressV1Request.ValidateAll() if the
+// designated constraints aren't met.
+type AddKanjiProgressV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddKanjiProgressV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddKanjiProgressV1RequestMultiError) AllErrors() []error { return m }
+
+// AddKanjiProgressV1RequestValidationError is the validation error returned by
+// AddKanjiProgressV1Request.Validate if the designated constraints aren't met.
+type AddKanjiProgressV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AddKanjiProgressV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AddKanjiProgressV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AddKanjiProgressV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AddKanjiProgressV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AddKanjiProgressV1RequestValidationError) ErrorName() string {
+	return "AddKanjiProgressV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AddKanjiProgressV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAddKanjiProgressV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AddKanjiProgressV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AddKanjiProgressV1RequestValidationError{}
+
+// Validate checks the field values on UpdateKanjiProgressV1Request with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdateKanjiProgressV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateKanjiProgressV1Request with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateKanjiProgressV1RequestMultiError, or nil if none found.
+func (m *UpdateKanjiProgressV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateKanjiProgressV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetProgressId() <= 0 {
+		err := UpdateKanjiProgressV1RequestValidationError{
+			field:  "ProgressId",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetSrsLevel() <= 0 {
+		err := UpdateKanjiProgressV1RequestValidationError{
+			field:  "SrsLevel",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetNextDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateKanjiProgressV1RequestValidationError{
+					field:  "NextDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateKanjiProgressV1RequestValidationError{
+					field:  "NextDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetNextDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateKanjiProgressV1RequestValidationError{
+				field:  "NextDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetBurnDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateKanjiProgressV1RequestValidationError{
+					field:  "BurnDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateKanjiProgressV1RequestValidationError{
+					field:  "BurnDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetBurnDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateKanjiProgressV1RequestValidationError{
+				field:  "BurnDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return UpdateKanjiProgressV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// UpdateKanjiProgressV1RequestMultiError is an error wrapping multiple
+// validation errors returned by UpdateKanjiProgressV1Request.ValidateAll() if
+// the designated constraints aren't met.
+type UpdateKanjiProgressV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateKanjiProgressV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateKanjiProgressV1RequestMultiError) AllErrors() []error { return m }
+
+// UpdateKanjiProgressV1RequestValidationError is the validation error returned
+// by UpdateKanjiProgressV1Request.Validate if the designated constraints
+// aren't met.
+type UpdateKanjiProgressV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateKanjiProgressV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateKanjiProgressV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateKanjiProgressV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateKanjiProgressV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateKanjiProgressV1RequestValidationError) ErrorName() string {
+	return "UpdateKanjiProgressV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateKanjiProgressV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateKanjiProgressV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateKanjiProgressV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateKanjiProgressV1RequestValidationError{}
+
+// Validate checks the field values on DefaultKanjiProgressV1Response with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DefaultKanjiProgressV1Response) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DefaultKanjiProgressV1Response with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// DefaultKanjiProgressV1ResponseMultiError, or nil if none found.
+func (m *DefaultKanjiProgressV1Response) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DefaultKanjiProgressV1Response) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Success
+
+	if len(errors) > 0 {
+		return DefaultKanjiProgressV1ResponseMultiError(errors)
+	}
+	return nil
+}
+
+// DefaultKanjiProgressV1ResponseMultiError is an error wrapping multiple
+// validation errors returned by DefaultKanjiProgressV1Response.ValidateAll()
+// if the designated constraints aren't met.
+type DefaultKanjiProgressV1ResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DefaultKanjiProgressV1ResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DefaultKanjiProgressV1ResponseMultiError) AllErrors() []error { return m }
+
+// DefaultKanjiProgressV1ResponseValidationError is the validation error
+// returned by DefaultKanjiProgressV1Response.Validate if the designated
+// constraints aren't met.
+type DefaultKanjiProgressV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DefaultKanjiProgressV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DefaultKanjiProgressV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DefaultKanjiProgressV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DefaultKanjiProgressV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DefaultKanjiProgressV1ResponseValidationError) ErrorName() string {
+	return "DefaultKanjiProgressV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DefaultKanjiProgressV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDefaultKanjiProgressV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DefaultKanjiProgressV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DefaultKanjiProgressV1ResponseValidationError{}

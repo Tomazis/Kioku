@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -18,6 +19,8 @@ type RepoKanjiProgress interface {
 	ListKanjiProgressByTime(ctx context.Context, userID uint64, now time.Time, limit uint64, offset uint64) ([]*m_kanji.KanjiProgress, error)
 	ListKanjiProgressByIDs(ctx context.Context, userID uint64, kanjiIDs []uint64) ([]*m_kanji.KanjiProgress, error)
 	ListKanjiProgressBySRSLevel(ctx context.Context, userID uint64, srsLevel uint32, limit uint64, offset uint64) ([]*m_kanji.KanjiProgress, error)
+	AddKanjiProgress(ctx context.Context, userID uint64, kanjiID []uint64) (bool, error)
+	UpdateKanjiProgress(ctx context.Context, progressID uint64, srsLevel uint32, nextDate *time.Time, burnDate *time.Time) (bool, error)
 }
 
 func packKanjiProgress(progress *m_kanji.KanjiProgress) *pb.KanjiProgress {
@@ -57,7 +60,6 @@ func (api *dbaAPI) GetKanjiProgressByIdV1(ctx context.Context, req *pb.GetKanjiP
 	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
 	return &pb.GetKanjiProgressByIdV1Response{KanjiProgress: packKanjiProgress(kanjiProgress)}, nil
-
 }
 
 func (api *dbaAPI) ListKanjiProgressByTimeV1(ctx context.Context, req *pb.ListKanjiProgressByTimeV1Request,
@@ -153,4 +155,87 @@ func (api *dbaAPI) ListKanjiProgressBySrsLevelV1(ctx context.Context, req *pb.Li
 	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
 	return &pb.ListKanjiProgressV1Response{KanjiProgress: res}, nil
+}
+
+func (api *dbaAPI) AddKanjiProgressV1(ctx context.Context, req *pb.AddKanjiProgressV1Request,
+) (*pb.DefaultKanjiProgressV1Response, error) {
+
+	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
+
+	if err := req.Validate(); err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	logger.InfoKV(ctx, "Get request", "userID", req.GetUserId(), "kanjiID", req.GetKanjiId())
+
+	kanjiProgress, err := api.repo.AddKanjiProgress(ctx, req.GetUserId(), req.GetKanjiId())
+	if err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
+
+	return &pb.DefaultKanjiProgressV1Response{Success: kanjiProgress}, nil
+}
+
+func (api *dbaAPI) UpdateKanjiProgressV1(ctx context.Context, req *pb.UpdateKanjiProgressV1Request,
+) (*pb.DefaultKanjiProgressV1Response, error) {
+
+	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
+
+	if err := req.Validate(); err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if req.GetSrsLevel() == 9 && req.GetBurnDate() == nil {
+		err := errors.New("SRS Level 9 but Burn Date nil")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if req.GetSrsLevel() < 9 && req.GetBurnDate() != nil {
+		err := errors.New("SRS Level < 9 but Burn Date is not nil")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if req.GetBurnDate() == nil && req.GetNextDate() == nil {
+		err := errors.New("Next Date and Burn Date both nil")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if req.GetBurnDate() != nil && req.GetNextDate() != nil {
+		err := errors.New("Next Date and Burn Date both not nil")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	logger.InfoKV(ctx, "Get request", "progressID", req.GetProgressId(),
+		"srs_level", req.GetSrsLevel(), "next_date", req.GetNextDate(), "burn_date", req.GetBurnDate())
+	var t time.Time
+	var nextDate *time.Time
+
+	if req.GetNextDate() != nil {
+		t = req.GetNextDate().AsTime()
+		nextDate = &t
+	}
+	var burnDate *time.Time
+	if req.GetBurnDate() != nil {
+		t = req.GetBurnDate().AsTime()
+		burnDate = &t
+	}
+
+	kanjiProgress, err := api.repo.UpdateKanjiProgress(ctx, req.GetProgressId(), req.GetSrsLevel(), nextDate, burnDate)
+	if err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
+
+	return &pb.DefaultKanjiProgressV1Response{Success: kanjiProgress}, nil
 }

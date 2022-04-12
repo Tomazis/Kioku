@@ -17,3 +17,11 @@ type repo struct {
 func NewRepo(db_ *sqlx.DB) *repo {
 	return &repo{db: db_}
 }
+
+func prepareCompStatement(whatSelect string, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
+	q, args, err := psql.Select(whatSelect).
+		From("compositions").
+		Where(whereSq).ToSql()
+
+	return q, args, err
+}

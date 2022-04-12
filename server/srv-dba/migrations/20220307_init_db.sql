@@ -133,9 +133,9 @@ CREATE TABLE kanji_progress (
            ON UPDATE NO ACTION,
 
   srs_level INTEGER,
-  unlock_date date,
-  next_date date DEFAULT NULL ,
-  burn_date date DEFAULT NULL 
+  unlock_date TIMESTAMP,
+  next_date TIMESTAMP DEFAULT NULL ,
+  burn_date TIMESTAMP DEFAULT NULL 
 );
 
 CREATE TABLE word_progress (
@@ -150,9 +150,9 @@ CREATE TABLE word_progress (
            ON DELETE CASCADE 
            ON UPDATE NO ACTION,
   srs_level INTEGER,
-  unlock_date date,
-  next_date date DEFAULT NULL ,
-  burn_date date DEFAULT NULL 
+  unlock_date TIMESTAMP,
+  next_date TIMESTAMP DEFAULT NULL ,
+  burn_date TIMESTAMP DEFAULT NULL 
 );
 
 -- +goose Down

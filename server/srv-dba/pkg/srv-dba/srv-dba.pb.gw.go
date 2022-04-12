@@ -562,6 +562,78 @@ func local_request_SrvDbaService_ListKanjiProgressBySrsLevelV1_0(ctx context.Con
 }
 
 var (
+	filter_SrvDbaService_AddKanjiProgressV1_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_SrvDbaService_AddKanjiProgressV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq AddKanjiProgressV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SrvDbaService_AddKanjiProgressV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.AddKanjiProgressV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_SrvDbaService_AddKanjiProgressV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq AddKanjiProgressV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SrvDbaService_AddKanjiProgressV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.AddKanjiProgressV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_SrvDbaService_UpdateKanjiProgressV1_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_SrvDbaService_UpdateKanjiProgressV1_0(ctx context.Context, marshaler runtime.Marshaler, client SrvDbaServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq UpdateKanjiProgressV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SrvDbaService_UpdateKanjiProgressV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.UpdateKanjiProgressV1(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_SrvDbaService_UpdateKanjiProgressV1_0(ctx context.Context, marshaler runtime.Marshaler, server SrvDbaServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq UpdateKanjiProgressV1Request
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SrvDbaService_UpdateKanjiProgressV1_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.UpdateKanjiProgressV1(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
 	filter_SrvDbaService_GetWordProgressByIdV1_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
@@ -964,6 +1036,52 @@ func RegisterSrvDbaServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 
 	})
 
+	mux.Handle("PUT", pattern_SrvDbaService_AddKanjiProgressV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/AddKanjiProgressV1", runtime.WithHTTPPathPattern("/v1/progress/kanji"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_SrvDbaService_AddKanjiProgressV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_AddKanjiProgressV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_SrvDbaService_UpdateKanjiProgressV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/UpdateKanjiProgressV1", runtime.WithHTTPPathPattern("/v1/progress/kanji"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_SrvDbaService_UpdateKanjiProgressV1_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_UpdateKanjiProgressV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("POST", pattern_SrvDbaService_GetWordProgressByIdV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -1317,6 +1435,46 @@ func RegisterSrvDbaServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 
 	})
 
+	mux.Handle("PUT", pattern_SrvDbaService_AddKanjiProgressV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/AddKanjiProgressV1", runtime.WithHTTPPathPattern("/v1/progress/kanji"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_SrvDbaService_AddKanjiProgressV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_AddKanjiProgressV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("POST", pattern_SrvDbaService_UpdateKanjiProgressV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kioku.server.srv_dba.v1.SrvDbaService/UpdateKanjiProgressV1", runtime.WithHTTPPathPattern("/v1/progress/kanji"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_SrvDbaService_UpdateKanjiProgressV1_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_SrvDbaService_UpdateKanjiProgressV1_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	mux.Handle("POST", pattern_SrvDbaService_GetWordProgressByIdV1_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
@@ -1423,6 +1581,10 @@ var (
 
 	pattern_SrvDbaService_ListKanjiProgressBySrsLevelV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "progress", "kanjis"}, ""))
 
+	pattern_SrvDbaService_AddKanjiProgressV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "progress", "kanji"}, ""))
+
+	pattern_SrvDbaService_UpdateKanjiProgressV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "progress", "kanji"}, ""))
+
 	pattern_SrvDbaService_GetWordProgressByIdV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "progress", "word"}, ""))
 
 	pattern_SrvDbaService_ListWordProgressByTimeV1_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "progress", "words"}, ""))
@@ -1454,6 +1616,10 @@ var (
 	forward_SrvDbaService_ListKanjiProgressByIdsV1_0 = runtime.ForwardResponseMessage
 
 	forward_SrvDbaService_ListKanjiProgressBySrsLevelV1_0 = runtime.ForwardResponseMessage
+
+	forward_SrvDbaService_AddKanjiProgressV1_0 = runtime.ForwardResponseMessage
+
+	forward_SrvDbaService_UpdateKanjiProgressV1_0 = runtime.ForwardResponseMessage
 
 	forward_SrvDbaService_GetWordProgressByIdV1_0 = runtime.ForwardResponseMessage
 

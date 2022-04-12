@@ -85,6 +85,18 @@ service SrvDbaService {
         };
     }
 
+    rpc AddKanjiProgressV1(AddKanjiProgressV1Request) returns (DefaultKanjiProgressV1Response) {
+        option (google.api.http) = {
+            put: "/v1/progress/kanji"
+        };
+    }
+
+    rpc UpdateKanjiProgressV1(UpdateKanjiProgressV1Request) returns (DefaultKanjiProgressV1Response) {
+        option (google.api.http) = {
+            post: "/v1/progress/kanji"
+        };
+    }
+
     //WordProgress part
     rpc GetWordProgressByIdV1(GetWordProgressByIdV1Request) returns (GetWordProgressByIdV1Response) {
         option (google.api.http) = {
