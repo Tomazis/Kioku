@@ -800,10 +800,10 @@ func (m *ListKanjiProgressBySrsLevelV1Request) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetSrsLevel() <= 0 {
+	if val := m.GetSrsLevel(); val <= 0 || val > 9 {
 		err := ListKanjiProgressBySrsLevelV1RequestValidationError{
 			field:  "SrsLevel",
-			reason: "value must be greater than 0",
+			reason: "value must be inside range (0, 9]",
 		}
 		if !all {
 			return err
@@ -1202,10 +1202,10 @@ func (m *UpdateKanjiProgressV1Request) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetSrsLevel() <= 0 {
+	if val := m.GetSrsLevel(); val <= 0 || val > 9 {
 		err := UpdateKanjiProgressV1RequestValidationError{
 			field:  "SrsLevel",
-			reason: "value must be greater than 0",
+			reason: "value must be inside range (0, 9]",
 		}
 		if !all {
 			return err

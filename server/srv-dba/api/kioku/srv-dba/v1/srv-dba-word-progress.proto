@@ -11,7 +11,7 @@ option go_package = "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba;srv_dba
 
 message WordProgress {
     uint64                    id = 1;
-    Word                     word = 2;
+    Word                      word = 2;
     uint32                    srs_level = 3;
     google.protobuf.Timestamp unlock_date = 4;
     google.protobuf.Timestamp next_date = 5;
@@ -40,11 +40,27 @@ message ListWordProgressByTimeV1Request {
 
 message ListWordProgressBySrsLevelV1Request {
     uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
-    uint32 srs_level = 2 [(validate.rules).uint32.gt = 0];
+    uint32 srs_level = 2 [(validate.rules).uint32 = {gt: 0, lte: 9}];
     uint64 limit  = 3 [(validate.rules).uint64.lt = 1000];
     uint64 offset = 4;
 }
 
 message ListWordProgressV1Response {
     repeated WordProgress word_progress = 1;
+}
+
+message AddWordProgressV1Request {
+    uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
+    repeated uint64 word_id = 2 [(validate.rules).repeated.items.uint64.gt = 0];
+}
+
+message UpdateWordProgressV1Request {
+    uint64 progress_id = 1 [(validate.rules).uint64.gt = 0];
+    uint32 srs_level = 2 [(validate.rules).uint32 = {gt: 0, lte: 9}];
+    google.protobuf.Timestamp next_date = 3;
+    google.protobuf.Timestamp burn_date = 4;
+}
+
+message DefaultWordProgressV1Response {
+    bool success = 1;
 }

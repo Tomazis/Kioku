@@ -191,26 +191,14 @@ func (api *dbaAPI) UpdateKanjiProgressV1(ctx context.Context, req *pb.UpdateKanj
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if req.GetSrsLevel() == 9 && req.GetBurnDate() == nil {
-		err := errors.New("SRS Level 9 but Burn Date nil")
+	if req.GetSrsLevel() == 9 && (req.GetNextDate() != nil || req.GetBurnDate() == nil) {
+		err := errors.New("SRS Level 9 but Next Date is not nil and Burn Date is nil")
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	if req.GetSrsLevel() < 9 && req.GetBurnDate() != nil {
-		err := errors.New("SRS Level < 9 but Burn Date is not nil")
-		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	if req.GetBurnDate() == nil && req.GetNextDate() == nil {
-		err := errors.New("Next Date and Burn Date both nil")
-		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	}
-
-	if req.GetBurnDate() != nil && req.GetNextDate() != nil {
-		err := errors.New("Next Date and Burn Date both not nil")
+	if req.GetSrsLevel() < 9 && (req.GetBurnDate() != nil || req.GetNextDate() == nil) {
+		err := errors.New("SRS Level < 9 but Burn Date is not nil and Next Date is nil")
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}

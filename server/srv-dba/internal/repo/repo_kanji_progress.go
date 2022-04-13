@@ -68,12 +68,12 @@ func (r *repo) GetKanjiProgressById(ctx context.Context, userID uint64,
 	var progress []*m_kanji.KanjiProgress
 
 	whereSq := sq.And{sq.Eq{"user_id": userID}, sq.Eq{"kanji_id": kanjiID}}
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
-
-	progress, err := selectKanjiProgress(ctx, tx, 1, 0, whereSq, nil)
+	progress, err = selectKanjiProgress(ctx, tx, 1, 0, whereSq, nil)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -94,11 +94,12 @@ func (r *repo) ListKanjiProgressByTime(ctx context.Context, userID uint64,
 
 	whereSq := sq.And{sq.Eq{"user_id": userID}, sq.LtOrEq{"next_date": now}}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
 
-	progress, err := selectKanjiProgress(ctx, tx, limit, offset, whereSq, nil)
+	progress, err = selectKanjiProgress(ctx, tx, limit, offset, whereSq, nil)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -118,11 +119,12 @@ func (r *repo) ListKanjiProgressByIDs(ctx context.Context, userID uint64,
 
 	whereSq := sq.And{sq.Eq{"user_id": userID}, sq.Eq{"kanji_id": kanjiIDs}}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
 
-	progress, err := selectKanjiProgress(ctx, tx, uint64(len(kanjiIDs)), 0, whereSq, nil)
+	progress, err = selectKanjiProgress(ctx, tx, uint64(len(kanjiIDs)), 0, whereSq, nil)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -143,11 +145,12 @@ func (r *repo) ListKanjiProgressBySRSLevel(ctx context.Context, userID uint64,
 
 	whereSq := sq.And{sq.Eq{"user_id": userID}, sq.Eq{"srs_level": srsLevel}}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
 
-	progress, err := selectKanjiProgress(ctx, tx, limit, offset, whereSq, nil)
+	progress, err = selectKanjiProgress(ctx, tx, limit, offset, whereSq, nil)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -175,9 +178,10 @@ func (r *repo) AddKanjiProgress(ctx context.Context, userID uint64,
 		return false, nil
 	}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return false, err
+	}
 
 	err = tx.GetContext(ctx, &top, q_top, args_top...)
 	if err != nil && err != sql.ErrNoRows {
@@ -237,9 +241,6 @@ func (r *repo) UpdateKanjiProgress(ctx context.Context, progressID uint64,
 	if err != nil {
 		return false, err
 	}
-
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
 
 	_, err = r.db.ExecContext(ctx, query, args...)
 	if err != nil {

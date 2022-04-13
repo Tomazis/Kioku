@@ -122,5 +122,20 @@ service SrvDbaService {
         };
     }
 
+    rpc AddWordProgressV1(AddWordProgressV1Request) returns (DefaultWordProgressV1Response) {
+        option (google.api.http) = {
+            put: "/v1/progress/word"
+        };
+    }
+
+    rpc UpdateWordProgressV1(UpdateWordProgressV1Request) returns (DefaultWordProgressV1Response) {
+        option (google.api.http) = {
+            post: "/v1/progress/word"
+        };
+    }
+
+
+
+
     
 }

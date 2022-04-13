@@ -203,13 +203,32 @@
     },
     "/v1/progress/word": {
       "post": {
-        "summary": "WordProgress part",
-        "operationId": "SrvDbaService_GetWordProgressByIdV1",
+        "operationId": "SrvDbaService_UpdateWordProgressV1",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1GetWordProgressByIdV1Response"
+              "$ref": "#/definitions/v1DefaultWordProgressV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "SrvDbaService"
+        ]
+      },
+      "put": {
+        "operationId": "SrvDbaService_AddWordProgressV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DefaultWordProgressV1Response"
             }
           },
           "default": {
@@ -458,6 +477,14 @@
       }
     },
     "v1DefaultKanjiProgressV1Response": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1DefaultWordProgressV1Response": {
       "type": "object",
       "properties": {
         "success": {

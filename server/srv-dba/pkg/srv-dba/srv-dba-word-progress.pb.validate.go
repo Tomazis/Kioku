@@ -797,10 +797,10 @@ func (m *ListWordProgressBySrsLevelV1Request) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetSrsLevel() <= 0 {
+	if val := m.GetSrsLevel(); val <= 0 || val > 9 {
 		err := ListWordProgressBySrsLevelV1RequestValidationError{
 			field:  "SrsLevel",
-			reason: "value must be greater than 0",
+			reason: "value must be inside range (0, 9]",
 		}
 		if !all {
 			return err
@@ -1036,3 +1036,417 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListWordProgressV1ResponseValidationError{}
+
+// Validate checks the field values on AddWordProgressV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *AddWordProgressV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddWordProgressV1Request with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddWordProgressV1RequestMultiError, or nil if none found.
+func (m *AddWordProgressV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AddWordProgressV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetUserId() <= 0 {
+		err := AddWordProgressV1RequestValidationError{
+			field:  "UserId",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	for idx, item := range m.GetWordId() {
+		_, _ = idx, item
+
+		if item <= 0 {
+			err := AddWordProgressV1RequestValidationError{
+				field:  fmt.Sprintf("WordId[%v]", idx),
+				reason: "value must be greater than 0",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return AddWordProgressV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// AddWordProgressV1RequestMultiError is an error wrapping multiple validation
+// errors returned by AddWordProgressV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type AddWordProgressV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddWordProgressV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddWordProgressV1RequestMultiError) AllErrors() []error { return m }
+
+// AddWordProgressV1RequestValidationError is the validation error returned by
+// AddWordProgressV1Request.Validate if the designated constraints aren't met.
+type AddWordProgressV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AddWordProgressV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AddWordProgressV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AddWordProgressV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AddWordProgressV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AddWordProgressV1RequestValidationError) ErrorName() string {
+	return "AddWordProgressV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AddWordProgressV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAddWordProgressV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AddWordProgressV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AddWordProgressV1RequestValidationError{}
+
+// Validate checks the field values on UpdateWordProgressV1Request with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdateWordProgressV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateWordProgressV1Request with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateWordProgressV1RequestMultiError, or nil if none found.
+func (m *UpdateWordProgressV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateWordProgressV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetProgressId() <= 0 {
+		err := UpdateWordProgressV1RequestValidationError{
+			field:  "ProgressId",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if val := m.GetSrsLevel(); val <= 0 || val > 9 {
+		err := UpdateWordProgressV1RequestValidationError{
+			field:  "SrsLevel",
+			reason: "value must be inside range (0, 9]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetNextDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateWordProgressV1RequestValidationError{
+					field:  "NextDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateWordProgressV1RequestValidationError{
+					field:  "NextDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetNextDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateWordProgressV1RequestValidationError{
+				field:  "NextDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetBurnDate()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UpdateWordProgressV1RequestValidationError{
+					field:  "BurnDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UpdateWordProgressV1RequestValidationError{
+					field:  "BurnDate",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetBurnDate()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UpdateWordProgressV1RequestValidationError{
+				field:  "BurnDate",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return UpdateWordProgressV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// UpdateWordProgressV1RequestMultiError is an error wrapping multiple
+// validation errors returned by UpdateWordProgressV1Request.ValidateAll() if
+// the designated constraints aren't met.
+type UpdateWordProgressV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateWordProgressV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateWordProgressV1RequestMultiError) AllErrors() []error { return m }
+
+// UpdateWordProgressV1RequestValidationError is the validation error returned
+// by UpdateWordProgressV1Request.Validate if the designated constraints
+// aren't met.
+type UpdateWordProgressV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateWordProgressV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateWordProgressV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateWordProgressV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateWordProgressV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateWordProgressV1RequestValidationError) ErrorName() string {
+	return "UpdateWordProgressV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateWordProgressV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateWordProgressV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateWordProgressV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateWordProgressV1RequestValidationError{}
+
+// Validate checks the field values on DefaultWordProgressV1Response with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DefaultWordProgressV1Response) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DefaultWordProgressV1Response with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// DefaultWordProgressV1ResponseMultiError, or nil if none found.
+func (m *DefaultWordProgressV1Response) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DefaultWordProgressV1Response) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Success
+
+	if len(errors) > 0 {
+		return DefaultWordProgressV1ResponseMultiError(errors)
+	}
+	return nil
+}
+
+// DefaultWordProgressV1ResponseMultiError is an error wrapping multiple
+// validation errors returned by DefaultWordProgressV1Response.ValidateAll()
+// if the designated constraints aren't met.
+type DefaultWordProgressV1ResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DefaultWordProgressV1ResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DefaultWordProgressV1ResponseMultiError) AllErrors() []error { return m }
+
+// DefaultWordProgressV1ResponseValidationError is the validation error
+// returned by DefaultWordProgressV1Response.Validate if the designated
+// constraints aren't met.
+type DefaultWordProgressV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DefaultWordProgressV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DefaultWordProgressV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DefaultWordProgressV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DefaultWordProgressV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DefaultWordProgressV1ResponseValidationError) ErrorName() string {
+	return "DefaultWordProgressV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DefaultWordProgressV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDefaultWordProgressV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DefaultWordProgressV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DefaultWordProgressV1ResponseValidationError{}

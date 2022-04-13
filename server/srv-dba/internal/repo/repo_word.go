@@ -119,9 +119,10 @@ func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, er
 		return nil, err
 	}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
 
 	tx.GetContext(ctx, &word, query, args...)
 	err = tx.SelectContext(ctx, &kanjiIds, queryComp, argsComp...)
@@ -203,9 +204,10 @@ func selectWordsList(ctx context.Context, tx *sqlx.Tx, limit uint64, offset uint
 }
 
 func (r *repo) ListWordsByLevel(ctx context.Context, level uint32, limit uint64, offset uint64) ([]*m_word.Word, error) {
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
 	words, err := selectWordsList(ctx, tx, limit, offset, sq.Eq{"word_level": level}, nil)
 
 	if err != nil {
@@ -223,9 +225,10 @@ func (r *repo) ListWordsByLevel(ctx context.Context, level uint32, limit uint64,
 	return words, nil
 }
 func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint64, offset uint64) ([]*m_word.Word, error) {
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
 
 	var wordsIds []uint64
 	q_words, args_words, err := prepareCompStatement("word_id", sq.Eq{"kanji_id": kanjiID}, nil)
@@ -257,9 +260,10 @@ func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint6
 	return words, nil
 }
 func (r *repo) ListWordsByIds(ctx context.Context, word_ids []uint64) ([]*m_word.Word, error) {
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	tx := r.db.MustBegin()
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
 
 	words, err := selectWordsList(ctx, tx, uint64(len(word_ids)), 0, sq.Eq{"words.id": word_ids}, nil)
 

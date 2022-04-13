@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -18,6 +19,8 @@ type RepoWordProgress interface {
 	ListWordProgressByTime(ctx context.Context, userID uint64, now time.Time, limit uint64, offset uint64) ([]*m_word.WordProgress, error)
 	ListWordProgressByIDs(ctx context.Context, userID uint64, wordIDs []uint64) ([]*m_word.WordProgress, error)
 	ListWordProgressBySRSLevel(ctx context.Context, userID uint64, srsLevel uint32, limit uint64, offset uint64) ([]*m_word.WordProgress, error)
+	AddWordProgress(ctx context.Context, userID uint64, wordID []uint64) (bool, error)
+	UpdateWordProgress(ctx context.Context, progressID uint64, srsLevel uint32, nextDate *time.Time, burnDate *time.Time) (bool, error)
 }
 
 func packWordProgress(progress *m_word.WordProgress) *pb.WordProgress {
@@ -153,4 +156,75 @@ func (api *dbaAPI) ListWordProgressBySrsLevelV1(ctx context.Context, req *pb.Lis
 	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
 
 	return &pb.ListWordProgressV1Response{WordProgress: res}, nil
+}
+
+func (api *dbaAPI) AddWordProgressV1(ctx context.Context, req *pb.AddWordProgressV1Request,
+) (*pb.DefaultWordProgressV1Response, error) {
+
+	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
+
+	if err := req.Validate(); err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	logger.InfoKV(ctx, "Get request", "userID", req.GetUserId(), "wordID", req.GetWordId())
+
+	wordProgress, err := api.repo.AddWordProgress(ctx, req.GetUserId(), req.GetWordId())
+	if err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
+
+	return &pb.DefaultWordProgressV1Response{Success: wordProgress}, nil
+}
+
+func (api *dbaAPI) UpdateWordProgressV1(ctx context.Context, req *pb.UpdateWordProgressV1Request,
+) (*pb.DefaultWordProgressV1Response, error) {
+
+	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
+
+	if err := req.Validate(); err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if req.GetSrsLevel() == 9 && (req.GetNextDate() != nil || req.GetBurnDate() == nil) {
+		err := errors.New("SRS Level 9 but Next Date is not nil and Burn Date is nil")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	if req.GetSrsLevel() < 9 && (req.GetBurnDate() != nil || req.GetNextDate() == nil) {
+		err := errors.New("SRS Level < 9 but Burn Date is not nil and Next Date is nil")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	logger.InfoKV(ctx, "Get request", "progressID", req.GetProgressId(),
+		"srs_level", req.GetSrsLevel(), "next_date", req.GetNextDate(), "burn_date", req.GetBurnDate())
+	var t time.Time
+	var nextDate *time.Time
+
+	if req.GetNextDate() != nil {
+		t = req.GetNextDate().AsTime()
+		nextDate = &t
+	}
+	var burnDate *time.Time
+	if req.GetBurnDate() != nil {
+		t = req.GetBurnDate().AsTime()
+		burnDate = &t
+	}
+
+	wordProgress, err := api.repo.UpdateWordProgress(ctx, req.GetProgressId(), req.GetSrsLevel(), nextDate, burnDate)
+	if err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
+
+	return &pb.DefaultWordProgressV1Response{Success: wordProgress}, nil
 }

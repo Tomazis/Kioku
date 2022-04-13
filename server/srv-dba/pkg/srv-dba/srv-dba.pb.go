@@ -44,7 +44,7 @@ var file_kioku_srv_dba_v1_srv_dba_proto_rawDesc = []byte{
 	0x67, 0x72, 0x65, 0x73, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x2c, 0x6b, 0x69, 0x6f,
 	0x6b, 0x75, 0x2f, 0x73, 0x72, 0x76, 0x2d, 0x64, 0x62, 0x61, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x72,
 	0x76, 0x2d, 0x64, 0x62, 0x61, 0x2d, 0x77, 0x6f, 0x72, 0x64, 0x2d, 0x70, 0x72, 0x6f, 0x67, 0x72,
-	0x65, 0x73, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x32, 0xa5, 0x15, 0x0a, 0x0d, 0x53, 0x72,
+	0x65, 0x73, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x32, 0xe3, 0x17, 0x0a, 0x0d, 0x53, 0x72,
 	0x76, 0x44, 0x62, 0x61, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x8f, 0x01, 0x0a, 0x0e,
 	0x47, 0x65, 0x74, 0x4b, 0x61, 0x6e, 0x6a, 0x69, 0x42, 0x79, 0x49, 0x64, 0x56, 0x31, 0x12, 0x2e,
 	0x2e, 0x6b, 0x69, 0x6f, 0x6b, 0x75, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x73, 0x72,
@@ -215,11 +215,31 @@ var file_kioku_srv_dba_v1_srv_dba_proto_rawDesc = []byte{
 	0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x56, 0x31, 0x52, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x1a, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x14, 0x22, 0x12, 0x2f,
 	0x76, 0x31, 0x2f, 0x70, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x2f, 0x77, 0x6f, 0x72, 0x64,
-	0x73, 0x42, 0x3d, 0x5a, 0x3b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x74, 0x6f, 0x6d, 0x61, 0x7a, 0x69, 0x73, 0x2f, 0x6b, 0x69, 0x6f, 0x6b, 0x75, 0x2f, 0x73, 0x65,
-	0x72, 0x76, 0x65, 0x72, 0x2f, 0x73, 0x72, 0x76, 0x2d, 0x64, 0x62, 0x61, 0x2f, 0x70, 0x6b, 0x67,
-	0x2f, 0x73, 0x72, 0x76, 0x2d, 0x64, 0x62, 0x61, 0x3b, 0x73, 0x72, 0x76, 0x5f, 0x64, 0x62, 0x61,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x12, 0x99, 0x01, 0x0a, 0x11, 0x41, 0x64, 0x64, 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f,
+	0x67, 0x72, 0x65, 0x73, 0x73, 0x56, 0x31, 0x12, 0x31, 0x2e, 0x6b, 0x69, 0x6f, 0x6b, 0x75, 0x2e,
+	0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x73, 0x72, 0x76, 0x5f, 0x64, 0x62, 0x61, 0x2e, 0x76,
+	0x31, 0x2e, 0x41, 0x64, 0x64, 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73,
+	0x73, 0x56, 0x31, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x6b, 0x69, 0x6f,
+	0x6b, 0x75, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x73, 0x72, 0x76, 0x5f, 0x64, 0x62,
+	0x61, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x57, 0x6f, 0x72, 0x64,
+	0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x56, 0x31, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x19, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x13, 0x1a, 0x11, 0x2f, 0x76, 0x31, 0x2f,
+	0x70, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x2f, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x9f, 0x01,
+	0x0a, 0x14, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f, 0x67,
+	0x72, 0x65, 0x73, 0x73, 0x56, 0x31, 0x12, 0x34, 0x2e, 0x6b, 0x69, 0x6f, 0x6b, 0x75, 0x2e, 0x73,
+	0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x73, 0x72, 0x76, 0x5f, 0x64, 0x62, 0x61, 0x2e, 0x76, 0x31,
+	0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f, 0x67, 0x72,
+	0x65, 0x73, 0x73, 0x56, 0x31, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x6b,
+	0x69, 0x6f, 0x6b, 0x75, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x2e, 0x73, 0x72, 0x76, 0x5f,
+	0x64, 0x62, 0x61, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x66, 0x61, 0x75, 0x6c, 0x74, 0x57, 0x6f,
+	0x72, 0x64, 0x50, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x56, 0x31, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x19, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x13, 0x22, 0x11, 0x2f, 0x76,
+	0x31, 0x2f, 0x70, 0x72, 0x6f, 0x67, 0x72, 0x65, 0x73, 0x73, 0x2f, 0x77, 0x6f, 0x72, 0x64, 0x42,
+	0x3d, 0x5a, 0x3b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x74, 0x6f,
+	0x6d, 0x61, 0x7a, 0x69, 0x73, 0x2f, 0x6b, 0x69, 0x6f, 0x6b, 0x75, 0x2f, 0x73, 0x65, 0x72, 0x76,
+	0x65, 0x72, 0x2f, 0x73, 0x72, 0x76, 0x2d, 0x64, 0x62, 0x61, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x73,
+	0x72, 0x76, 0x2d, 0x64, 0x62, 0x61, 0x3b, 0x73, 0x72, 0x76, 0x5f, 0x64, 0x62, 0x61, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var file_kioku_srv_dba_v1_srv_dba_proto_goTypes = []interface{}{
@@ -240,15 +260,18 @@ var file_kioku_srv_dba_v1_srv_dba_proto_goTypes = []interface{}{
 	(*ListWordProgressByTimeV1Request)(nil),      // 14: kioku.server.srv_dba.v1.ListWordProgressByTimeV1Request
 	(*ListWordProgressByIdsV1Request)(nil),       // 15: kioku.server.srv_dba.v1.ListWordProgressByIdsV1Request
 	(*ListWordProgressBySrsLevelV1Request)(nil),  // 16: kioku.server.srv_dba.v1.ListWordProgressBySrsLevelV1Request
-	(*GetKanjiByIdV1Response)(nil),               // 17: kioku.server.srv_dba.v1.GetKanjiByIdV1Response
-	(*ListKanjiV1Response)(nil),                  // 18: kioku.server.srv_dba.v1.ListKanjiV1Response
-	(*GetWordByIdV1Response)(nil),                // 19: kioku.server.srv_dba.v1.GetWordByIdV1Response
-	(*ListWordsV1Response)(nil),                  // 20: kioku.server.srv_dba.v1.ListWordsV1Response
-	(*GetKanjiProgressByIdV1Response)(nil),       // 21: kioku.server.srv_dba.v1.GetKanjiProgressByIdV1Response
-	(*ListKanjiProgressV1Response)(nil),          // 22: kioku.server.srv_dba.v1.ListKanjiProgressV1Response
-	(*DefaultKanjiProgressV1Response)(nil),       // 23: kioku.server.srv_dba.v1.DefaultKanjiProgressV1Response
-	(*GetWordProgressByIdV1Response)(nil),        // 24: kioku.server.srv_dba.v1.GetWordProgressByIdV1Response
-	(*ListWordProgressV1Response)(nil),           // 25: kioku.server.srv_dba.v1.ListWordProgressV1Response
+	(*AddWordProgressV1Request)(nil),             // 17: kioku.server.srv_dba.v1.AddWordProgressV1Request
+	(*UpdateWordProgressV1Request)(nil),          // 18: kioku.server.srv_dba.v1.UpdateWordProgressV1Request
+	(*GetKanjiByIdV1Response)(nil),               // 19: kioku.server.srv_dba.v1.GetKanjiByIdV1Response
+	(*ListKanjiV1Response)(nil),                  // 20: kioku.server.srv_dba.v1.ListKanjiV1Response
+	(*GetWordByIdV1Response)(nil),                // 21: kioku.server.srv_dba.v1.GetWordByIdV1Response
+	(*ListWordsV1Response)(nil),                  // 22: kioku.server.srv_dba.v1.ListWordsV1Response
+	(*GetKanjiProgressByIdV1Response)(nil),       // 23: kioku.server.srv_dba.v1.GetKanjiProgressByIdV1Response
+	(*ListKanjiProgressV1Response)(nil),          // 24: kioku.server.srv_dba.v1.ListKanjiProgressV1Response
+	(*DefaultKanjiProgressV1Response)(nil),       // 25: kioku.server.srv_dba.v1.DefaultKanjiProgressV1Response
+	(*GetWordProgressByIdV1Response)(nil),        // 26: kioku.server.srv_dba.v1.GetWordProgressByIdV1Response
+	(*ListWordProgressV1Response)(nil),           // 27: kioku.server.srv_dba.v1.ListWordProgressV1Response
+	(*DefaultWordProgressV1Response)(nil),        // 28: kioku.server.srv_dba.v1.DefaultWordProgressV1Response
 }
 var file_kioku_srv_dba_v1_srv_dba_proto_depIdxs = []int32{
 	0,  // 0: kioku.server.srv_dba.v1.SrvDbaService.GetKanjiByIdV1:input_type -> kioku.server.srv_dba.v1.GetKanjiByIdV1Request
@@ -268,25 +291,29 @@ var file_kioku_srv_dba_v1_srv_dba_proto_depIdxs = []int32{
 	14, // 14: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressByTimeV1:input_type -> kioku.server.srv_dba.v1.ListWordProgressByTimeV1Request
 	15, // 15: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressByIdsV1:input_type -> kioku.server.srv_dba.v1.ListWordProgressByIdsV1Request
 	16, // 16: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressBySrsLevelV1:input_type -> kioku.server.srv_dba.v1.ListWordProgressBySrsLevelV1Request
-	17, // 17: kioku.server.srv_dba.v1.SrvDbaService.GetKanjiByIdV1:output_type -> kioku.server.srv_dba.v1.GetKanjiByIdV1Response
-	18, // 18: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiByLevelV1:output_type -> kioku.server.srv_dba.v1.ListKanjiV1Response
-	18, // 19: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiByIdsV1:output_type -> kioku.server.srv_dba.v1.ListKanjiV1Response
-	19, // 20: kioku.server.srv_dba.v1.SrvDbaService.GetWordByIdV1:output_type -> kioku.server.srv_dba.v1.GetWordByIdV1Response
-	20, // 21: kioku.server.srv_dba.v1.SrvDbaService.ListWordsByLevelV1:output_type -> kioku.server.srv_dba.v1.ListWordsV1Response
-	20, // 22: kioku.server.srv_dba.v1.SrvDbaService.ListWordsByKanjiV1:output_type -> kioku.server.srv_dba.v1.ListWordsV1Response
-	20, // 23: kioku.server.srv_dba.v1.SrvDbaService.ListWordsByIdsV1:output_type -> kioku.server.srv_dba.v1.ListWordsV1Response
-	21, // 24: kioku.server.srv_dba.v1.SrvDbaService.GetKanjiProgressByIdV1:output_type -> kioku.server.srv_dba.v1.GetKanjiProgressByIdV1Response
-	22, // 25: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiProgressByTimeV1:output_type -> kioku.server.srv_dba.v1.ListKanjiProgressV1Response
-	22, // 26: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiProgressByIdsV1:output_type -> kioku.server.srv_dba.v1.ListKanjiProgressV1Response
-	22, // 27: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiProgressBySrsLevelV1:output_type -> kioku.server.srv_dba.v1.ListKanjiProgressV1Response
-	23, // 28: kioku.server.srv_dba.v1.SrvDbaService.AddKanjiProgressV1:output_type -> kioku.server.srv_dba.v1.DefaultKanjiProgressV1Response
-	23, // 29: kioku.server.srv_dba.v1.SrvDbaService.UpdateKanjiProgressV1:output_type -> kioku.server.srv_dba.v1.DefaultKanjiProgressV1Response
-	24, // 30: kioku.server.srv_dba.v1.SrvDbaService.GetWordProgressByIdV1:output_type -> kioku.server.srv_dba.v1.GetWordProgressByIdV1Response
-	25, // 31: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressByTimeV1:output_type -> kioku.server.srv_dba.v1.ListWordProgressV1Response
-	25, // 32: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressByIdsV1:output_type -> kioku.server.srv_dba.v1.ListWordProgressV1Response
-	25, // 33: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressBySrsLevelV1:output_type -> kioku.server.srv_dba.v1.ListWordProgressV1Response
-	17, // [17:34] is the sub-list for method output_type
-	0,  // [0:17] is the sub-list for method input_type
+	17, // 17: kioku.server.srv_dba.v1.SrvDbaService.AddWordProgressV1:input_type -> kioku.server.srv_dba.v1.AddWordProgressV1Request
+	18, // 18: kioku.server.srv_dba.v1.SrvDbaService.UpdateWordProgressV1:input_type -> kioku.server.srv_dba.v1.UpdateWordProgressV1Request
+	19, // 19: kioku.server.srv_dba.v1.SrvDbaService.GetKanjiByIdV1:output_type -> kioku.server.srv_dba.v1.GetKanjiByIdV1Response
+	20, // 20: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiByLevelV1:output_type -> kioku.server.srv_dba.v1.ListKanjiV1Response
+	20, // 21: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiByIdsV1:output_type -> kioku.server.srv_dba.v1.ListKanjiV1Response
+	21, // 22: kioku.server.srv_dba.v1.SrvDbaService.GetWordByIdV1:output_type -> kioku.server.srv_dba.v1.GetWordByIdV1Response
+	22, // 23: kioku.server.srv_dba.v1.SrvDbaService.ListWordsByLevelV1:output_type -> kioku.server.srv_dba.v1.ListWordsV1Response
+	22, // 24: kioku.server.srv_dba.v1.SrvDbaService.ListWordsByKanjiV1:output_type -> kioku.server.srv_dba.v1.ListWordsV1Response
+	22, // 25: kioku.server.srv_dba.v1.SrvDbaService.ListWordsByIdsV1:output_type -> kioku.server.srv_dba.v1.ListWordsV1Response
+	23, // 26: kioku.server.srv_dba.v1.SrvDbaService.GetKanjiProgressByIdV1:output_type -> kioku.server.srv_dba.v1.GetKanjiProgressByIdV1Response
+	24, // 27: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiProgressByTimeV1:output_type -> kioku.server.srv_dba.v1.ListKanjiProgressV1Response
+	24, // 28: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiProgressByIdsV1:output_type -> kioku.server.srv_dba.v1.ListKanjiProgressV1Response
+	24, // 29: kioku.server.srv_dba.v1.SrvDbaService.ListKanjiProgressBySrsLevelV1:output_type -> kioku.server.srv_dba.v1.ListKanjiProgressV1Response
+	25, // 30: kioku.server.srv_dba.v1.SrvDbaService.AddKanjiProgressV1:output_type -> kioku.server.srv_dba.v1.DefaultKanjiProgressV1Response
+	25, // 31: kioku.server.srv_dba.v1.SrvDbaService.UpdateKanjiProgressV1:output_type -> kioku.server.srv_dba.v1.DefaultKanjiProgressV1Response
+	26, // 32: kioku.server.srv_dba.v1.SrvDbaService.GetWordProgressByIdV1:output_type -> kioku.server.srv_dba.v1.GetWordProgressByIdV1Response
+	27, // 33: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressByTimeV1:output_type -> kioku.server.srv_dba.v1.ListWordProgressV1Response
+	27, // 34: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressByIdsV1:output_type -> kioku.server.srv_dba.v1.ListWordProgressV1Response
+	27, // 35: kioku.server.srv_dba.v1.SrvDbaService.ListWordProgressBySrsLevelV1:output_type -> kioku.server.srv_dba.v1.ListWordProgressV1Response
+	28, // 36: kioku.server.srv_dba.v1.SrvDbaService.AddWordProgressV1:output_type -> kioku.server.srv_dba.v1.DefaultWordProgressV1Response
+	28, // 37: kioku.server.srv_dba.v1.SrvDbaService.UpdateWordProgressV1:output_type -> kioku.server.srv_dba.v1.DefaultWordProgressV1Response
+	19, // [19:38] is the sub-list for method output_type
+	0,  // [0:19] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name

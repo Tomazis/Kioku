@@ -39,6 +39,8 @@ type SrvDbaServiceClient interface {
 	ListWordProgressByTimeV1(ctx context.Context, in *ListWordProgressByTimeV1Request, opts ...grpc.CallOption) (*ListWordProgressV1Response, error)
 	ListWordProgressByIdsV1(ctx context.Context, in *ListWordProgressByIdsV1Request, opts ...grpc.CallOption) (*ListWordProgressV1Response, error)
 	ListWordProgressBySrsLevelV1(ctx context.Context, in *ListWordProgressBySrsLevelV1Request, opts ...grpc.CallOption) (*ListWordProgressV1Response, error)
+	AddWordProgressV1(ctx context.Context, in *AddWordProgressV1Request, opts ...grpc.CallOption) (*DefaultWordProgressV1Response, error)
+	UpdateWordProgressV1(ctx context.Context, in *UpdateWordProgressV1Request, opts ...grpc.CallOption) (*DefaultWordProgressV1Response, error)
 }
 
 type srvDbaServiceClient struct {
@@ -202,6 +204,24 @@ func (c *srvDbaServiceClient) ListWordProgressBySrsLevelV1(ctx context.Context, 
 	return out, nil
 }
 
+func (c *srvDbaServiceClient) AddWordProgressV1(ctx context.Context, in *AddWordProgressV1Request, opts ...grpc.CallOption) (*DefaultWordProgressV1Response, error) {
+	out := new(DefaultWordProgressV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/AddWordProgressV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *srvDbaServiceClient) UpdateWordProgressV1(ctx context.Context, in *UpdateWordProgressV1Request, opts ...grpc.CallOption) (*DefaultWordProgressV1Response, error) {
+	out := new(DefaultWordProgressV1Response)
+	err := c.cc.Invoke(ctx, "/kioku.server.srv_dba.v1.SrvDbaService/UpdateWordProgressV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SrvDbaServiceServer is the server API for SrvDbaService service.
 // All implementations must embed UnimplementedSrvDbaServiceServer
 // for forward compatibility
@@ -227,6 +247,8 @@ type SrvDbaServiceServer interface {
 	ListWordProgressByTimeV1(context.Context, *ListWordProgressByTimeV1Request) (*ListWordProgressV1Response, error)
 	ListWordProgressByIdsV1(context.Context, *ListWordProgressByIdsV1Request) (*ListWordProgressV1Response, error)
 	ListWordProgressBySrsLevelV1(context.Context, *ListWordProgressBySrsLevelV1Request) (*ListWordProgressV1Response, error)
+	AddWordProgressV1(context.Context, *AddWordProgressV1Request) (*DefaultWordProgressV1Response, error)
+	UpdateWordProgressV1(context.Context, *UpdateWordProgressV1Request) (*DefaultWordProgressV1Response, error)
 	mustEmbedUnimplementedSrvDbaServiceServer()
 }
 
@@ -284,6 +306,12 @@ func (UnimplementedSrvDbaServiceServer) ListWordProgressByIdsV1(context.Context,
 }
 func (UnimplementedSrvDbaServiceServer) ListWordProgressBySrsLevelV1(context.Context, *ListWordProgressBySrsLevelV1Request) (*ListWordProgressV1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListWordProgressBySrsLevelV1 not implemented")
+}
+func (UnimplementedSrvDbaServiceServer) AddWordProgressV1(context.Context, *AddWordProgressV1Request) (*DefaultWordProgressV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddWordProgressV1 not implemented")
+}
+func (UnimplementedSrvDbaServiceServer) UpdateWordProgressV1(context.Context, *UpdateWordProgressV1Request) (*DefaultWordProgressV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateWordProgressV1 not implemented")
 }
 func (UnimplementedSrvDbaServiceServer) mustEmbedUnimplementedSrvDbaServiceServer() {}
 
@@ -604,6 +632,42 @@ func _SrvDbaService_ListWordProgressBySrsLevelV1_Handler(srv interface{}, ctx co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SrvDbaService_AddWordProgressV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddWordProgressV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvDbaServiceServer).AddWordProgressV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/AddWordProgressV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvDbaServiceServer).AddWordProgressV1(ctx, req.(*AddWordProgressV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SrvDbaService_UpdateWordProgressV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateWordProgressV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SrvDbaServiceServer).UpdateWordProgressV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kioku.server.srv_dba.v1.SrvDbaService/UpdateWordProgressV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SrvDbaServiceServer).UpdateWordProgressV1(ctx, req.(*UpdateWordProgressV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SrvDbaService_ServiceDesc is the grpc.ServiceDesc for SrvDbaService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -678,6 +742,14 @@ var SrvDbaService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListWordProgressBySrsLevelV1",
 			Handler:    _SrvDbaService_ListWordProgressBySrsLevelV1_Handler,
+		},
+		{
+			MethodName: "AddWordProgressV1",
+			Handler:    _SrvDbaService_AddWordProgressV1_Handler,
+		},
+		{
+			MethodName: "UpdateWordProgressV1",
+			Handler:    _SrvDbaService_UpdateWordProgressV1_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
