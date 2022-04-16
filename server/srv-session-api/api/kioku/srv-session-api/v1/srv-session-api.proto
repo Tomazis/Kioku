@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package kioku.server.srv_session_api.v1;
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/tomazis/kioku/server/srv-session-api/pkg/srv-session-api;srv_session_api";
+
+message Event {
+    uint64 user_id        = 1 [(validate.rules).uint64.gt = 0];
+    uint32 user_level     = 2 [(validate.rules).uint32.gt = 0]; 
+    uint64 progress_id    = 3 [(validate.rules).uint64.gt = 0];
+    uint32 progress_level = 4 [(validate.rules).uint32.gt = 0]; 
+    uint32 srs_level      = 5 [(validate.rules).uint32.gt = 0]; 
+    bool   success        = 6;
+}
+
+message KanjiEventV1Request {
+    Event event = 1;
+}
+
+message WordEventV1Request {
+    Event event = 1;
+}
+
+message EventV1Reposnse {
+    bool success = 1;
+}
+
+// SrvSessionApiService - Service for managing the session events
+service SrvSessionApi {
+    rpc KanjiEventV1(KanjiEventV1Request) returns (EventV1Reposnse) {
+        option (google.api.http) = {
+            post: "/v1/event/kanji"
+        };
+    }
+
+    rpc WordEventV1(WordEventV1Request) returns (EventV1Reposnse) {
+        option (google.api.http) = {
+            post: "/v1/event/word"
+        };
+    }
+}
+
