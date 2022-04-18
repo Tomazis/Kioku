@@ -108,8 +108,36 @@
             "required": false,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "min",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
+        "tags": [
+          "SrvDbaService"
+        ]
+      }
+    },
+    "/v1/progress/counter": {
+      "post": {
+        "operationId": "SrvDbaService_GetCounterV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetCounterV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
         "tags": [
           "SrvDbaService"
         ]
@@ -347,8 +375,34 @@
               "format": "uint64"
             },
             "collectionFormat": "multi"
+          },
+          {
+            "name": "min",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
+        "tags": [
+          "SrvDbaService"
+        ]
+      },
+      "post": {
+        "operationId": "SrvDbaService_ListWordsByKanjiAndLevelV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListWordsV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
         "tags": [
           "SrvDbaService"
         ]
@@ -392,6 +446,12 @@
             "required": false,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "min",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -437,6 +497,12 @@
             "required": false,
             "type": "string",
             "format": "uint64"
+          },
+          {
+            "name": "min",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -476,6 +542,27 @@
         }
       }
     },
+    "v1Counter": {
+      "type": "object",
+      "properties": {
+        "kanjiCount": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "userKanjiCount": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "wordsCount": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "userWordsCount": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
     "v1DefaultKanjiProgressV1Response": {
       "type": "object",
       "properties": {
@@ -489,6 +576,14 @@
       "properties": {
         "success": {
           "type": "boolean"
+        }
+      }
+    },
+    "v1GetCounterV1Response": {
+      "type": "object",
+      "properties": {
+        "counter": {
+          "$ref": "#/definitions/v1Counter"
         }
       }
     },

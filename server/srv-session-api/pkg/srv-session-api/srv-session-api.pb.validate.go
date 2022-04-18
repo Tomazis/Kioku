@@ -67,9 +67,31 @@ func (m *Event) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if m.GetUserLevel() <= 0 {
+		err := EventValidationError{
+			field:  "UserLevel",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if m.GetProgressId() <= 0 {
 		err := EventValidationError{
 			field:  "ProgressId",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.GetProgressLevel() <= 0 {
+		err := EventValidationError{
+			field:  "ProgressLevel",
 			reason: "value must be greater than 0",
 		}
 		if !all {

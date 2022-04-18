@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -12,8 +13,8 @@ import (
 // Get User Level
 // If kanji/word level == user level then check if both (kanji and word) progress% > 85%
 // If true then user level +1 and add new kanji and words to progress corresponding to level
-func (r *repo) ProceedEvent(e *models.Event, isKanji bool) error {
-	counter, err := getCounter(e.UserID, e.UserLevel)
+func (r *repo) ProceedEvent(ctx context.Context, e *models.Event, isKanji bool) error {
+	counter, err := getCounter(ctx, e.UserID, e.UserLevel)
 	if err != nil {
 		return err
 	}
@@ -23,23 +24,23 @@ func (r *repo) ProceedEvent(e *models.Event, isKanji bool) error {
 		return err
 	}
 
-	err = updateProgress(e)
+	err = updateProgress(ctx, e)
 	if err != nil {
 		return err
 	}
 
 	if isKanji && counter.KanjiCount != counter.UKanjiCount {
-		err = addNewKanjiAndUnlockWords(e.UserID, e.ProgressLevel)
+		err = addNewKanjiAndUnlockWords(ctx, e.UserID, e.ProgressLevel)
 		if err != nil {
 			return err
 		}
 	}
 
 	if e.ProgressLevel == e.UserLevel {
-		completion := float64(counter.UWordsSum+counter.UKanjiSum) / float64(counter.KanjiSum+counter.WordsSum) * 100
+		completion := float64(counter.UWordsCount+counter.UKanjiCount) / float64(counter.KanjiCount+counter.WordsCount) * 100
 
 		if completion >= 85 {
-			userLevelUp(e.UserID)
+			userLevelUp(ctx, e.UserID)
 		}
 	}
 	return nil
@@ -92,20 +93,20 @@ func setProgressTime(e *models.Event) error {
 	return nil
 }
 
-func getCounter(userID uint64, userLevel uint32) (*models.Counter, error) {
+func getCounter(ctx context.Context, userID uint64, userLevel uint32) (*models.Counter, error) {
 	var counter *models.Counter
 	return counter, nil
 }
 
 //add 50% kanji to study and words that hasn't had that level kanji
-func userLevelUp(userID uint64) error {
+func userLevelUp(ctx context.Context, userID uint64) error {
 	return nil
 }
 
-func addNewKanjiAndUnlockWords(userID uint64, progressLevel uint32) error {
+func addNewKanjiAndUnlockWords(ctx context.Context, userID uint64, progressLevel uint32) error {
 	return nil
 }
 
-func updateProgress(e *models.Event) error {
+func updateProgress(ctx context.Context, e *models.Event) error {
 	return nil
 }

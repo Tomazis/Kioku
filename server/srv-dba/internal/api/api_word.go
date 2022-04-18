@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -15,9 +16,10 @@ import (
 
 type RepoWord interface {
 	GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, error)
-	ListWordsByLevel(ctx context.Context, level uint32, limit uint64, offset uint64) ([]*m_word.Word, error)
-	ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint64, offset uint64) ([]*m_word.Word, error)
-	ListWordsByIds(ctx context.Context, word_ids []uint64) ([]*m_word.Word, error)
+	ListWordsByLevel(ctx context.Context, level uint32, limit uint64, offset uint64, min bool) ([]*m_word.Word, error)
+	ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint64, offset uint64, min bool) ([]*m_word.Word, error)
+	ListWordsByKanjiAndLevel(ctx context.Context, level uint32, kanjiID uint64, limit uint64, offset uint64, min bool) ([]*m_word.Word, error)
+	ListWordsByIds(ctx context.Context, word_ids []uint64, min bool) ([]*m_word.Word, error)
 }
 
 func packWord(word *m_word.Word) *pb.Word {
@@ -41,8 +43,8 @@ func packWord(word *m_word.Word) *pb.Word {
 		var t, l sql.NullString
 		t.Scan(trans[i])
 		l.Scan(lang[i])
-		tr := aggStringToSlice(t, "/")
-		la := aggStringToSlice(l, "/")
+		tr := aggStringToSlice(t, "#")
+		la := aggStringToSlice(l, "#")
 		translations := make([]*pb.SentenceTranslation, len(tr))
 		for j, t := range tr {
 			language, _ := strconv.Atoi(la[j])
@@ -110,7 +112,7 @@ func (api *dbaAPI) ListWordsByLevelV1(ctx context.Context, req *pb.ListWordsByLe
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	words, err := api.repo.ListWordsByLevel(ctx, req.GetLevel(), req.GetLimit(), req.GetOffset())
+	words, err := api.repo.ListWordsByLevel(ctx, req.GetLevel(), req.GetLimit(), req.GetOffset(), req.GetMin())
 	if err != nil {
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -139,7 +141,52 @@ func (api *dbaAPI) ListWordsByKanjiV1(ctx context.Context, req *pb.ListWordsByKa
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
-	words, err := api.repo.ListWordsByKanji(ctx, req.GetKanjiId(), req.GetLimit(), req.GetOffset())
+	words, err := api.repo.ListWordsByKanji(ctx, req.GetKanjiId(), req.GetLimit(), req.GetOffset(), req.GetMin())
+	if err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+	if len(words) == 0 {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- returned zero items from db", funcName), "error", err)
+		return nil, status.Error(codes.NotFound, "words not found")
+	}
+	res := make([]*pb.Word, len(words))
+	for i, word := range words {
+		res[i] = packWord(word)
+	}
+
+	logger.DebugKV(ctx, fmt.Sprintf("%s -- success", funcName))
+
+	return &pb.ListWordsV1Response{Words: res}, nil
+}
+
+func (api *dbaAPI) ListWordsByKanjiAndLevelV1(ctx context.Context, req *pb.ListWordsByKanjiAndLevelV1Request,
+) (*pb.ListWordsV1Response, error) {
+
+	ctx = logger.SetLevelFromContext(ctx)
+	funcName := runFuncName()
+
+	if err := req.Validate(); err != nil {
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+	if req.GetLevel() == 0 && req.GetKanjiId() == 0 {
+		err := errors.New("Level = 0 and KanjiId = 0")
+		logger.ErrorKV(ctx, fmt.Sprintf("%s -- validation failed", funcName), "error", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	var words []*m_word.Word
+	var err error
+
+	if req.GetLevel() == 0 {
+		words, err = api.repo.ListWordsByKanji(ctx, req.GetKanjiId(), req.GetLimit(), req.GetOffset(), req.GetMin())
+	} else if req.GetKanjiId() == 0 {
+		words, err = api.repo.ListWordsByLevel(ctx, req.GetLevel(), req.GetLimit(), req.GetOffset(), req.GetMin())
+	} else {
+		words, err = api.repo.ListWordsByKanjiAndLevel(ctx, req.GetLevel(), req.GetKanjiId(), req.GetLimit(), req.GetOffset(), req.GetMin())
+	}
+
 	if err != nil {
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -169,7 +216,7 @@ func (api *dbaAPI) ListWordsByIdsV1(ctx context.Context, req *pb.ListWordsByIdsV
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
-	words, err := api.repo.ListWordsByIds(ctx, req.GetWordId())
+	words, err := api.repo.ListWordsByIds(ctx, req.GetWordId(), req.GetMin())
 	if err != nil {
 		logger.ErrorKV(ctx, fmt.Sprintf("%s -- failed to get from db", funcName), "error", err)
 		return nil, status.Error(codes.Internal, err.Error())

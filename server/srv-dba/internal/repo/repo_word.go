@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/jmoiron/sqlx"
 	m_kanji "github.com/tomazis/kioku/server/srv-dba/internal/models/kanji"
 	m_word "github.com/tomazis/kioku/server/srv-dba/internal/models/word"
@@ -42,7 +41,7 @@ func prepareWordStatement(limit uint64, offset uint64, whereSq interface{}, args
 		return "", nil, err
 	}
 
-	sub_q_trans, _, err := sq.Select("word_id as sentences_word_id, sentence_id as sen_id, string_agg(sentence_translation, '/') AS sentence_translation, array_to_string(array_agg(sentence_language), '/') AS sentence_language").
+	sub_q_trans, _, err := sq.Select("word_id as sentences_word_id, sentence_id as sen_id, string_agg(sentence_translation, '#') AS sentence_translation, array_to_string(array_agg(sentence_language), '#') AS sentence_language").
 		Distinct().
 		From("sentences").
 		LeftJoin("sentence_translations ON (sentences.id = sentence_translations.sentence_id)").
@@ -87,7 +86,7 @@ func prepareWordStatement(limit uint64, offset uint64, whereSq interface{}, args
 }
 
 func prepareMinWordStatement(limit uint64, offset uint64, whereSq interface{}, args ...interface{}) (string, []interface{}, error) {
-	query, args, err := psql.Select("words.id, word, word_meaning, word_level, word_reading").
+	query, args, err := psql.Select("ON (words.id) words.id, word, word_meaning, word_level, word_reading").Distinct().
 		From("words").
 		LeftJoin("word_readings ON words.id = word_readings.word_id").
 		Where(whereSq).
@@ -100,6 +99,8 @@ func prepareMinWordStatement(limit uint64, offset uint64, whereSq interface{}, a
 	if err != nil {
 		return "", nil, err
 	}
+
+	println(query)
 
 	return query, args, nil
 }
@@ -151,15 +152,19 @@ func (r *repo) GetWordByID(ctx context.Context, wordID uint64) (*m_word.Word, er
 
 	word.Composition = kanji
 
-	spew.Dump(word)
-
 	return &word, nil
 }
 
-func selectWordsList(ctx context.Context, tx *sqlx.Tx, limit uint64, offset uint64, whereSq interface{}, args ...interface{}) ([]*m_word.Word, error) {
+func selectWordsList(ctx context.Context, tx *sqlx.Tx, limit uint64, offset uint64, min bool, whereSq interface{}, arguments ...interface{}) ([]*m_word.Word, error) {
 	var words []*m_word.Word
-
-	query, args, err := prepareWordStatement(limit, offset, whereSq, nil)
+	var query string
+	var args []interface{}
+	var err error
+	if min {
+		query, args, err = prepareMinWordStatement(limit, offset, whereSq, nil)
+	} else {
+		query, args, err = prepareWordStatement(limit, offset, whereSq, nil)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -168,6 +173,10 @@ func selectWordsList(ctx context.Context, tx *sqlx.Tx, limit uint64, offset uint
 	if err != nil {
 		tx.Rollback()
 		return nil, err
+	}
+
+	if min {
+		return words, nil
 	}
 
 	for i, w := range words {
@@ -197,26 +206,28 @@ func selectWordsList(ctx context.Context, tx *sqlx.Tx, limit uint64, offset uint
 			tx.Rollback()
 			return nil, err
 		}
+
 		words[i].Composition = kanji
 	}
 
 	return words, nil
 }
 
-func (r *repo) ListWordsByLevel(ctx context.Context, level uint32, limit uint64, offset uint64) ([]*m_word.Word, error) {
+func (r *repo) ListWordsByLevel(ctx context.Context, level uint32, limit uint64, offset uint64, min bool) ([]*m_word.Word, error) {
+	whereSq := sq.Eq{"word_level": level}
+
 	tx, err := r.db.Beginx()
 	if err != nil {
 		return nil, err
 	}
-	words, err := selectWordsList(ctx, tx, limit, offset, sq.Eq{"word_level": level}, nil)
 
+	words, err := selectWordsList(ctx, tx, limit, offset, min, whereSq, nil)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 
 	err = tx.Commit()
-
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -224,34 +235,34 @@ func (r *repo) ListWordsByLevel(ctx context.Context, level uint32, limit uint64,
 
 	return words, nil
 }
-func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint64, offset uint64) ([]*m_word.Word, error) {
+func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint64, offset uint64, min bool) ([]*m_word.Word, error) {
+	whereSq := sq.Eq{"kanji_id": kanjiID}
 	tx, err := r.db.Beginx()
 	if err != nil {
 		return nil, err
 	}
 
 	var wordsIds []uint64
-	q_words, args_words, err := prepareCompStatement("word_id", sq.Eq{"kanji_id": kanjiID}, nil)
+	q_words, args_words, err := prepareCompStatement("word_id", whereSq, nil)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
+
 	err = tx.SelectContext(ctx, &wordsIds, q_words, args_words...)
-
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 
-	words, err := selectWordsList(ctx, tx, limit, offset, sq.Eq{"words.id": wordsIds}, nil)
-
+	whereSq = sq.Eq{"words.id": wordsIds}
+	words, err := selectWordsList(ctx, tx, limit, offset, min, whereSq, nil)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 
 	err = tx.Commit()
-
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -259,13 +270,50 @@ func (r *repo) ListWordsByKanji(ctx context.Context, kanjiID uint64, limit uint6
 
 	return words, nil
 }
-func (r *repo) ListWordsByIds(ctx context.Context, word_ids []uint64) ([]*m_word.Word, error) {
+
+func (r *repo) ListWordsByKanjiAndLevel(ctx context.Context, level uint32, kanjiID uint64, limit uint64, offset uint64, min bool) ([]*m_word.Word, error) {
+	whereSqComp := sq.Eq{"kanji_id": kanjiID}
 	tx, err := r.db.Beginx()
 	if err != nil {
 		return nil, err
 	}
 
-	words, err := selectWordsList(ctx, tx, uint64(len(word_ids)), 0, sq.Eq{"words.id": word_ids}, nil)
+	var wordsIds []uint64
+	q_words, args_words, err := prepareCompStatement("word_id", whereSqComp, nil)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.SelectContext(ctx, &wordsIds, q_words, args_words...)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	whereSq := sq.And{sq.Eq{"word_level": level}, sq.Eq{"words.id": wordsIds}}
+	words, err := selectWordsList(ctx, tx, limit, offset, min, whereSq, nil)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	return words, nil
+}
+
+func (r *repo) ListWordsByIds(ctx context.Context, word_ids []uint64, min bool) ([]*m_word.Word, error) {
+	whereSq := sq.Eq{"words.id": word_ids}
+	tx, err := r.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
+
+	words, err := selectWordsList(ctx, tx, uint64(len(word_ids)), 0, min, whereSq, nil)
 
 	if err != nil {
 		tx.Rollback()

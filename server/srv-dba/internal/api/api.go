@@ -14,6 +14,7 @@ type Repo interface {
 	RepoWord
 	RepoKanjiProgress
 	RepoWordProgress
+	RepoHelpers
 }
 
 type dbaAPI struct {

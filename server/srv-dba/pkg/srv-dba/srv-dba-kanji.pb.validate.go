@@ -428,6 +428,8 @@ func (m *ListKanjiByLevelV1Request) validate(all bool) error {
 
 	// no validation rules for Offset
 
+	// no validation rules for Min
+
 	if len(errors) > 0 {
 		return ListKanjiByLevelV1RequestMultiError(errors)
 	}
@@ -544,6 +546,8 @@ func (m *ListKanjiByIdsV1Request) validate(all bool) error {
 		}
 
 	}
+
+	// no validation rules for Min
 
 	if len(errors) > 0 {
 		return ListKanjiByIdsV1RequestMultiError(errors)

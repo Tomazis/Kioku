@@ -735,6 +735,8 @@ func (m *ListWordsByLevelV1Request) validate(all bool) error {
 
 	// no validation rules for Offset
 
+	// no validation rules for Min
+
 	if len(errors) > 0 {
 		return ListWordsByLevelV1RequestMultiError(errors)
 	}
@@ -860,6 +862,8 @@ func (m *ListWordsByKanjiV1Request) validate(all bool) error {
 
 	// no validation rules for Offset
 
+	// no validation rules for Min
+
 	if len(errors) > 0 {
 		return ListWordsByKanjiV1RequestMultiError(errors)
 	}
@@ -939,6 +943,129 @@ var _ interface {
 	ErrorName() string
 } = ListWordsByKanjiV1RequestValidationError{}
 
+// Validate checks the field values on ListWordsByKanjiAndLevelV1Request with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *ListWordsByKanjiAndLevelV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListWordsByKanjiAndLevelV1Request
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// ListWordsByKanjiAndLevelV1RequestMultiError, or nil if none found.
+func (m *ListWordsByKanjiAndLevelV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListWordsByKanjiAndLevelV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Level
+
+	// no validation rules for KanjiId
+
+	if m.GetLimit() >= 1000 {
+		err := ListWordsByKanjiAndLevelV1RequestValidationError{
+			field:  "Limit",
+			reason: "value must be less than 1000",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	// no validation rules for Offset
+
+	// no validation rules for Min
+
+	if len(errors) > 0 {
+		return ListWordsByKanjiAndLevelV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// ListWordsByKanjiAndLevelV1RequestMultiError is an error wrapping multiple
+// validation errors returned by
+// ListWordsByKanjiAndLevelV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type ListWordsByKanjiAndLevelV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListWordsByKanjiAndLevelV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListWordsByKanjiAndLevelV1RequestMultiError) AllErrors() []error { return m }
+
+// ListWordsByKanjiAndLevelV1RequestValidationError is the validation error
+// returned by ListWordsByKanjiAndLevelV1Request.Validate if the designated
+// constraints aren't met.
+type ListWordsByKanjiAndLevelV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListWordsByKanjiAndLevelV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListWordsByKanjiAndLevelV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListWordsByKanjiAndLevelV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListWordsByKanjiAndLevelV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListWordsByKanjiAndLevelV1RequestValidationError) ErrorName() string {
+	return "ListWordsByKanjiAndLevelV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListWordsByKanjiAndLevelV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListWordsByKanjiAndLevelV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListWordsByKanjiAndLevelV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListWordsByKanjiAndLevelV1RequestValidationError{}
+
 // Validate checks the field values on ListWordsByIdsV1Request with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -976,6 +1103,8 @@ func (m *ListWordsByIdsV1Request) validate(all bool) error {
 		}
 
 	}
+
+	// no validation rules for Min
 
 	if len(errors) > 0 {
 		return ListWordsByIdsV1RequestMultiError(errors)

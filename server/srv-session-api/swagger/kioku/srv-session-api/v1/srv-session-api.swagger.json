@@ -99,9 +99,17 @@
           "type": "string",
           "format": "uint64"
         },
+        "userLevel": {
+          "type": "integer",
+          "format": "int64"
+        },
         "progressId": {
           "type": "string",
           "format": "uint64"
+        },
+        "progressLevel": {
+          "type": "integer",
+          "format": "int64"
         },
         "srsLevel": {
           "type": "integer",

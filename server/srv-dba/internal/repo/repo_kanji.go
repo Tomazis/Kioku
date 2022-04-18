@@ -93,10 +93,16 @@ func (r *repo) GetKanjiByID(ctx context.Context, kanjiID uint64) (*m_kanji.Kanji
 	return &kanji, nil
 }
 
-func (r *repo) ListKanjiByLevel(ctx context.Context, level uint32, limit uint64, offset uint64) ([]*m_kanji.Kanji, error) {
+func (r *repo) ListKanjiByLevel(ctx context.Context, level uint32, limit uint64, offset uint64, min bool) ([]*m_kanji.Kanji, error) {
 	whereSq := sq.Eq{"kanji.kanji_level": level}
-
-	query, args, err := prepareKanjiStatement(limit, offset, whereSq, nil)
+	var query string
+	var args []interface{}
+	var err error
+	if min {
+		query, args, err = prepareMinKanjiStatement(limit, offset, whereSq, nil)
+	} else {
+		query, args, err = prepareKanjiStatement(limit, offset, whereSq, nil)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -112,10 +118,17 @@ func (r *repo) ListKanjiByLevel(ctx context.Context, level uint32, limit uint64,
 	return kanji, nil
 }
 
-func (r *repo) ListKanjiByIDs(ctx context.Context, ids []uint64) ([]*m_kanji.Kanji, error) {
+func (r *repo) ListKanjiByIDs(ctx context.Context, ids []uint64, min bool) ([]*m_kanji.Kanji, error) {
 	whereSq := sq.Eq{"kanji.id": ids}
+	var query string
+	var args []interface{}
+	var err error
+	if min {
+		query, args, err = prepareMinKanjiStatement(uint64(len(ids)), 0, whereSq, nil)
+	} else {
+		query, args, err = prepareKanjiStatement(uint64(len(ids)), 0, whereSq, nil)
+	}
 
-	query, args, err := prepareKanjiStatement(uint64(len(ids)), 0, whereSq, nil)
 	if err != nil {
 		return nil, err
 	}

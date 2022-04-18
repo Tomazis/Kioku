@@ -40,19 +40,30 @@ message GetWordByIdV1Response {
 }
 
 message ListWordsByLevelV1Request {
-    uint32 level = 1 [(validate.rules).uint32.gt = 0];
+    uint32 level  = 1 [(validate.rules).uint32.gt = 0];
     uint64 limit  = 2 [(validate.rules).uint64.lt = 1000];
     uint64 offset = 3;
+    bool   min    = 4;
 }
 
 message ListWordsByKanjiV1Request {
     uint64 kanji_id = 1 [(validate.rules).uint64.gt = 0];
-    uint64 limit  = 2 [(validate.rules).uint64.lt = 1000];
-    uint64 offset = 3;
+    uint64 limit    = 2 [(validate.rules).uint64.lt = 1000];
+    uint64 offset   = 3;
+    bool   min      = 4;
+}
+
+message ListWordsByKanjiAndLevelV1Request {
+    uint32 level    = 1;
+    uint64 kanji_id = 2;
+    uint64 limit    = 3 [(validate.rules).uint64.lt = 1000];
+    uint64 offset   = 4;
+    bool   min      = 5;
 }
 
 message ListWordsByIdsV1Request {
     repeated uint64 word_id = 1 [(validate.rules).repeated.items.uint64.gt = 0];
+             bool   min     = 2;
 }
 
 message ListWordsV1Response {

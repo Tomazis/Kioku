@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package kioku.server.srv_dba.v1;
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba;srv_dba";
+
+message Counter {
+	uint64 kanji_count      = 1; 
+	uint64 user_kanji_count = 2; 
+	uint64 words_count      = 3; 
+	uint64 user_words_count = 4;
+}
+
+message GetCounterV1Request {
+    uint64 user_id = 1 [(validate.rules).uint64.gt = 0];
+    uint32 level   = 2 [(validate.rules).uint32.gt = 0];
+}
+
+message GetCounterV1Response {
+    Counter counter = 1;
+}

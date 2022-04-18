@@ -10,6 +10,7 @@ import "kioku/srv-dba/v1/srv-dba-kanji.proto";
 import "kioku/srv-dba/v1/srv-dba-word.proto";
 import "kioku/srv-dba/v1/srv-dba-kanji-progress.proto";
 import "kioku/srv-dba/v1/srv-dba-word-progress.proto";
+import "kioku/srv-dba/v1/srv-dba-helpers.proto";
 
 option go_package = "github.com/tomazis/kioku/server/srv-dba/pkg/srv-dba;srv_dba";
 
@@ -57,6 +58,12 @@ service SrvDbaService {
     rpc ListWordsByIdsV1(ListWordsByIdsV1Request) returns (ListWordsV1Response) {
         option (google.api.http) = {
             get: "/v1/words"
+        };
+    }
+
+    rpc ListWordsByKanjiAndLevelV1(ListWordsByKanjiAndLevelV1Request) returns (ListWordsV1Response) {
+        option (google.api.http) = {
+            post: "/v1/words"
         };
     }
 
@@ -134,7 +141,13 @@ service SrvDbaService {
         };
     }
 
+    //Helpers part
 
+    rpc GetCounterV1(GetCounterV1Request) returns (GetCounterV1Response) {
+        option (google.api.http) = {
+            post: "/v1/progress/counter"
+        };
+    }
 
 
     
